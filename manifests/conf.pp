@@ -87,20 +87,20 @@ class apache::conf (
     '/etc/httpd/conf',
     '/etc/httpd/conf.d'
   ]:
-    owner     => 'root',
-    group     => $group,
-    mode      => '0640',
-    recurse   => true,
-    purge     => $purge,
-    checksum  => undef,
+    owner    => 'root',
+    group    => $group,
+    mode     => '0640',
+    recurse  => true,
+    purge    => $purge,
+    checksum => undef,
   }
 
   file { '/etc/httpd/conf/httpd.conf':
-    owner     => 'root',
-    group     => $group,
-    mode      => '0640',
-    content   => template('apache/etc/httpd/conf/httpd.conf.erb'),
-    notify    => Service['httpd']
+    owner   => 'root',
+    group   => $group,
+    mode    => '0640',
+    content => template('apache/etc/httpd/conf/httpd.conf.erb'),
+    notify  => Service['httpd']
   }
 
   if $enable_iptables {

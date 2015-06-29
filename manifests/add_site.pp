@@ -23,13 +23,13 @@ define apache::add_site (
   include 'apache'
 
   file { "/etc/httpd/conf.d/${name}.conf":
-    owner     => hiera('apache::conf::group','root'),
-    group     => hiera('apache::conf::group','apache'),
-    mode      => '0640',
-    content   => $content ? {
-      'base'    => template("apache/etc/httpd/conf.d/${name}.conf.erb"),
-      default   => $content
+    owner   => hiera('apache::conf::group','root'),
+    group   => hiera('apache::conf::group','apache'),
+    mode    => '0640',
+    content => $content ? {
+      'base'  => template("apache/etc/httpd/conf.d/${name}.conf.erb"),
+      default => $content
     },
-    notify    => Service['httpd']
+    notify  => Service['httpd']
   }
 }
