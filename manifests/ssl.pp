@@ -93,18 +93,18 @@ class apache::ssl (
     include 'pki'
 
     ::pki::copy { '/etc/httpd/conf':
-      group  => hiera('apache::conf::group','apache'),
-      notify => Service['httpd']
+      group   => hiera('apache::conf::group','apache'),
+      notify  => Service['httpd']
     }
   }
   elsif  !empty($cert_source) {
     file { '/etc/httpd/conf/pki':
-      ensure => 'directory',
-      owner  => hiera('apache::conf::group','root'),
-      group  => hiera('apache::conf::group','apache'),
-      mode   => '0640',
-      source => $cert_source,
-      notify => Service['httpd']
+      ensure  => 'directory',
+      owner   => hiera('apache::conf::group','root'),
+      group   => hiera('apache::conf::group','apache'),
+      mode    => '0640',
+      source  => $cert_source,
+      notify  => Service['httpd']
     }
   }
 

@@ -64,10 +64,10 @@ class apache (
   }
 
   file { $data_dir:
-    ensure => 'directory',
-    owner  => 'root',
-    group  => 'apache',
-    mode   => '0640'
+    ensure   => 'directory',
+    owner    => 'root',
+    group    => 'apache',
+    mode     => '0640'
   }
 
   file { '/etc/httpd':
@@ -79,60 +79,60 @@ class apache (
   }
 
   file { '/etc/httpd/conf/magic':
-    owner  => 'root',
-    group  => 'apache',
-    mode   => '0640',
-    source => 'puppet:///modules/apache/magic',
-    notify => Service['httpd'],
+    owner    => 'root',
+    group    => 'apache',
+    mode     => '0640',
+    source   => 'puppet:///modules/apache/magic',
+    notify   => Service['httpd'],
   }
 
   file { '/etc/httpd/conf.d/welcome.conf': ensure => 'absent' }
 
   file { '/etc/mime.types':
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
-    notify => Service['httpd'],
+    owner    => 'root',
+    group    => 'root',
+    mode     => '0644',
+    notify   => Service['httpd'],
   }
 
   file { '/etc/httpd/logs':
-    ensure => 'symlink',
-    target => '/var/log/httpd',
-    force  => true,
+    ensure  => 'symlink',
+    target  => '/var/log/httpd',
+    force   => true,
   }
 
   file { '/etc/httpd/modules':
-    ensure => 'symlink',
-    target => $::hardwaremodel ? {
+    ensure  => 'symlink',
+    target  => $::hardwaremodel ? {
       'x86_64' => '/usr/lib64/httpd/modules',
       default  => '/usr/lib/httpd/modules'
     },
-    force  => true,
+    force   => true,
   }
 
   file { '/etc/httpd/run':
-    ensure => 'symlink',
-    target => '/var/run/httpd',
-    force  => true,
+    ensure  => 'symlink',
+    target  => '/var/run/httpd',
+    force   => true,
   }
 
   file { '/var/log/httpd':
-    ensure => 'directory',
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0700'
+    ensure  => 'directory',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700'
   }
 
   file { 'httpd_modules':
-    ensure => 'directory',
-    path   => $::hardwaremodel ? {
-      'x86_64' => '/usr/lib64/httpd/modules',
-      default  => '/usr/lib/httpd/modules'
+    ensure    => 'directory',
+    path      => $::hardwaremodel ? {
+      'x86_64'  => '/usr/lib64/httpd/modules',
+      default   => '/usr/lib/httpd/modules'
     },
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
-    notify => Service['httpd'],
+    owner     => 'root',
+    group     => 'root',
+    mode      => '0755',
+    notify    => Service['httpd'],
   }
 
   group { 'apache':
