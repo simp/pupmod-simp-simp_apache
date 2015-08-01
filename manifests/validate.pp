@@ -24,7 +24,7 @@ class apache::validate {
         'binddn'      => '^(.+=.+,?)*',
         'bindpw'      => nil,
         'search'      => '^(.+=.+,?)*',
-        'posix_group' => '^true$'
+        'posix_group' => 'true'
       }
     },
     'limits' => {
