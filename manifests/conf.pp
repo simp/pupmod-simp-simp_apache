@@ -74,56 +74,10 @@ class apache::conf (
   $logformat = '%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"',
   $logfacility = 'local6',
   $enable_iptables = true,
-  $enable_rsyslog = true,
   $rsyslog_target = '/var/log/httpd',
   $purge = true
 ) {
   include 'apache'
-
-  # Make sure the networks are all formatted correctly for Apache.
-  $l_allowroot = munge_httpd_networks($allowroot)
-
-  file { [
-    '/etc/httpd/conf',
-    '/etc/httpd/conf.d'
-  ]:
-    owner    => 'root',
-    group    => $group,
-    mode     => '0640',
-    recurse  => true,
-    purge    => $purge,
-    checksum => undef,
-  }
-
-  file { '/etc/httpd/conf/httpd.conf':
-    owner   => 'root',
-    group   => $group,
-    mode    => '0640',
-    content => template('apache/etc/httpd/conf/httpd.conf.erb'),
-    notify  => Service['httpd']
-  }
-
-  if $enable_iptables {
-    include 'iptables'
-
-    iptables::add_tcp_stateful_listen { 'allow_http':
-      order       => '11',
-      client_nets => $l_allowroot,
-      dports      => $listen
-    }
-  }
-
-  if $enable_rsyslog {
-    include 'rsyslog'
-
-    rsyslog::add_rule { '10apache':
-    rule => "
-if \$programname == 'httpd' and \$syslogseverity-text == 'err' then \t\t ${rsyslog_target}/error_log
-& ~
-if \$programname == 'httpd' then \t\t ${rsyslog_target}/access_log
-& ~"
-    }
-  }
 
   validate_integer($httpd_timeout)
   validate_array_member($keepalive,['on','off'])
@@ -144,7 +98,54 @@ if \$programname == 'httpd' then \t\t ${rsyslog_target}/access_log
   validate_array_member($enablemmap,['on','off'])
   validate_array_member($enablesendfile,['on','off'])
   validate_bool($enable_iptables)
-  validate_bool($enable_rsyslog)
   validate_absolute_path($rsyslog_target)
   validate_bool($purge)
+
+  # Make sure the networks are all formatted correctly for Apache.
+  $l_allowroot = munge_httpd_networks($allowroot)
+
+  file { [
+    '/etc/httpd/conf',
+    '/etc/httpd/conf.d'
+  ]:
+    owner     => 'root',
+    group     => $group,
+    mode      => '0640',
+    recurse   => true,
+    purge     => $purge,
+    checksum  => undef,
+  }
+
+  file { '/etc/httpd/conf/httpd.conf':
+    owner     => 'root',
+    group     => $group,
+    mode      => '0640',
+    content   => template('apache/etc/httpd/conf/httpd.conf.erb'),
+    notify    => Service['httpd']
+  }
+
+  if $enable_iptables {
+    include 'iptables'
+
+    iptables::add_tcp_stateful_listen { 'allow_http':
+      order       => '11',
+      client_nets => $l_allowroot,
+      dports      => $listen
+    }
+  }
+
+  if $::use_simp_logging or hiera('use_simp_logging') {
+    include 'rsyslog'
+
+    rsyslog::rule::local { '10apache_error':
+      rule            => 'if ($programname == \'httpd\' and $syslogseverity-text == \'err\') then',
+      target_log_file => "${rsyslog_target}/error_log",
+      include_stop    => true
+    }
+    rsyslog::rule::local { '10apache_access':
+      rule            => 'if ($programname == \'httpd\') then',
+      target_log_file => "${rsyslog_target}/access_log",
+      include_stop    => true
+    }
+  }
 }
