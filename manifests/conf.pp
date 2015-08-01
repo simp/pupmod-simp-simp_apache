@@ -74,11 +74,32 @@ class apache::conf (
   $logformat = '%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"',
   $logfacility = 'local6',
   $enable_iptables = true,
-  $enable_rsyslog = true,
   $rsyslog_target = '/var/log/httpd',
   $purge = true
 ) {
   include 'apache'
+
+  validate_integer($httpd_timeout)
+  validate_array_member($keepalive,['on','off'])
+  validate_integer($maxkeepalive)
+  validate_integer($keepalivetimeout)
+  validate_integer($prefork_startservers)
+  validate_integer($prefork_minspareservers)
+  validate_integer($prefork_maxspareservers)
+  validate_integer($prefork_serverlimit)
+  validate_integer($prefork_maxclients)
+  validate_integer($prefork_maxrequestsperchild)
+  validate_integer($worker_startservers)
+  validate_integer($worker_maxclients)
+  validate_integer($worker_minsparethreads)
+  validate_integer($worker_maxsparethreads)
+  validate_integer($worker_threadsperchild)
+  validate_integer($worker_maxrequestsperchild)
+  validate_array_member($enablemmap,['on','off'])
+  validate_array_member($enablesendfile,['on','off'])
+  validate_bool($enable_iptables)
+  validate_absolute_path($rsyslog_target)
+  validate_bool($purge)
 
   # Make sure the networks are all formatted correctly for Apache.
   $l_allowroot = munge_httpd_networks($allowroot)
@@ -113,38 +134,18 @@ class apache::conf (
     }
   }
 
-  if $enable_rsyslog {
+  if $::use_simp_logging or hiera('use_simp_logging',false) {
     include 'rsyslog'
 
-    rsyslog::add_rule { '10apache':
-    rule => "
-if \$programname == 'httpd' and \$syslogseverity-text == 'err' then \t\t ${rsyslog_target}/error_log
-& ~
-if \$programname == 'httpd' then \t\t ${rsyslog_target}/access_log
-& ~"
+    rsyslog::rule::local { '10apache_error':
+      rule            => 'if ($programname == \'httpd\' and $syslogseverity-text == \'err\') then',
+      target_log_file => "${rsyslog_target}/error_log",
+      stop_processing => true
+    }
+    rsyslog::rule::local { '10apache_access':
+      rule            => 'if ($programname == \'httpd\') then',
+      target_log_file => "${rsyslog_target}/access_log",
+      stop_processing => true
     }
   }
-
-  validate_integer($httpd_timeout)
-  validate_array_member($keepalive,['on','off'])
-  validate_integer($maxkeepalive)
-  validate_integer($keepalivetimeout)
-  validate_integer($prefork_startservers)
-  validate_integer($prefork_minspareservers)
-  validate_integer($prefork_maxspareservers)
-  validate_integer($prefork_serverlimit)
-  validate_integer($prefork_maxclients)
-  validate_integer($prefork_maxrequestsperchild)
-  validate_integer($worker_startservers)
-  validate_integer($worker_maxclients)
-  validate_integer($worker_minsparethreads)
-  validate_integer($worker_maxsparethreads)
-  validate_integer($worker_threadsperchild)
-  validate_integer($worker_maxrequestsperchild)
-  validate_array_member($enablemmap,['on','off'])
-  validate_array_member($enablesendfile,['on','off'])
-  validate_bool($enable_iptables)
-  validate_bool($enable_rsyslog)
-  validate_absolute_path($rsyslog_target)
-  validate_bool($purge)
 }
