@@ -1,7 +1,7 @@
 Summary: Apache Puppet Module
 Name: pupmod-apache
 Version: 4.1.0
-Release: 16
+Release: 17
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -13,7 +13,7 @@ Requires: pupmod-iptables >= 4.1.0-3
 Requires: pupmod-logrotate >= 4.1.0-0
 Requires: pupmod-pki >= 3.0.0-0
 Requires: pupmod-rsync >= 4.0.0-14
-Requires: pupmod-rsyslog >= 4.1.0-0
+Requires: pupmod-rsyslog >= 5.0.0-0
 Requires: puppet >= 3.3.0
 Requires: puppetlabs-stdlib >= 4.1.0-0
 Buildarch: noarch
@@ -63,6 +63,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Fri Jul 31 2015 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-17
+- Updated to use the refactored rsyslog module.
+
 * Thu Feb 19 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-16
 - Migrated to the new 'simp' environment.
 
