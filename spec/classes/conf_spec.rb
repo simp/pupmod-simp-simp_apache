@@ -17,24 +17,26 @@ describe 'apache::conf' do
 
   it { should compile.with_all_deps }
   it { should create_class('apache::conf') }
-  it { should create_iptables__add_tcp_stateful_listen('allow_http') }
-  it { should create_rsyslog__add_rule('10apache') }
+  it { should_not create_iptables__add_tcp_stateful_listen('allow_http') }
+  it { should_not create_rsyslog__rule__local('10apache_error') }
+  it { should_not create_rsyslog__rule__local('10apache_access') }
 
-  context 'no_iptables' do
-    let(:params){{ 'enable_iptables' => false }}
-
-    it { should compile.with_all_deps }
-    it { should create_class('apache::conf') }
-    it { should_not create_iptables__add_tcp_stateful_listen('allow_http') }
-    it { should create_rsyslog__add_rule('10apache') }
-  end
-
-  context 'no_enable_rsyslog' do
-    let(:params){{ 'enable_rsyslog' => false }}
+  context 'enable_iptables' do
+    let(:params){{ 'enable_iptables' => true }}
 
     it { should compile.with_all_deps }
+    it { should create_class('iptables') }
     it { should create_class('apache::conf') }
     it { should create_iptables__add_tcp_stateful_listen('allow_http') }
-    it { should_not create_rsyslog__add_rule('10apache') }
+  end
+
+  context 'enable_logging' do
+    let(:params){{ 'enable_logging' => true }}
+
+    it { should compile.with_all_deps }
+    it { should create_class('apache::conf') }
+    it { should create_class('rsyslog') }
+    it { should create_rsyslog__rule__local('10apache_error') }
+    it { should create_rsyslog__rule__local('10apache_access') }
   end
 end

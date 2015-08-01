@@ -98,7 +98,7 @@ class apache (
   file { '/etc/httpd/logs':
     ensure => 'symlink',
     target => '/var/log/httpd',
-    force  => true,
+    force  => true
   }
 
   file { '/etc/httpd/modules':
@@ -107,7 +107,7 @@ class apache (
       'x86_64' => '/usr/lib64/httpd/modules',
       default  => '/usr/lib/httpd/modules'
     },
-    force  => true,
+    force  => true
   }
 
   file { '/etc/httpd/run':
@@ -132,7 +132,7 @@ class apache (
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
-    notify => Service['httpd'],
+    notify => Service['httpd']
   }
 
   group { 'apache':
