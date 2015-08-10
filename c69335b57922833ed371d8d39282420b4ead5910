@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad9bd40_4ff1d469",
+        "filename": "manifests/ssl.pp",
+        "patchSetId": 7
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-08-10T15:16:32Z",
+      "side": 1,
+      "message": "This will not lint",
+      "revId": "c69335b57922833ed371d8d39282420b4ead5910",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
