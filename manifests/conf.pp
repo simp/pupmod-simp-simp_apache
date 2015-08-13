@@ -74,7 +74,7 @@ class apache::conf (
   $logformat = '%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"',
   $logfacility = 'local6',
   $enable_iptables = defined('$::use_iptables')   ? { true => $::use_iptables,  default => hiera('use_iptables',false) },
-  $enable_logging  = defined('$::enable_logging') ? { true => $::enable_logging,  default => hiera('enable_logging',false) },
+  $enable_logging  = defined('$::enable_logging') ? { true => $::enable_logging,  default => hiera('enable_logging',true) },
   $rsyslog_target = '/var/log/httpd',
   $purge = true
 ) {

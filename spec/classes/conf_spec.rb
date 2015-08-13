@@ -18,8 +18,11 @@ describe 'apache::conf' do
   it { should compile.with_all_deps }
   it { should create_class('apache::conf') }
   it { should_not create_iptables__add_tcp_stateful_listen('allow_http') }
-  it { should_not create_rsyslog__rule__local('10apache_error') }
-  it { should_not create_rsyslog__rule__local('10apache_access') }
+# Once the SIMP globals change for SIMPv6, these will actually be the defaults.
+#  it { should_not create_rsyslog__rule__local('10apache_error') }
+#  it { should_not create_rsyslog__rule__local('10apache_access') }
+  it { should create_rsyslog__rule__local('10apache_error') }
+  it { should create_rsyslog__rule__local('10apache_access') }
 
   context 'enable_iptables' do
     let(:params){{ 'enable_iptables' => true }}
