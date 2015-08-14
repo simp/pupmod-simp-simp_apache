@@ -138,13 +138,13 @@ class apache::conf (
 
   if $enable_logging or hiera('use_simp_logging',false) {
     include '::rsyslog'
-    rsyslog::rule::local { '10apache_error':
-      rule            => 'if ($programname == \'httpd\' and $syslogseverity-text == \'err\') then',
+    rsyslog::rule::local { '10_apache_error':
+      rule            => 'if ($programname == "httpd" and $syslogseverity-text == "err") then',
       target_log_file => "${rsyslog_target}/error_log",
       stop_processing => true
     }
-    rsyslog::rule::local { '10apache_access':
-      rule            => 'if ($programname == \'httpd\') then',
+    rsyslog::rule::local { '10_apache_access':
+      rule            => 'if ($programname == "httpd") then',
       target_log_file => "${rsyslog_target}/access_log",
       stop_processing => true
     }
