@@ -78,7 +78,7 @@ class apache::conf (
   $rsyslog_target = '/var/log/httpd',
   $purge = true
 ) {
-  include 'apache'
+  include '::apache'
 
   validate_integer($httpd_timeout)
   validate_array_member($keepalive,['on','off'])
