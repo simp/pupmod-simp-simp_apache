@@ -66,7 +66,7 @@ class apache::ssl (
   $cert_source = '',
   $use_simp_pki = true
 ) {
-  include 'apache'
+  include '::apache'
 
   package { 'mod_ssl': ensure => 'latest' }
 
@@ -80,7 +80,7 @@ class apache::ssl (
   }
 
   if $enable_iptables {
-    include 'iptables'
+    include '::iptables'
 
     iptables::add_tcp_stateful_listen { 'allow_https':
       order       => '11',
@@ -90,7 +90,7 @@ class apache::ssl (
   }
 
   if $use_simp_pki {
-    include 'pki'
+    include '::pki'
 
     ::pki::copy { '/etc/httpd/conf':
       group  => hiera('apache::conf::group','apache'),

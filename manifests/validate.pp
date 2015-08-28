@@ -15,7 +15,7 @@ class apache::validate {
     'method' => {
       'file' => {
         'enable'    => '^true|false$',
-        'user_file' => '^/.*',
+        'user_file' => '^/.*'
       },
       'ldap'    => {
         'enable'      => '^true|false$',
@@ -24,7 +24,7 @@ class apache::validate {
         'binddn'      => '^(.+=.+,?)*',
         'bindpw'      => nil,
         'search'      => '^(.+=.+,?)*',
-        'posix_group' => 'true'
+        'posix_group' => true
       }
     },
     'limits' => {

@@ -3,10 +3,12 @@ fixtures:
   symlinks:
     apache: "#{source_dir}"
     auditd: "#{source_dir}/../auditd"
+    augeasproviders_apache: "#{source_dir}/../augeasproviders_apache"
     augeasproviders_core: "#{source_dir}/../augeasproviders_core"
     augeasproviders_grub: "#{source_dir}/../augeasproviders_grub"
     common: "#{source_dir}/../common"
     concat: "#{source_dir}/../concat"
+    functions: "#{source_dir}/../functions"
     iptables: "#{source_dir}/../iptables"
     logrotate: "#{source_dir}/../logrotate"
     pki: "#{source_dir}/../pki"
