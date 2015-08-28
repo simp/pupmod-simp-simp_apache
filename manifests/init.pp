@@ -41,9 +41,9 @@ class apache (
   $ssl = true
 ) {
 
-  include 'apache::conf'
+  include '::apache::conf'
   if $ssl {
-    include 'apache::ssl'
+    include '::apache::ssl'
   }
 
   if $::operatingsystem in ['RedHat','CentOS'] {
@@ -147,7 +147,7 @@ class apache (
   }
 
   if $rsync_web_root {
-    include 'rsync'
+    include '::rsync'
 
     # Rsync the /var/www space from the rsync server.
     # Add anything here you want to go to every web server.

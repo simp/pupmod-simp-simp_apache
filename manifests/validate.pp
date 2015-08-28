@@ -15,22 +15,22 @@ class apache::validate {
     'method' => {
       'file' => {
         'enable'    => '^true|false$',
-        'user_file' => '^/.*',
+        'user_file' => '^/.*'
       },
-      'ldap'    => {
+      'ldap' => {
         'enable'      => '^true|false$',
         'url'         => nil,
         'security'    => '^SSL|TLS|STARTTLS$',
         'binddn'      => '^(.+=.+,?)*',
         'bindpw'      => nil,
         'search'      => '^(.+=.+,?)*',
-        'posix_group' => 'true'
+        'posix_group' => true
       }
     },
     'limits' => {
-      'defaults' => nil,
-      'hosts'  => nil,
-      'users'  => nil,
+      'defaults'    => nil,
+      'hosts'       => nil,
+      'users'       => nil,
       'ldap_groups' => nil
     }
   }
