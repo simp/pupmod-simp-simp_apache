@@ -24,14 +24,14 @@ class apache::validate {
         'binddn'      => '^(.+=.+,?)*',
         'bindpw'      => nil,
         'search'      => '^(.+=.+,?)*',
-        'posix_group' => 'true'
-      }
+        'posix_group' => true,
+      },
     },
     'limits' => {
       'defaults' => nil,
       'hosts'  => nil,
       'users'  => nil,
-      'ldap_groups' => nil
-    }
-  }
+      'ldap_groups' => nil,
+    },
+  },
 }

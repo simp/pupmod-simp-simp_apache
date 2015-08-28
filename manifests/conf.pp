@@ -78,50 +78,50 @@ class apache::conf (
   $rsyslog_target = '/var/log/httpd',
   $purge = true
 ) {
-  include 'apache'
+  include '::apache'
 
   # Make sure the networks are all formatted correctly for Apache.
   $l_allowroot = munge_httpd_networks($allowroot)
 
   file { [
     '/etc/httpd/conf',
-    '/etc/httpd/conf.d'
+    '/etc/httpd/conf.d',
   ]:
-    owner     => 'root',
-    group     => $group,
-    mode      => '0640',
-    recurse   => true,
-    purge     => $purge,
-    checksum  => undef,
+    owner    => 'root',
+    group    => $group,
+    mode     => '0640',
+    recurse  => true,
+    purge    => $purge,
+    checksum => undef,
   }
 
   file { '/etc/httpd/conf/httpd.conf':
-    owner     => 'root',
-    group     => $group,
-    mode      => '0640',
-    content   => template('apache/etc/httpd/conf/httpd.conf.erb'),
-    notify    => Service['httpd']
+    owner   => 'root',
+    group   => $group,
+    mode    => '0640',
+    content => template('apache/etc/httpd/conf/httpd.conf.erb'),
+    notify  => Service['httpd'],
   }
 
   if $enable_iptables {
-    include 'iptables'
+    include '::iptables'
 
     iptables::add_tcp_stateful_listen { 'allow_http':
       order       => '11',
       client_nets => $l_allowroot,
-      dports      => $listen
+      dports      => $listen,
     }
   }
 
   if $enable_rsyslog {
-    include 'rsyslog'
+    include '::rsyslog'
 
     rsyslog::add_rule { '10apache':
     rule => "
 if \$programname == 'httpd' and \$syslogseverity-text == 'err' then \t\t ${rsyslog_target}/error_log
 & ~
 if \$programname == 'httpd' then \t\t ${rsyslog_target}/access_log
-& ~"
+& ~",
     }
   }
 

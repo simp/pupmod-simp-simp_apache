@@ -66,7 +66,7 @@ class apache::ssl (
   $cert_source = '',
   $use_simp_pki = true
 ) {
-  include 'apache'
+  include '::apache'
 
   package { 'mod_ssl': ensure => 'latest' }
 
@@ -76,35 +76,35 @@ class apache::ssl (
     mode    => '0640',
     content => template('apache/etc/httpd/conf.d/ssl.conf.erb'),
     require => Package['mod_ssl'],
-    notify  => Service['httpd']
+    notify  => Service['httpd'],
   }
 
   if $enable_iptables {
-    include 'iptables'
+    include '::iptables'
 
     iptables::add_tcp_stateful_listen { 'allow_https':
       order       => '11',
       client_nets => $client_nets,
-      dports      => $listen
+      dports      => $listen,
     }
   }
 
   if $use_simp_pki {
-    include 'pki'
+    include '::pki'
 
     ::pki::copy { '/etc/httpd/conf':
-      group   => hiera('apache::conf::group','apache'),
-      notify  => Service['httpd']
+      group  => hiera('apache::conf::group','apache'),
+      notify => Service['httpd'],
     }
   }
   elsif  !empty($cert_source) {
     file { '/etc/httpd/conf/pki':
-      ensure  => 'directory',
-      owner   => hiera('apache::conf::group','root'),
-      group   => hiera('apache::conf::group','apache'),
-      mode    => '0640',
-      source  => $cert_source,
-      notify  => Service['httpd']
+      ensure => 'directory',
+      owner  => hiera('apache::conf::group','root'),
+      group  => hiera('apache::conf::group','apache'),
+      mode   => '0640',
+      source => $cert_source,
+      notify => Service['httpd'],
     }
   }
 
