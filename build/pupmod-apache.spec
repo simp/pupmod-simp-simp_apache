@@ -1,14 +1,15 @@
 Summary: Apache Puppet Module
 Name: pupmod-apache
 Version: 4.1.0
-Release: 16
+Release: 17
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires: pupmod-auditd >= 4.1.0-2
 Requires: pupmod-common >= 4.1.0-5
-Requires: pupmod-concat >= 4.0.0-0
+Requires: pupmod-simplib >= 1.0.0-0
+Requires: pupmod-simpcat >= 4.0.0-0
 Requires: pupmod-iptables >= 4.1.0-3
 Requires: pupmod-logrotate >= 4.1.0-0
 Requires: pupmod-pki >= 3.0.0-0
@@ -63,6 +64,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-17
+- migration to simplib and simpcat (lib/ only)
+
 * Thu Feb 19 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-16
 - Migrated to the new 'simp' environment.
 
