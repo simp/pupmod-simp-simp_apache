@@ -8,7 +8,7 @@ describe 'apache::ssl' do
     :interfaces => 'lo',
     :ipaddress_lo => '127.0.0.1',
     :operatingsystem => 'RedHat',
-    :lsbmajdistrelease => '7',
+    :operatingsystemmajrelease => '7',
     :apache_version => '2.4',
     :grub_version => '2.0~beta',
     :uid_min => '500'

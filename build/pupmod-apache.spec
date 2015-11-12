@@ -1,7 +1,7 @@
 Summary: Apache Puppet Module
 Name: pupmod-apache
 Version: 4.1.0
-Release: 17
+Release: 18
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -21,7 +21,7 @@ Buildarch: noarch
 Requires: simp-bootstrap >= 4.2.0
 Obsoletes: pupmod-apache-test
 
-Prefix: /etc/puppet/environments/simp/modules
+Prefix: %{_sysconfdir}/puppet/environments/simp/modules
 
 %description
 This Puppet module provides the capability to configure Apache and component
@@ -64,6 +64,10 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Thu Nov 12 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-18
+- Updated to switch from 'lsb*' facts to 'operatingsystem*' facts for
+  environments that don't install the LSB packages.
+
 * Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-17
 - migration to simplib and simpcat (lib/ only)
 

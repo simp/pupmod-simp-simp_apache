@@ -47,7 +47,7 @@ class apache (
   }
 
   if $::operatingsystem in ['RedHat','CentOS'] {
-    if (versioncmp($::lsbmajdistrelease,'7') >= 0) {
+    if (versioncmp($::operatingsystemmajrelease,'7') >= 0) {
       $apache_homedir = '/usr/share/httpd'
 
       package { 'mod_ldap':
