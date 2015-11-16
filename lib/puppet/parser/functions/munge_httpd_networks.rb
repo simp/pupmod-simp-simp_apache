@@ -13,7 +13,7 @@ module Puppet::Parser::Functions
     ENDHEREDOC
 
     Puppet::Parser::Functions.autoloader.load(
-      File.expand_path(File.dirname(__FILE__) + '/../../../../../common/lib/puppet/parser/nets2cidr.rb')
+      File.expand_path(File.dirname(__FILE__) + '/../../../../../simplib/lib/puppet/parser/nets2cidr.rb')
     )
     unless args.length > 0 then
       raise Puppet::ParseError, ("munge_httpd_networks(): wrong number of arguments (#{args.length}; must be > 0)")
