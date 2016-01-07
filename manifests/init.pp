@@ -41,19 +41,21 @@ class apache (
   $ssl = true
 ) {
 
+  include '::apache::install'
   include '::apache::conf'
+
   if $ssl {
     include '::apache::ssl'
+    Class['::apache::install'] -> Class['::apache::ssl']
   }
+
+  Class['::apache::install'] -> Class['::apache']
+  Class['::apache::install'] -> Class['::apache::conf']
+  Class['::apache::install'] ~> Service['httpd']
 
   if $::operatingsystem in ['RedHat','CentOS'] {
     if (versioncmp($::operatingsystemmajrelease,'7') >= 0) {
       $apache_homedir = '/usr/share/httpd'
-
-      package { 'mod_ldap':
-        ensure => 'latest',
-        notify => Service['httpd']
-      }
     }
     else {
       $apache_homedir = '/var/www'
@@ -68,14 +70,6 @@ class apache (
     owner  => 'root',
     group  => 'apache',
     mode   => '0640'
-  }
-
-  file { '/etc/httpd':
-    owner    => 'root',
-    group    => 'apache',
-    mode     => '0640',
-    recurse  => true,
-    checksum => undef,
   }
 
   file { '/etc/httpd/conf/magic':
@@ -139,11 +133,6 @@ class apache (
       ensure    => 'present',
       allowdupe => false,
       gid       => '48'
-  }
-
-  package { 'httpd':
-    ensure => 'latest',
-    notify => Service['httpd']
   }
 
   if $rsync_web_root {

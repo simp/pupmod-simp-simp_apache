@@ -1,7 +1,7 @@
 Summary: Apache Puppet Module
 Name: pupmod-apache
 Version: 4.1.0
-Release: 18
+Release: 19
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -19,7 +19,7 @@ Requires: puppet >= 3.3.0
 Requires: puppetlabs-stdlib >= 4.1.0-0
 Buildarch: noarch
 Requires: simp-bootstrap >= 4.2.0
-Obsoletes: pupmod-apache-test
+Obsoletes: pupmod-apache-test >= 0.0.1
 
 Prefix: %{_sysconfdir}/puppet/environments/simp/modules
 
@@ -64,6 +64,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Thu Jan 07 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-19
+- Updated to correct some ordering issues.
+
 * Thu Nov 12 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-18
 - Updated to switch from 'lsb*' facts to 'operatingsystem*' facts for
   environments that don't install the LSB packages.

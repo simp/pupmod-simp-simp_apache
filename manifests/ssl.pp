@@ -68,14 +68,11 @@ class apache::ssl (
 ) {
   include '::apache'
 
-  package { 'mod_ssl': ensure => 'latest' }
-
   file { '/etc/httpd/conf.d/ssl.conf':
     owner   => hiera('apache::conf::group','root'),
     group   => hiera('apache::conf::group','apache'),
     mode    => '0640',
     content => template('apache/etc/httpd/conf.d/ssl.conf.erb'),
-    require => Package['mod_ssl'],
     notify  => Service['httpd']
   }
 
