@@ -16,35 +16,35 @@ describe 'apache::ssl' do
   let(:facts){base_facts}
 
   context 'base' do
-    it { should compile.with_all_deps }
-    it { should create_class('apache') }
-    it { should create_class('apache::ssl') }
-    it { should create_iptables__add_tcp_stateful_listen('allow_https') }
-    it { should create_class('pki') }
-    it { should create_pki__copy('/etc/httpd/conf') }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to create_class('apache') }
+    it { is_expected.to create_class('apache::ssl') }
+    it { is_expected.to create_iptables__add_tcp_stateful_listen('allow_https') }
+    it { is_expected.to create_class('pki') }
+    it { is_expected.to create_pki__copy('/etc/httpd/conf') }
   end
 
   context 'no_enable_iptables' do
     let(:params){{ 'enable_iptables' => false }}
 
-    it { should compile.with_all_deps }
-    it { should create_class('apache') }
-    it { should create_class('apache::ssl') }
-    it { should_not create_iptables__add_tcp_stateful_listen('allow_https') }
-    it { should create_class('pki') }
-    it { should create_pki__copy('/etc/httpd/conf') }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to create_class('apache') }
+    it { is_expected.to create_class('apache::ssl') }
+    it { is_expected.not_to create_iptables__add_tcp_stateful_listen('allow_https') }
+    it { is_expected.to create_class('pki') }
+    it { is_expected.to create_pki__copy('/etc/httpd/conf') }
   end
 
   context 'no_use_simp_pki' do
     let(:params){{ 'use_simp_pki' => false }}
 
-    it { should compile.with_all_deps }
-    it { should create_class('apache') }
-    it { should create_class('apache::ssl') }
-    it { should create_iptables__add_tcp_stateful_listen('allow_https') }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to create_class('apache') }
+    it { is_expected.to create_class('apache::ssl') }
+    it { is_expected.to create_iptables__add_tcp_stateful_listen('allow_https') }
 # This doesn't work for undetermined reasons
 #    it { should_not contain_class('pki') }
-    it { should_not create_pki__copy('/etc/httpd/conf') }
+    it { is_expected.not_to create_pki__copy('/etc/httpd/conf') }
   end
 
   context 'use_simp_pki_and_filled_cert_source' do
@@ -53,14 +53,14 @@ describe 'apache::ssl' do
       'cert_source'  => '/tmp/foo'
     }}
 
-    it { should compile.with_all_deps }
-    it { should create_class('apache') }
-    it { should create_class('apache::ssl') }
-    it { should create_iptables__add_tcp_stateful_listen('allow_https') }
-    it { should create_class('pki') }
-    it { should create_pki__copy('/etc/httpd/conf') }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to create_class('apache') }
+    it { is_expected.to create_class('apache::ssl') }
+    it { is_expected.to create_iptables__add_tcp_stateful_listen('allow_https') }
+    it { is_expected.to create_class('pki') }
+    it { is_expected.to create_pki__copy('/etc/httpd/conf') }
     it {
-      should_not create_file('/etc/httpd/conf/pki').with({
+      is_expected.not_to create_file('/etc/httpd/conf/pki').with({
         'source' => params['cert_source']
       })
     }
@@ -72,15 +72,15 @@ describe 'apache::ssl' do
       'cert_source'  => '/tmp/foo'
     }}
 
-    it { should compile.with_all_deps }
-    it { should create_class('apache') }
-    it { should create_class('apache::ssl') }
-    it { should create_iptables__add_tcp_stateful_listen('allow_https') }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to create_class('apache') }
+    it { is_expected.to create_class('apache::ssl') }
+    it { is_expected.to create_iptables__add_tcp_stateful_listen('allow_https') }
 # This doesn't work for undetermined reasons
 #    it { should_not create_class('pki') }
-    it { should_not create_pki__copy('/etc/httpd/conf') }
+    it { is_expected.not_to create_pki__copy('/etc/httpd/conf') }
     it {
-      should create_file('/etc/httpd/conf/pki').with({
+      is_expected.to create_file('/etc/httpd/conf/pki').with({
         'source' => params['cert_source']
       })
     }

@@ -20,16 +20,20 @@
 define apache::add_site (
   $content = 'base'
 ) {
+  validate_string( $content )
+
   include 'apache'
+
+  $_content = $content ? {
+    'base'  => template("apache/etc/httpd/conf.d/${name}.conf.erb"),
+    default => $content
+  }
 
   file { "/etc/httpd/conf.d/${name}.conf":
     owner   => hiera('apache::conf::group','root'),
     group   => hiera('apache::conf::group','apache'),
     mode    => '0640',
-    content => $content ? {
-      'base'  => template("apache/etc/httpd/conf.d/${name}.conf.erb"),
-      default => $content
-    },
+    content => $_content,
     notify  => Service['httpd']
   }
 }
