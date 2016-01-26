@@ -66,6 +66,16 @@ class apache::ssl (
   $cert_source = '',
   $use_simp_pki = true
 ) {
+  validate_array($ssl_cipher_suite)
+  validate_array($ssl_protocols)
+  validate_array_member($ssl_honor_cipher_order,['on','off'])
+  validate_integer($sslverifydepth)
+  validate_absolute_path($sslcacertificatepath)
+  validate_absolute_path($sslcertificatefile)
+  validate_absolute_path($sslcertificatekeyfile)
+  validate_bool($enable_default_vhost)
+  validate_bool($enable_iptables)
+  validate_bool($use_simp_pki)
   include '::apache'
 
   file { '/etc/httpd/conf.d/ssl.conf':
@@ -104,15 +114,4 @@ class apache::ssl (
       notify => Service['httpd']
     }
   }
-
-  validate_array($ssl_cipher_suite)
-  validate_array($ssl_protocols)
-  validate_array_member($ssl_honor_cipher_order,['on','off'])
-  validate_integer($sslverifydepth)
-  validate_absolute_path($sslcacertificatepath)
-  validate_absolute_path($sslcertificatefile)
-  validate_absolute_path($sslcertificatekeyfile)
-  validate_bool($enable_default_vhost)
-  validate_bool($enable_iptables)
-  validate_bool($use_simp_pki)
 }

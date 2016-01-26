@@ -16,7 +16,7 @@ describe 'apache::add_site' do
   let(:title) {'test'}
   let(:params) {{ :content => 'test' }}
 
-  it { should create_class('apache') }
+  it { is_expected.to create_class('apache') }
 
-  it { should contain_file("/etc/httpd/conf.d/#{title}.conf").with_content('test') }
+  it { is_expected.to contain_file("/etc/httpd/conf.d/#{title}.conf").with_content('test') }
 end

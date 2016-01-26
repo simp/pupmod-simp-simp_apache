@@ -40,6 +40,11 @@ class apache (
   $rsync_web_root = true,
   $ssl = true
 ) {
+  validate_absolute_path($data_dir)
+  validate_bool($ssl)
+  validate_string($rsync_server)
+  validate_integer($rsync_timeout)
+  validate_bool($rsync_web_root)
 
   include '::apache::install'
   include '::apache::conf'
@@ -63,6 +68,12 @@ class apache (
   }
   else {
     $apache_homedir = '/var/www'
+  }
+
+
+  $_modules_target = $::hardwaremodel ? {
+    'x86_64' => '/usr/lib64/httpd/modules',
+    default  => '/usr/lib/httpd/modules'
   }
 
   file { $data_dir:
@@ -97,10 +108,7 @@ class apache (
 
   file { '/etc/httpd/modules':
     ensure => 'symlink',
-    target => $::hardwaremodel ? {
-      'x86_64' => '/usr/lib64/httpd/modules',
-      default  => '/usr/lib/httpd/modules'
-    },
+    target =>  $_modules_target,
     force  => true
   }
 
@@ -119,10 +127,7 @@ class apache (
 
   file { 'httpd_modules':
     ensure => 'directory',
-    path   => $::hardwaremodel ? {
-      'x86_64' => '/usr/lib64/httpd/modules',
-      default  => '/usr/lib/httpd/modules'
-    },
+    path   => $_modules_target,
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
@@ -185,9 +190,4 @@ class apache (
     uid        => '48',
     require    => Group['apache']
   }
-
-  validate_absolute_path($data_dir)
-  validate_bool($ssl)
-  validate_integer($rsync_timeout)
-  validate_bool($rsync_web_root)
 }
