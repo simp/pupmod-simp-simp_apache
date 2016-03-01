@@ -1,7 +1,7 @@
 Summary: Apache Puppet Module
 Name: pupmod-apache
 Version: 4.1.0
-Release: 20
+Release: 21
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -19,6 +19,7 @@ Requires: puppetlabs-stdlib >= 4.1.0-0
 Buildarch: noarch
 Requires: simp-bootstrap >= 4.2.0
 Obsoletes: pupmod-apache-test >= 0.0.1
+Requires: pupmod-onyxpoint-compliance_markup
 
 Prefix: %{_sysconfdir}/puppet/environments/simp/modules
 
@@ -63,6 +64,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Tue Mar 01 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 4.1.0-21
+- Added compliance function support
+
 * Tue Jan 26 2016 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-20
 - Normalized common static module assets
 

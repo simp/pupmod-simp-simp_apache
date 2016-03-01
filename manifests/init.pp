@@ -46,6 +46,8 @@ class apache (
   validate_integer($rsync_timeout)
   validate_bool($rsync_web_root)
 
+  compliance_map()
+
   include '::apache::install'
   include '::apache::conf'
 

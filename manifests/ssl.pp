@@ -78,6 +78,8 @@ class apache::ssl (
   validate_bool($use_simp_pki)
   include '::apache'
 
+  compliance_map()
+
   file { '/etc/httpd/conf.d/ssl.conf':
     owner   => hiera('apache::conf::group','root'),
     group   => hiera('apache::conf::group','apache'),
