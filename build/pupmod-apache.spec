@@ -1,7 +1,7 @@
 Summary: Apache Puppet Module
 Name: pupmod-apache
-Version: 4.1.0
-Release: 21
+Version: 4.1.1
+Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -64,6 +64,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Sat Mar 19 2016 Trevor Vaughan <tvaughan@onyxpoint.comm> - 4.1.1-0
+- Migrated use_simp_pki to a global catalyst.
+
 * Tue Mar 01 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 4.1.0-21
 - Added compliance function support
 

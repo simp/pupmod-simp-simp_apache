@@ -64,7 +64,7 @@ class apache::ssl (
   $enable_default_vhost = true,
   $enable_iptables = true,
   $cert_source = '',
-  $use_simp_pki = true
+  $use_simp_pki = defined('$::use_simp_pki') ? { true => $::use_simp_pki, default => hiera('use_simp_pki', true) }
 ) {
   validate_array($ssl_cipher_suite)
   validate_array($ssl_protocols)
