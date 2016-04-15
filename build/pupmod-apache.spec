@@ -1,6 +1,6 @@
 Summary: Apache Puppet Module
 Name: pupmod-apache
-Version: 4.1.1
+Version: 4.1.2
 Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
@@ -64,7 +64,11 @@ fi
 # Post uninstall stuff
 
 %changelog
-* Sat Mar 19 2016 Trevor Vaughan <tvaughan@onyxpoint.comm> - 4.1.1-0
+* Thu Apr 14 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.2-0
+- Ensure that the munge_httpd_networks array is flattened on return. This is a
+  Ruby 1.9 compatiblity issue.
+
+* Sat Mar 19 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.1-0
 - Migrated use_simp_pki to a global catalyst.
 
 * Tue Mar 01 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 4.1.0-21

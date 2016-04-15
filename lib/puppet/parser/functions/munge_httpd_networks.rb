@@ -35,6 +35,6 @@ module Puppet::Parser::Functions
       end
     end
 
-    httpd_networks
+    httpd_networks.flatten
   end
 end
