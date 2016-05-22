@@ -1,6 +1,6 @@
 Summary: Apache Puppet Module
 Name: pupmod-apache
-Version: 4.1.2
+Version: 4.1.3
 Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
@@ -64,6 +64,10 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Sun May 22 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.3-0
+- Ensure that PKI certificates that are downloaded without using simp::pki are
+  copied recursively.
+
 * Thu Apr 14 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.2-0
 - Ensure that the munge_httpd_networks array is flattened on return. This is a
   Ruby 1.9 compatiblity issue.
