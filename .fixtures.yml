@@ -5,6 +5,9 @@ fixtures:
     augeasproviders_apache: "git://github.com/simp/augeasproviders_apache"
     augeasproviders_core: "git://github.com/simp/augeasproviders_core"
     augeasproviders_grub: "git://github.com/simp/augeasproviders_grub"
+    haveged:
+      repo: "git://github.com/simp/puppet-haveged"
+      branch: "simp-master"
     simplib: "git://github.com/simp/pupmod-simp-simplib"
     simpcat: "git://github.com/simp/pupmod-simp-concat"
     iptables: "git://github.com/simp/pupmod-simp-iptables"
