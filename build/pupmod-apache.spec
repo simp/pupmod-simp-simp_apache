@@ -1,12 +1,13 @@
 Summary: Apache Puppet Module
 Name: pupmod-apache
-Version: 4.1.3
+Version: 4.1.4
 Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires: pupmod-auditd >= 4.1.0-2
+Requires: pupmod-haveged >= 0.3.0
 Requires: pupmod-simplib >= 1.0.0-0
 Requires: pupmod-simpcat >= 4.0.0-0
 Requires: pupmod-iptables >= 4.1.0-3
@@ -64,6 +65,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Thu Jun 30 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.4-0
+- Haveged included by default for entropy generation.
+
 * Sun May 22 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.3-0
 - Ensure that PKI certificates that are downloaded without using simp::pki are
   copied recursively.

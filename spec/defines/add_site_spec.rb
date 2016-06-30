@@ -1,22 +1,21 @@
 require 'spec_helper'
 
 describe 'apache::add_site' do
-  let(:facts) {{
-    :fqdn => 'test.host.net',
-    :hardwaremodel => 'x86_64',
-    :interfaces => 'lo',
-    :ipaddress_lo => '127.0.0.1',
-    :operatingsystem => 'RedHat',
-    :operatingsystemmajrelease => '7',
-    :apache_version => '2.4',
-    :grub_version => '2.0~beta',
-    :uid_min => '500',
-    :selinux_current_mode => 'enabled'
-  }}
-  let(:title) {'test'}
-  let(:params) {{ :content => 'test' }}
+  context 'supported operating systems' do
+    on_supported_os.each do |os, facts|
+      context "on #{os}" do
+        let(:facts) do
+          facts
+        end
 
-  it { is_expected.to create_class('apache') }
-
-  it { is_expected.to contain_file("/etc/httpd/conf.d/#{title}.conf").with_content('test') }
+        context 'with default parameters' do
+          let(:title) {'test'}
+          let(:params) {{ :content => 'test' }}
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_class('apache') }
+          it { is_expected.to contain_file("/etc/httpd/conf.d/#{title}.conf").with_content('test') }
+        end
+      end
+    end
+  end
 end
