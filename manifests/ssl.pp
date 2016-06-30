@@ -64,7 +64,9 @@ class apache::ssl (
   $enable_default_vhost = true,
   $enable_iptables = true,
   $cert_source = '',
-  $use_simp_pki = defined('$::use_simp_pki') ? { true => $::use_simp_pki, default => hiera('use_simp_pki', true) }
+  $use_haveged = defined('$::use_haveged') ? { true => getvar('::use_haveged'), default => hiera('use_haveged', true) },
+  $use_simp_pki = defined('$::use_simp_pki') ? { true => getvar('::use_simp_pki'), default => hiera('use_simp_pki', true) }
+
 ) {
   validate_array($ssl_cipher_suite)
   validate_array($ssl_protocols)
@@ -76,9 +78,14 @@ class apache::ssl (
   validate_bool($enable_default_vhost)
   validate_bool($enable_iptables)
   validate_bool($use_simp_pki)
+  validate_bool($use_haveged)
   include '::apache'
 
   compliance_map()
+
+  if $use_haveged {
+    include '::haveged'
+  }
 
   file { '/etc/httpd/conf.d/ssl.conf':
     owner   => hiera('apache::conf::group','root'),
