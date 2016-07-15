@@ -129,6 +129,7 @@ module Puppet::Parser::Functions
         output << "<Limit #{k}>"
         output << "  Order allow,deny"
         output << "  #{v.join("\n  ")}"
+        output << "  Require all denied"
         output << "  Satisfy any"
         output << "</Limit>"
       end

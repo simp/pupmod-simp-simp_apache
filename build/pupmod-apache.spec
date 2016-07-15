@@ -1,6 +1,6 @@
 Summary: Apache Puppet Module
 Name: pupmod-apache
-Version: 4.1.4
+Version: 4.1.5
 Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
@@ -65,6 +65,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Tue Jul 19 2016 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 4.1.5-0
+- Add default Require to apache_limits() output
+
 * Thu Jun 30 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.4-0
 - Haveged included by default for entropy generation.
 

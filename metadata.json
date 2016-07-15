@@ -1,6 +1,6 @@
 {
   "name":    "simp-apache",
-  "version": "4.1.4",
+  "version": "4.1.5",
   "author":  "simp",
   "summary": "configure SIMP apache & component sites (NOTE: legacy, conflicts with puppetlabs-apache)",
   "license": "Apache-2.0",
