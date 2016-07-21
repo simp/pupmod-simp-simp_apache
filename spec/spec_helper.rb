@@ -25,7 +25,6 @@ end
 default_hiera_config =<<-EOM
 ---
 :backends:
-  - "rspec"
   - "yaml"
 :yaml:
   :datadir: "stub"

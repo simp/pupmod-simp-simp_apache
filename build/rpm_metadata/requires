@@ -1,0 +1,12 @@
+Requires: pupmod-auditd >= 4.1.0-2
+Requires: pupmod-haveged >= 0.3.0
+Requires: pupmod-iptables >= 4.1.0-3
+Requires: pupmod-logrotate >= 4.1.0-0
+Requires: pupmod-pki >= 3.0.0-0
+Requires: pupmod-rsync >= 4.0.0-14
+Requires: pupmod-rsyslog >= 4.1.0-0
+Requires: pupmod-simp-compliance_markup
+Requires: pupmod-simpcat >= 4.0.0-0
+Requires: pupmod-simplib >= 1.0.0-0
+Requires: puppetlabs-stdlib >= 4.1.0-0
+Obsoletes: pupmod-apache-test >= 0.0.1
