@@ -1,21 +1,29 @@
 ---
 fixtures:
   repositories:
-    auditd: "git://github.com/simp/pupmod-simp-auditd"
-    augeasproviders_apache: "git://github.com/simp/augeasproviders_apache"
-    augeasproviders_core: "git://github.com/simp/augeasproviders_core"
-    augeasproviders_grub: "git://github.com/simp/augeasproviders_grub"
-    haveged:
-      repo: "git://github.com/simp/puppet-haveged"
+    auditd: "https://github.com/simp/pupmod-simp-auditd"
+    augeasproviders_apache:
+      repo: "https://github.com/simp/augeasproviders_apache"
       branch: "simp-master"
-    simplib: "git://github.com/simp/pupmod-simp-simplib"
-    simpcat: "git://github.com/simp/pupmod-simp-concat"
-    iptables: "git://github.com/simp/pupmod-simp-iptables"
-    logrotate: "git://github.com/simp/pupmod-simp-logrotate"
-    pki: "git://github.com/simp/pupmod-simp-pki"
-    rsync: "git://github.com/simp/pupmod-simp-rsync"
-    rsyslog: "git://github.com/simp/pupmod-simp-rsyslog"
-    stdlib: "git://github.com/simp/puppetlabs-stdlib"
-    compliance: "https://github.com/trevor-vaughan/pupmod-compliance"
+    augeasproviders_core:
+      repo: "https://github.com/simp/augeasproviders_core"
+      branch : "simp-master"
+    augeasproviders_grub:
+      repo: "https://github.com/simp/augeasproviders_grub"
+      branch: "simp-master"
+    compliance_markup: "https://github.com/simp/pupmod-simp-compliance_markup"
+    haveged:
+      repo: "https://github.com/simp/puppet-haveged"
+      branch: "simp-master"
+    simpcat: "https://github.com/simp/pupmod-simp-simpcat"
+    simplib: "https://github.com/simp/pupmod-simp-simplib"
+    iptables: "https://github.com/simp/pupmod-simp-iptables"
+    logrotate: "https://github.com/simp/pupmod-simp-logrotate"
+    pki: "https://github.com/simp/pupmod-simp-pki"
+    rsync: "https://github.com/simp/pupmod-simp-rsync"
+    rsyslog: "https://github.com/simp/pupmod-simp-rsyslog"
+    stdlib:
+      repo: "https://github.com/simp/puppetlabs-stdlib"
+      branch: "simp-master"
   symlinks:
     apache: "#{source_dir}"
