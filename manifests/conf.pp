@@ -140,12 +140,12 @@ class apache::conf (
 
   if $enable_logging or hiera('use_simp_logging',false) {
     include '::rsyslog'
-    rsyslog::rule::local { '10apache_error':
+    rsyslog::rule::local { 'XX_apache_error':
       rule            => 'if ($programname == \'httpd\' and $syslogseverity-text == \'err\') then',
       target_log_file => "${rsyslog_target}/error_log",
       stop_processing => true
     }
-    rsyslog::rule::local { '10apache_access':
+    rsyslog::rule::local { 'YY_apache_access':
       rule            => 'if ($programname == \'httpd\') then',
       target_log_file => "${rsyslog_target}/access_log",
       stop_processing => true
