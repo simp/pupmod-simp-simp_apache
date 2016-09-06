@@ -12,11 +12,8 @@ describe 'simp_apache::conf' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp_apache::conf') }
           it { is_expected.not_to create_iptables__add_tcp_stateful_listen('allow_http') }
-          # Once the SIMP globals change for SIMPv6, these will actually be the defaults.
-          #  it { should_not create_rsyslog__rule__local('10apache_error') }
-          #  it { should_not create_rsyslog__rule__local('10apache_access') }
-          it { is_expected.to create_rsyslog__rule__local('10apache_error') }
-          it { is_expected.to create_rsyslog__rule__local('10apache_access') }
+          it { is_expected.to create_rsyslog__rule__local('XX_apache_error') }
+          it { is_expected.to create_rsyslog__rule__local('YY_apache_access') }
         end
 
         context 'enable_iptables' do
@@ -32,8 +29,8 @@ describe 'simp_apache::conf' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp_apache::conf') }
           it { is_expected.to create_class('rsyslog') }
-          it { is_expected.to create_rsyslog__rule__local('10apache_error') }
-          it { is_expected.to create_rsyslog__rule__local('10apache_access') }
+          it { is_expected.to create_rsyslog__rule__local('XX_apache_error') }
+          it { is_expected.to create_rsyslog__rule__local('YY_apache_access') }
         end
       end
     end
