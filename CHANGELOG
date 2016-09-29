@@ -1,3 +1,6 @@
+* Wed Sep 28 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.1.6-0
+- Fix Forge `haveged` dependency name
+
 * Tue Jul 19 2016 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 4.1.5-0
 - Add default Require to apache_limits() output
 
