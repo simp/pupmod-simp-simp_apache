@@ -6,5 +6,7 @@ Requires: pupmod-simp-logrotate >= 4.1.0-0
 Requires: pupmod-simp-pki >= 3.0.0-0
 Requires: pupmod-simp-rsync >= 4.0.0-14
 Requires: pupmod-simp-rsyslog >= 4.1.0-0
-Requires: pupmod-simp-simpcat >= 4.0.0-0
+Requires: pupmod-simp-simpcat >= 6.0.0-0
 Obsoletes: pupmod-apache-test >= 0.0.1
+Obsoletes: pupmod-simp-apache >= 4.1.5-0
+Provides: pupmod-simp-apache > 5.0.0-0
