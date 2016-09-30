@@ -26,4 +26,4 @@ fixtures:
       repo: "https://github.com/simp/puppetlabs-stdlib"
       branch: "simp-master"
   symlinks:
-    apache: "#{source_dir}"
+    simp_apache: "#{source_dir}"

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'apache::ssl' do
+describe 'simp_apache::ssl' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
@@ -10,8 +10,8 @@ describe 'apache::ssl' do
 
         context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('apache') }
-          it { is_expected.to create_class('apache::ssl') }
+          it { is_expected.to create_class('simp_apache') }
+          it { is_expected.to create_class('simp_apache::ssl') }
           it { is_expected.to create_iptables__add_tcp_stateful_listen('allow_https') }
           it { is_expected.to create_class('pki') }
           it { is_expected.to create_pki__copy('/etc/httpd/conf') }
@@ -22,8 +22,8 @@ describe 'apache::ssl' do
           let(:params){{ 'enable_iptables' => false }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('apache') }
-          it { is_expected.to create_class('apache::ssl') }
+          it { is_expected.to create_class('simp_apache') }
+          it { is_expected.to create_class('simp_apache::ssl') }
           it { is_expected.not_to create_iptables__add_tcp_stateful_listen('allow_https') }
           it { is_expected.to create_class('pki') }
           it { is_expected.to create_pki__copy('/etc/httpd/conf') }
@@ -33,8 +33,8 @@ describe 'apache::ssl' do
           let(:params){{ 'use_simp_pki' => false }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('apache') }
-          it { is_expected.to create_class('apache::ssl') }
+          it { is_expected.to create_class('simp_apache') }
+          it { is_expected.to create_class('simp_apache::ssl') }
           it { is_expected.to create_iptables__add_tcp_stateful_listen('allow_https') }
           # This doesn't work for undetermined reasons
           #    it { should_not contain_class('pki') }
@@ -48,8 +48,8 @@ describe 'apache::ssl' do
           }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('apache') }
-          it { is_expected.to create_class('apache::ssl') }
+          it { is_expected.to create_class('simp_apache') }
+          it { is_expected.to create_class('simp_apache::ssl') }
           it { is_expected.to create_iptables__add_tcp_stateful_listen('allow_https') }
           it { is_expected.to create_class('pki') }
           it { is_expected.to create_pki__copy('/etc/httpd/conf') }
@@ -67,8 +67,8 @@ describe 'apache::ssl' do
           }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('apache') }
-          it { is_expected.to create_class('apache::ssl') }
+          it { is_expected.to create_class('simp_apache') }
+          it { is_expected.to create_class('simp_apache::ssl') }
           it { is_expected.to create_iptables__add_tcp_stateful_listen('allow_https') }
           # This doesn't work for undetermined reasons
           #    it { should_not create_class('pki') }

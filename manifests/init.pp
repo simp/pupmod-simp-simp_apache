@@ -1,4 +1,4 @@
-# == Class: apache
+# == Class: simp_apache
 #
 # This class configures an Apache server.  It ensures that the appropriate
 # files are in the appropriate places and can optionally rsync the
@@ -33,7 +33,7 @@
 #
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
-class apache (
+class simp_apache (
   $data_dir = versioncmp(simp_version(),'5') ? { '-1' => '/srv/www', default => '/var/www' },
   $rsync_server = hiera('rsync::server'),
   $rsync_timeout = hiera('rsync::timeout','2'),
@@ -48,17 +48,17 @@ class apache (
 
   compliance_map()
 
-  include '::apache::install'
-  include '::apache::conf'
+  include '::simp_apache::install'
+  include '::simp_apache::conf'
 
   if $ssl {
-    include '::apache::ssl'
-    Class['::apache::install'] -> Class['::apache::ssl']
+    include '::simp_apache::ssl'
+    Class['::simp_apache::install'] -> Class['::simp_apache::ssl']
   }
 
-  Class['::apache::install'] -> Class['::apache']
-  Class['::apache::install'] -> Class['::apache::conf']
-  Class['::apache::install'] ~> Service['httpd']
+  Class['::simp_apache::install'] -> Class['::simp_apache']
+  Class['::simp_apache::install'] -> Class['::simp_apache::conf']
+  Class['::simp_apache::install'] ~> Service['httpd']
 
   if $::operatingsystem in ['RedHat','CentOS'] {
     if (versioncmp($::operatingsystemmajrelease,'7') >= 0) {
@@ -89,7 +89,7 @@ class apache (
     owner  => 'root',
     group  => 'apache',
     mode   => '0640',
-    source => 'puppet:///modules/apache/magic',
+    source => "puppet:///modules/${module_name}/magic",
     notify => Service['httpd'],
   }
 
