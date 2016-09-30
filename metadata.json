@@ -1,7 +1,7 @@
 {
-  "name": "simp-apache",
-  "version": "4.1.7",
-  "author": "simp",
+  "name": "simp-simp_apache",
+  "version": "5.0.0",
+  "author": "SIMP Team",
   "summary": "configure SIMP apache & component sites (NOTE: legacy, conflicts with puppetlabs-apache)",
   "license": "Apache-2.0",
   "source": "https://github.com/simp/pupmod-simp-apache",
@@ -22,7 +22,11 @@
     },
     {
       "name": "simp/simplib",
-      "version_requirement": ">= 1.3.1 < 2.0.0"
+      "version_requirement": ">= 2.0.0 < 3.0.0"
+    },
+    {
+      "name": "simp/simpcat",
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/pki",
@@ -34,15 +38,15 @@
     },
     {
       "name": "simp/rsyslog",
-      "version_requirement": ">= 5.1.0 < 6.0.0"
+      "version_requirement": ">= 4.1.0"
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.9.0 < 5.0.0"
+      "version_requirement": ">= 4.1.0"
     },
     {
       "name": "simp/compliance_markup",
-      "version_requirement": ">= 1.0.1 < 2.0.0"
+      "version_requirement": ">= 1.0.0"
     }
   ],
   "operatingsystem_support": [
