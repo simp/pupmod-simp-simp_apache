@@ -17,21 +17,21 @@
 #   custom content on the fly.
 #
 #
-define apache::add_site (
+define simp_apache::add_site (
   $content = 'base'
 ) {
   validate_string( $content )
 
-  include 'apache'
+  include '::simp_apache'
 
   $_content = $content ? {
-    'base'  => template("apache/etc/httpd/conf.d/${name}.conf.erb"),
+    'base'  => template("${module_name}/etc/httpd/conf.d/${name}.conf.erb"),
     default => $content
   }
 
   file { "/etc/httpd/conf.d/${name}.conf":
-    owner   => hiera('apache::conf::group','root'),
-    group   => hiera('apache::conf::group','apache'),
+    owner   => pick($::simp_apache::conf::group,'root'),
+    group   => pick($::simp_apache::conf::group,'apache'),
     mode    => '0640',
     content => $_content,
     notify  => Service['httpd']

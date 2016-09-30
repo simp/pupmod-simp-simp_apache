@@ -1,4 +1,4 @@
-# == Class apache::validate
+# == Class simp_apache::validate
 #
 # This class should be used as input to validate_deep_hash when
 # managing 'ldap' or 'limits' ACLs
@@ -10,7 +10,7 @@
 #
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
-class apache::validate {
+class simp_apache::validate {
   $method_acl = {
     'method' => {
       'file' => {
