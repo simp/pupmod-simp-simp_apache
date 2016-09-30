@@ -1,4 +1,4 @@
-# == Class: apache::ssl
+# == Class: simp_apache::ssl
 #
 # This class configures an Apache server with SSL support.  It ensures that
 # the appropriate files are in the appropriate places and have the correct
@@ -49,7 +49,7 @@
 #
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
-class apache::ssl (
+class simp_apache::ssl (
   $listen = '443',
   $client_nets = hiera('client_nets'),
   $ssl_cipher_suite = hiera('openssl::cipher_suite',['HIGH']),
@@ -79,7 +79,8 @@ class apache::ssl (
   validate_bool($enable_iptables)
   validate_bool($use_simp_pki)
   validate_bool($use_haveged)
-  include '::apache'
+
+  include '::simp_apache'
 
   compliance_map()
 
@@ -88,10 +89,10 @@ class apache::ssl (
   }
 
   file { '/etc/httpd/conf.d/ssl.conf':
-    owner   => hiera('apache::conf::group','root'),
-    group   => hiera('apache::conf::group','apache'),
+    owner   => pick($::simp_apache::conf::group,'root'),
+    group   => pick($::simp_apache::conf::group,'apache'),
     mode    => '0640',
-    content => template('apache/etc/httpd/conf.d/ssl.conf.erb'),
+    content => template("${module_name}/etc/httpd/conf.d/ssl.conf.erb"),
     notify  => Service['httpd']
   }
 
@@ -109,15 +110,15 @@ class apache::ssl (
     include '::pki'
 
     ::pki::copy { '/etc/httpd/conf':
-      group  => hiera('apache::conf::group','apache'),
+      group  => pick($::simp_apache::conf::group,'apache'),
       notify => Service['httpd']
     }
   }
   elsif  !empty($cert_source) {
     file { '/etc/httpd/conf/pki':
       ensure  => 'directory',
-      owner   => hiera('apache::conf::group','root'),
-      group   => hiera('apache::conf::group','apache'),
+      owner   => pick($::simp_apache::conf::group,'root'),
+      group   => pick($::simp_apache::conf::group,'apache'),
       mode    => '0640',
       source  => $cert_source,
       recurse => true,

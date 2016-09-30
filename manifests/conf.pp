@@ -1,4 +1,4 @@
-# == Class: apache::conf
+# == Class: simp_apache::conf
 #
 # This class sets up apache.conf.
 #
@@ -43,7 +43,7 @@
 #
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
-class apache::conf (
+class simp_apache::conf (
   $httpd_timeout = '120',
   $keepalive = 'off',
   $maxkeepalive = '100',
@@ -78,7 +78,7 @@ class apache::conf (
   $rsyslog_target = '/var/log/httpd',
   $purge = true
 ) {
-  include '::apache'
+  include '::simp_apache'
 
   validate_integer($httpd_timeout)
   validate_array_member($keepalive,['on','off'])
@@ -124,7 +124,7 @@ class apache::conf (
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template('apache/etc/httpd/conf/httpd.conf.erb'),
+    content => template("${module_name}/etc/httpd/conf/httpd.conf.erb"),
     notify  => Service['httpd']
   }
 
