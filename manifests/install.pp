@@ -1,8 +1,8 @@
-# == Class: apache::install
+# == Class: simp_apache::install
 #
 # Package installation
 #
-class apache::install {
+class simp_apache::install {
 
   assert_private()
 
@@ -15,7 +15,7 @@ class apache::install {
     }
   }
 
-  if $::apache::ssl {
+  if $::simp_apache::ssl {
     package { 'mod_ssl': ensure => 'latest' }
   }
 }
