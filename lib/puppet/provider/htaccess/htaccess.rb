@@ -35,8 +35,11 @@ Puppet::Type.type(:htaccess).provide :htaccess do
       fh = File.open(target,'r')
 
       # Check for the edit message and add if necessary.
-      if fh.eof? or ( not fh.readline.chomp.eql?(HTACCESS_EDIT_MSG) ) then
+      if fh.eof?
         outfile.puts(HTACCESS_EDIT_MSG)
+      elsif not fh.readline.chomp.eql?(HTACCESS_EDIT_MSG)
+        outfile.puts(HTACCESS_EDIT_MSG)
+        fh.rewind
       else
         fh.rewind
       end
@@ -75,7 +78,6 @@ Puppet::Type.type(:htaccess).provide :htaccess do
 
       fh.close
       outfile.close
-
       FileUtils.cp(tmpname,target)
       FileUtils.rm(tmpname)
     rescue Exception => e

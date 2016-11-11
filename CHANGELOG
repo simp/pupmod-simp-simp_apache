@@ -1,3 +1,11 @@
+* Fri Nov 11 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 4.1.8-0
+- Fixed bug in which htaccess type would fail to compile as it
+  required 'sha1' instead of 'digest/sha1'
+- Fixed bug in which htaccess provider dropped the first line
+  of an existing htaccess file, when that line did not contain
+  the Puppet-management warning comment.
+- Eliminated use of deprecated Puppet.newtype
+
 * Wed Sep 28 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.1.6-0
 - Fix Forge `haveged` dependency name
 
