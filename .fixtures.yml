@@ -11,7 +11,10 @@ fixtures:
     augeasproviders_grub:
       repo: "https://github.com/simp/augeasproviders_grub"
       branch: "simp-master"
-    compliance_markup: "https://github.com/simp/pupmod-simp-compliance_markup"
+    compliance_markup:
+      repo: "https://github.com/simp/pupmod-simp-compliance_markup"
+      branch: "master"
+#      branch: "1.0.2"
     haveged:
       repo: "https://github.com/simp/puppet-haveged"
       branch: "simp-master"

@@ -1,0 +1,17 @@
+HOSTS:
+  server7:
+    roles:
+      - server7
+      - default
+    platform: el-7-x86_64
+    box :     centos/7
+    hypervisor : vagrant
+  server6:
+    roles:
+      - server6
+    platform: el-6-x86_64
+    box :     centos/6
+    hypervisor : vagrant
+CONFIG:
+  type: foss
+  vagrant_memsize: 256
