@@ -82,7 +82,7 @@ Puppet::Type.type(:htaccess).provide :htaccess do
       FileUtils.rm(tmpname)
     rescue Exception => e
       fail Puppet::Error, e
-    end 
+    end
 
   end
 
@@ -95,7 +95,7 @@ Puppet::Type.type(:htaccess).provide :htaccess do
   end
 
   def passwd_sync
-    mod_target("modify")  
+    mod_target("modify")
     return nil
   end
 
@@ -112,11 +112,11 @@ Puppet::Type.type(:htaccess).provide :htaccess do
           return true
         end
       end
-      
+
       return false
     rescue Exception => e
       fail Puppet::Error, e
-    end 
+    end
   end
 
   def passwd_retrieve
@@ -134,10 +134,10 @@ Puppet::Type.type(:htaccess).provide :htaccess do
           return l_pass
         end
       end
-      
+
     rescue Exception => e
       fail Puppet::Error, e
-    end 
+    end
 
     return nil
   end

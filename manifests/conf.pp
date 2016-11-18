@@ -103,7 +103,6 @@ class simp_apache::conf (
   validate_absolute_path($rsyslog_target)
   validate_bool($purge)
 
-  compliance_map()
 
   # Make sure the networks are all formatted correctly for Apache.
   $l_allowroot = munge_httpd_networks($allowroot)

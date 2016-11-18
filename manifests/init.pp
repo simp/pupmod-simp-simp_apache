@@ -46,7 +46,6 @@ class simp_apache (
   validate_integer($rsync_timeout)
   validate_bool($rsync_web_root)
 
-  compliance_map()
 
   include '::simp_apache::install'
   include '::simp_apache::conf'

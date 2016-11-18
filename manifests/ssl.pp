@@ -82,7 +82,6 @@ class simp_apache::ssl (
 
   include '::simp_apache'
 
-  compliance_map()
 
   if $use_haveged {
     include '::haveged'
