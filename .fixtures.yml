@@ -1,32 +1,28 @@
 ---
 fixtures:
   repositories:
-    auditd: "https://github.com/simp/pupmod-simp-auditd"
+    auditd: https://github.com/simp/pupmod-simp-auditd
     augeasproviders_apache:
-      repo: "https://github.com/simp/augeasproviders_apache"
-      branch: "simp-master"
+      repo: https://github.com/simp/augeasproviders_apache
+      branch: simp-master
     augeasproviders_core:
-      repo: "https://github.com/simp/augeasproviders_core"
-      branch : "simp-master"
+      repo: https://github.com/simp/augeasproviders_core
+      branch: simp-master
     augeasproviders_grub:
-      repo: "https://github.com/simp/augeasproviders_grub"
-      branch: "simp-master"
-    compliance_markup:
-      repo: "https://github.com/simp/pupmod-simp-compliance_markup"
-      branch: "master"
-#      branch: "1.0.2"
+      repo: https://github.com/simp/augeasproviders_grub
+      branch: simp-master
     haveged:
-      repo: "https://github.com/simp/puppet-haveged"
-      branch: "simp-master"
-    simpcat: "https://github.com/simp/pupmod-simp-simpcat"
-    simplib: "https://github.com/simp/pupmod-simp-simplib"
-    iptables: "https://github.com/simp/pupmod-simp-iptables"
-    logrotate: "https://github.com/simp/pupmod-simp-logrotate"
-    pki: "https://github.com/simp/pupmod-simp-pki"
-    rsync: "https://github.com/simp/pupmod-simp-rsync"
-    rsyslog: "https://github.com/simp/pupmod-simp-rsyslog"
+      repo: https://github.com/simp/puppet-haveged
+      branch: simp-master
+    iptables: https://github.com/simp/pupmod-simp-iptables
+    logrotate: https://github.com/simp/pupmod-simp-logrotate
+    pki: https://github.com/simp/pupmod-simp-pki
+    rsync: https://github.com/simp/pupmod-simp-rsync
+    rsyslog: https://github.com/simp/pupmod-simp-rsyslog
+    simpcat: https://github.com/simp/pupmod-simp-simpcat
+    simplib: https://github.com/simp/pupmod-simp-simplib
     stdlib:
-      repo: "https://github.com/simp/puppetlabs-stdlib"
-      branch: "simp-master"
+      repo: https://github.com/simp/puppetlabs-stdlib
+      branch: simp-master
   symlinks:
     simp_apache: "#{source_dir}"
