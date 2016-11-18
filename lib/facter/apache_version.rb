@@ -1,6 +1,6 @@
 #
 # Return the version of apache installed on the system.
-# 
+#
 # Returns 'unknown' if the version cannot be determined.
 #
 Facter.add("apache_version") do
