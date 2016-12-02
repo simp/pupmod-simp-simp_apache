@@ -34,18 +34,18 @@
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp_apache (
-  $data_dir = versioncmp(simp_version(),'5') ? { '-1' => '/srv/www', default => '/var/www' },
-  $rsync_server = hiera('rsync::server'),
-  $rsync_timeout = hiera('rsync::timeout','2'),
+  $data_dir       = versioncmp(simp_version(),'5') ? { '-1' => '/srv/www', default => '/var/www' },
+  $rsync_source   = "apache_${::environment}/www",
+  $rsync_server   = hiera('rsync::server'),
+  $rsync_timeout  = hiera('rsync::timeout','2'),
   $rsync_web_root = true,
-  $ssl = true
+  $ssl            = true
 ) {
   validate_absolute_path($data_dir)
   validate_bool($ssl)
   validate_string($rsync_server)
   validate_integer($rsync_timeout)
   validate_bool($rsync_web_root)
-
 
   include '::simp_apache::install'
   include '::simp_apache::conf'
@@ -70,7 +70,6 @@ class simp_apache (
   else {
     $apache_homedir = '/var/www'
   }
-
 
   $_modules_target = $::hardwaremodel ? {
     'x86_64' => '/usr/lib64/httpd/modules',
@@ -147,9 +146,9 @@ class simp_apache (
     # Rsync the /var/www space from the rsync server.
     # Add anything here you want to go to every web server.
     rsync { 'site':
-      user     => 'apache_rsync',
-      password => passgen('apache_rsync'),
-      source   => 'apache/www',
+      user     => "apache_rsync_${::environment}",
+      password => passgen("apache_rsync_${::environment}"),
+      source   => $rsync_source,
       target   => '/var',
       server   => $rsync_server,
       timeout  => $rsync_timeout,

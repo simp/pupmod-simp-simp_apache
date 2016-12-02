@@ -1,3 +1,6 @@
+* Thu Dec 01 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
+- Updated to use the environment-aware rsync in SIMP 6
+
 * Thu Dec 01 2016 Nicholas Hughes, Nick Markowski <nmarkowski@keywcorp.com> - 5.0.1-0
 - Prevent log duplication and log where intended    
 - Changed naming to XX_ or YY_ to come before the default Z_default.conf
