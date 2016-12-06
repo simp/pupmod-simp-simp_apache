@@ -13,8 +13,8 @@ Requires: pupmod-simp-simpcat < 7.0.0-0
 Requires: pupmod-simp-simpcat >= 6.0.0-0
 Requires: pupmod-simp-pki < 6.0.0-0
 Requires: pupmod-simp-pki >= 5.0.0-0
-Requires: pupmod-simp-rsync < 6.0.0-0
-Requires: pupmod-simp-rsync >= 5.0.0-0
+Requires: pupmod-simp-rsync < 7.0.0-0
+Requires: pupmod-simp-rsync >= 6.0.0-0
 Requires: pupmod-simp-rsyslog < 7.0.0-0
 Requires: pupmod-simp-rsyslog >= 6.0.0-0
 Requires: pupmod-simp-auditd < 7.0.0-0
