@@ -1,8 +1,11 @@
+* Wed Dec 07 2016 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.0-0
+- Updated catalysts to take defaults from simp_options
+
 * Thu Dec 01 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
 - Updated to use the environment-aware rsync in SIMP 6
 
 * Thu Dec 01 2016 Nicholas Hughes, Nick Markowski <nmarkowski@keywcorp.com> - 5.0.1-0
-- Prevent log duplication and log where intended    
+- Prevent log duplication and log where intended
 - Changed naming to XX_ or YY_ to come before the default Z_default.conf
   for local rules, but after the numbered configs used by the log_server
   class.

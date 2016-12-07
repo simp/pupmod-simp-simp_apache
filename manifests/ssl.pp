@@ -15,7 +15,7 @@
 #   An array of ports upon which the stock SSL configuration should
 #   listen.
 #
-# [*client_nets*]
+# [*trusted_nets*]
 #   Type: Array
 #   An array of networks that you trust to connect to your server.
 #
@@ -28,18 +28,18 @@
 #   Whether or not to activate the default VirtualHost on the $listen
 #   port.
 #
-# [*enable_iptables*]
+# [*firewall*]
 #   Type: Boolean
 #   Whether or not to use the SIMP iptables module.
 #
 # [*cert_source*]
 #   Type: Valid File Resource Source
-#   If $use_simp_pki is :false, this will designate the proper source
+#   If $pki is :false, this will designate the proper source
 #   for the PKI certs to be used by Apache. If neither variable is
 #   set, you will need to ensure that certificates are properly
 #   uploaded to the system.
 #
-# [*use_simp_pki*]
+# [*pki*]
 #   Type: Boolean
 #   Whether or not to use to the inbuilt 'pki' module from the SIMP
 #   build. This would tie Apache to the system certificates in
@@ -51,8 +51,8 @@
 #
 class simp_apache::ssl (
   $listen = '443',
-  $client_nets = hiera('client_nets'),
-  $ssl_cipher_suite = hiera('openssl::cipher_suite',['HIGH']),
+  $trusted_nets = lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'], 'value_type' => Array[String] }),
+  $openssl_cipher_suite = lookup('simp_options::openssl::cipher_suite', { 'default_value' => ['DEFAULT', '!MEDIUM'], 'value_type' => Array[String] }),
   $ssl_protocols = ['TLSv1','TLSv1.1','TLSv1.2'],
   $ssl_honor_cipher_order = 'on',
   $sslverifyclient = 'require',
@@ -62,13 +62,12 @@ class simp_apache::ssl (
   $sslcertificatekeyfile = "/etc/httpd/conf/pki/private/${::fqdn}.pem",
   $logformat = '%t %h %{SSL_CLIENT_S_DN_CN}x %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %s',
   $enable_default_vhost = true,
-  $enable_iptables = true,
+  $firewall = lookup('simp_options::firewall',  { 'default_value' => false, 'value_type' => Boolean}),
   $cert_source = '',
-  $use_haveged = defined('$::use_haveged') ? { true => getvar('::use_haveged'), default => hiera('use_haveged', true) },
-  $use_simp_pki = defined('$::use_simp_pki') ? { true => getvar('::use_simp_pki'), default => hiera('use_simp_pki', true) }
-
+  $haveged = lookup('simp_options::haveged',  { 'default_value' => false, 'value_type' => Boolean}),
+  $pki = lookup('simp_options::pki',  { 'default_value' => false, 'value_type' => Boolean})
 ) {
-  validate_array($ssl_cipher_suite)
+  validate_array($openssl_cipher_suite)
   validate_array($ssl_protocols)
   validate_array_member($ssl_honor_cipher_order,['on','off'])
   validate_integer($sslverifydepth)
@@ -76,14 +75,14 @@ class simp_apache::ssl (
   validate_absolute_path($sslcertificatefile)
   validate_absolute_path($sslcertificatekeyfile)
   validate_bool($enable_default_vhost)
-  validate_bool($enable_iptables)
-  validate_bool($use_simp_pki)
-  validate_bool($use_haveged)
+  validate_bool($firewall)
+  validate_bool($pki)
+  validate_bool($haveged)
 
   include '::simp_apache'
 
 
-  if $use_haveged {
+  if $haveged {
     include '::haveged'
   }
 
@@ -95,17 +94,17 @@ class simp_apache::ssl (
     notify  => Service['httpd']
   }
 
-  if $enable_iptables {
+  if $firewall {
     include '::iptables'
 
     iptables::add_tcp_stateful_listen { 'allow_https':
-      order       => '11',
-      client_nets => $client_nets,
-      dports      => $listen
+      order        => '11',
+      trusted_nets => $trusted_nets,
+      dports       => $listen
     }
   }
 
-  if $use_simp_pki {
+  if $pki {
     include '::pki'
 
     ::pki::copy { '/etc/httpd/conf':

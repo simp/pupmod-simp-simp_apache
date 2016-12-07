@@ -22,17 +22,17 @@
 #   Type: Array of Integers
 #   An array of ports upon which Apache should listen.
 #
-# [*enable_iptables*]
+# [*firewall*]
 #   Type: Boolean
 #   Whether or not to use the SIMP IPTables module.
 #
-# [*enable_logging*]
+# [*syslog*]
 #   Type: Boolean
 #   Whether or not to use the SIMP Rsyslog module.
 #
-# [*rsyslog_target*]
+# [*syslog_target*]
 #   Type: Absolute Path
-#   If $enable_rsyslog is true, store the apache logs at this
+#   If $syslog is true, store the apache logs at this
 #   location.
 #
 # [*purge*]
@@ -73,9 +73,9 @@ class simp_apache::conf (
   $httpd_loglevel = 'warn',
   $logformat = '%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"',
   $logfacility = 'local6',
-  $enable_iptables = defined('$::use_iptables')   ? { true => $::use_iptables,  default => hiera('use_iptables',false) },
-  $enable_logging  = defined('$::enable_logging') ? { true => $::enable_logging,  default => hiera('enable_logging',true) },
-  $rsyslog_target = '/var/log/httpd',
+  $firewall = lookup('simp_options::firewall',  { 'default_value' => false, 'value_type' => Boolean}),
+  $syslog  = lookup('simp_options::syslog',  { 'default_value' => false, 'value_type' => Boolean}),
+  $syslog_target = '/var/log/httpd',
   $purge = true
 ) {
   include '::simp_apache'
@@ -98,9 +98,9 @@ class simp_apache::conf (
   validate_integer($worker_maxrequestsperchild)
   validate_array_member($enablemmap,['on','off'])
   validate_array_member($enablesendfile,['on','off'])
-  validate_bool($enable_iptables)
-  validate_bool($enable_logging)
-  validate_absolute_path($rsyslog_target)
+  validate_bool($firewall)
+  validate_bool($syslog)
+  validate_absolute_path($syslog_target)
   validate_bool($purge)
 
 
@@ -127,26 +127,26 @@ class simp_apache::conf (
     notify  => Service['httpd']
   }
 
-  if $enable_iptables {
+  if $firewall {
     include '::iptables'
 
     iptables::add_tcp_stateful_listen { 'allow_http':
-      order       => '11',
-      client_nets => $l_allowroot,
-      dports      => $listen
+      order        => '11',
+      trusted_nets => $l_allowroot,
+      dports       => $listen
     }
   }
 
-  if $enable_logging or hiera('use_simp_logging',false) {
+  if $syslog  {
     include '::rsyslog'
     rsyslog::rule::local { 'XX_apache_error':
       rule            => 'if ($programname == \'httpd\' and $syslogseverity-text == \'err\') then',
-      target_log_file => "${rsyslog_target}/error_log",
+      target_log_file => "${syslog_target}/error_log",
       stop_processing => true
     }
     rsyslog::rule::local { 'YY_apache_access':
       rule            => 'if ($programname == \'httpd\') then',
-      target_log_file => "${rsyslog_target}/access_log",
+      target_log_file => "${syslog_target}/access_log",
       stop_processing => true
     }
   }
