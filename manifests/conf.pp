@@ -73,8 +73,8 @@ class simp_apache::conf (
   $httpd_loglevel = 'warn',
   $logformat = '%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"',
   $logfacility = 'local6',
-  $firewall = lookup('simp_options::firewall',  { 'default_value' => false, 'value_type' => Boolean}),
-  $syslog  = lookup('simp_options::syslog',  { 'default_value' => false, 'value_type' => Boolean}),
+  $firewall = simplib::lookup('simp_options::firewall',  { 'default_value' => false, 'value_type' => Boolean}),
+  $syslog  = simplib::lookup('simp_options::syslog',  { 'default_value' => false, 'value_type' => Boolean}),
   $syslog_target = '/var/log/httpd',
   $purge = true
 ) {

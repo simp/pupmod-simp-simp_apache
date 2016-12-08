@@ -51,8 +51,8 @@
 #
 class simp_apache::ssl (
   $listen = '443',
-  $trusted_nets = lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'], 'value_type' => Array[String] }),
-  $openssl_cipher_suite = lookup('simp_options::openssl::cipher_suite', { 'default_value' => ['DEFAULT', '!MEDIUM'], 'value_type' => Array[String] }),
+  $trusted_nets = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'], 'value_type' => Array[String] }),
+  $openssl_cipher_suite = simplib::lookup('simp_options::openssl::cipher_suite', { 'default_value' => ['DEFAULT', '!MEDIUM'], 'value_type' => Array[String] }),
   $ssl_protocols = ['TLSv1','TLSv1.1','TLSv1.2'],
   $ssl_honor_cipher_order = 'on',
   $sslverifyclient = 'require',
@@ -62,10 +62,10 @@ class simp_apache::ssl (
   $sslcertificatekeyfile = "/etc/httpd/conf/pki/private/${::fqdn}.pem",
   $logformat = '%t %h %{SSL_CLIENT_S_DN_CN}x %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %s',
   $enable_default_vhost = true,
-  $firewall = lookup('simp_options::firewall',  { 'default_value' => false, 'value_type' => Boolean}),
+  $firewall = simplib::lookup('simp_options::firewall',  { 'default_value' => false, 'value_type' => Boolean}),
   $cert_source = '',
-  $haveged = lookup('simp_options::haveged',  { 'default_value' => false, 'value_type' => Boolean}),
-  $pki = lookup('simp_options::pki',  { 'default_value' => false, 'value_type' => Boolean})
+  $haveged = simplib::lookup('simp_options::haveged',  { 'default_value' => false, 'value_type' => Boolean}),
+  $pki = simplib::lookup('simp_options::pki',  { 'default_value' => false, 'value_type' => Boolean})
 ) {
   validate_array($openssl_cipher_suite)
   validate_array($ssl_protocols)

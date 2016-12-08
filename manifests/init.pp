@@ -36,8 +36,8 @@
 class simp_apache (
   $data_dir       = versioncmp(simp_version(),'5') ? { '-1' => '/srv/www', default => '/var/www' },
   $rsync_source   = "apache_${::environment}/www",
-  $rsync_server   = lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1', 'value_type' => String}),
-  $rsync_timeout  = lookup('simp_options::rsync::timeout', { 'default_value' => '2', 'value_type' => Stdlib::Compat::Integer }),
+  $rsync_server   = simplib::lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1', 'value_type' => String}),
+  $rsync_timeout  = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => '2', 'value_type' => Stdlib::Compat::Integer }),
   $rsync_web_root = true,
   $ssl            = true
 ) {

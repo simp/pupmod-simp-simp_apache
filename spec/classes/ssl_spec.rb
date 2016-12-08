@@ -51,9 +51,8 @@ describe 'simp_apache::ssl' do
           it { is_expected.to_not create_iptables__add_tcp_stateful_listen('allow_https') }
           it { is_expected.to create_class('pki') }
           it { is_expected.to create_pki__copy('/etc/httpd/conf') }
-          it {
-            is_expected.to_not create_file('/etc/httpd/conf/pki').with({
-              'source' => params['cert_source']
+          it { is_expected.to create_file('/etc/httpd/conf/pki').with({
+              'source' => nil
             })
           }
         end
@@ -71,7 +70,7 @@ describe 'simp_apache::ssl' do
           it { is_expected.to_not create_pki__copy('/etc/httpd/conf') }
           it {
             is_expected.to create_file('/etc/httpd/conf/pki').with({
-              'source' => params['cert_source']
+              'source' => '/tmp/foo'
             })
           }
         end
