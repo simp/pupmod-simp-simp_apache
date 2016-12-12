@@ -32,7 +32,7 @@
 #   Type: Boolean
 #   Whether or not to use the SIMP iptables module.
 #
-# [*cert_source*]
+# [*app_pki_cert_source*]
 #   Type: Valid File Resource Source
 #   If $pki is :false, this will designate the proper source
 #   for the PKI certs to be used by Apache. If neither variable is
@@ -57,13 +57,13 @@ class simp_apache::ssl (
   $ssl_honor_cipher_order = 'on',
   $sslverifyclient = 'require',
   $sslverifydepth = '10',
-  $sslcacertificatepath = '/etc/httpd/conf/pki/cacerts',
-  $sslcertificatefile = "/etc/httpd/conf/pki/public/${::fqdn}.pub",
-  $sslcertificatekeyfile = "/etc/httpd/conf/pki/private/${::fqdn}.pem",
+  $app_pki_ca_dir = '/etc/httpd/conf/pki/cacerts',
+  $app_pki_cert = "/etc/httpd/conf/pki/public/${::fqdn}.pub",
+  $app_pki_key = "/etc/httpd/conf/pki/private/${::fqdn}.pem",
+  $app_pki_cert_source = '',
   $logformat = '%t %h %{SSL_CLIENT_S_DN_CN}x %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %s',
   $enable_default_vhost = true,
   $firewall = simplib::lookup('simp_options::firewall',  { 'default_value' => false, 'value_type' => Boolean}),
-  $cert_source = '',
   $haveged = simplib::lookup('simp_options::haveged',  { 'default_value' => false, 'value_type' => Boolean}),
   $pki = simplib::lookup('simp_options::pki',  { 'default_value' => false, 'value_type' => Boolean})
 ) {
@@ -71,9 +71,9 @@ class simp_apache::ssl (
   validate_array($ssl_protocols)
   validate_array_member($ssl_honor_cipher_order,['on','off'])
   validate_integer($sslverifydepth)
-  validate_absolute_path($sslcacertificatepath)
-  validate_absolute_path($sslcertificatefile)
-  validate_absolute_path($sslcertificatekeyfile)
+  validate_absolute_path($app_pki_ca_dir)
+  validate_absolute_path($app_pki_cert)
+  validate_absolute_path($app_pki_key)
   validate_bool($enable_default_vhost)
   validate_bool($firewall)
   validate_bool($pki)
@@ -112,13 +112,13 @@ class simp_apache::ssl (
       notify => Service['httpd']
     }
   }
-  elsif  !empty($cert_source) {
+  elsif !empty($app_pki_cert_source) {
     file { '/etc/httpd/conf/pki':
       ensure  => 'directory',
       owner   => pick($::simp_apache::conf::group,'root'),
       group   => pick($::simp_apache::conf::group,'apache'),
       mode    => '0640',
-      source  => $cert_source,
+      source  => $app_pki_cert_source,
       recurse => true,
       notify  => Service['httpd']
     }

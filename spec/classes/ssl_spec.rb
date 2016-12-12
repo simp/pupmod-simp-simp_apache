@@ -40,9 +40,9 @@ describe 'simp_apache::ssl' do
           it { is_expected.to create_pki__copy('/etc/httpd/conf') }
         end
 
-        context 'pki = true and filled cert_source' do
+        context 'pki = true and filled app_pki_cert_source' do
           let(:params){{
-            :pki => true, :cert_source  => '/tmp/foo'
+            :pki => true, :app_pki_cert_source  => '/tmp/foo'
           }}
 
           it { is_expected.to compile.with_all_deps }
@@ -57,9 +57,9 @@ describe 'simp_apache::ssl' do
           }
         end
 
-        context 'pki = false and filled cert_source' do
+        context 'pki = false and filled app_pki_cert_source' do
           let(:params){{
-            :cert_source  => '/tmp/foo'
+            :app_pki_cert_source  => '/tmp/foo'
           }}
 
           it { is_expected.to compile.with_all_deps }
