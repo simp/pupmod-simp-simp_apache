@@ -12,7 +12,7 @@ describe 'simp_apache::ssl' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp_apache') }
           it { is_expected.to create_class('simp_apache::ssl') }
-          it { is_expected.to_not create_iptables__add_tcp_stateful_listen('allow_https') }
+          it { is_expected.to_not create_iptables__listen__tcp_stateful('allow_https') }
           it { is_expected.to_not create_class('pki') }
           it { is_expected.to_not create_pki__copy('/etc/httpd/conf') }
           it { is_expected.to_not contain_class('haveged') }
@@ -24,7 +24,7 @@ describe 'simp_apache::ssl' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp_apache') }
           it { is_expected.to create_class('simp_apache::ssl') }
-          it { is_expected.to create_iptables__add_tcp_stateful_listen('allow_https') }
+          it { is_expected.to create_iptables__listen__tcp_stateful('allow_https') }
           it { is_expected.to_not create_class('pki') }
           it { is_expected.to_not create_pki__copy('/etc/httpd/conf') }
         end
@@ -35,7 +35,7 @@ describe 'simp_apache::ssl' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp_apache') }
           it { is_expected.to create_class('simp_apache::ssl') }
-          it { is_expected.to_not create_iptables__add_tcp_stateful_listen('allow_https') }
+          it { is_expected.to_not create_iptables__listen__tcp_stateful('allow_https') }
           it { is_expected.to create_class('pki') }
           it { is_expected.to create_pki__copy('/etc/httpd/conf') }
         end
@@ -48,7 +48,7 @@ describe 'simp_apache::ssl' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp_apache') }
           it { is_expected.to create_class('simp_apache::ssl') }
-          it { is_expected.to_not create_iptables__add_tcp_stateful_listen('allow_https') }
+          it { is_expected.to_not create_iptables__listen__tcp_stateful('allow_https') }
           it { is_expected.to create_class('pki') }
           it { is_expected.to create_pki__copy('/etc/httpd/conf') }
           it { is_expected.to create_file('/etc/httpd/conf/pki').with({
@@ -65,7 +65,7 @@ describe 'simp_apache::ssl' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp_apache') }
           it { is_expected.to create_class('simp_apache::ssl') }
-          it { is_expected.to_not create_iptables__add_tcp_stateful_listen('allow_https') }
+          it { is_expected.to_not create_iptables__listen__tcp_stateful('allow_https') }
           it { is_expected.to_not create_class('pki') }
           it { is_expected.to_not create_pki__copy('/etc/httpd/conf') }
           it {
@@ -80,14 +80,6 @@ describe 'simp_apache::ssl' do
           it { is_expected.to_not contain_class('haveged') }
         end
 
-        context 'with invalid input' do
-          let(:params) {{:haveged => 'invalid_input'}}
-          it 'with haveged as a string' do
-            expect {
-              is_expected.to compile
-            }.to raise_error(RSpec::Expectations::ExpectationNotMetError,/invalid_input" is not a boolean/)
-          end
-        end
       end
     end
   end

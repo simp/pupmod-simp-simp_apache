@@ -1,16 +1,12 @@
-# == Class: simp_apache::install
-#
 # Package installation
 #
 class simp_apache::install {
-
   assert_private()
-
 
   package { 'httpd': ensure => 'latest' }
 
-  if $::operatingsystem in ['RedHat','CentOS'] {
-    if (versioncmp($::operatingsystemmajrelease,'7') >= 0) {
+  if $facts['os']['name'] in ['RedHat','CentOS'] {
+    if (versioncmp($facts['os']['release']['major'],'7') >= 0) {
       package { 'mod_ldap': ensure => 'latest' }
     }
   }

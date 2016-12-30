@@ -9,7 +9,8 @@
   "issues_url": "https://simp-project.atlassian.net",
   "tags": [
     "simp",
-    "apache"
+    "apache",
+    "httpd"
   ],
   "dependencies": [
     {
@@ -68,5 +69,16 @@
         "7"
       ]
     }
-  ]
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": "4.x"
+    },
+    {
+      "name": "pe",
+      "version_requirement": ">= 2016.2.0"
+    }
+  ],
+  "data_provider": "hiera"
 }

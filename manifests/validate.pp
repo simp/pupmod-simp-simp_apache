@@ -1,14 +1,10 @@
-# == Class simp_apache::validate
-#
 # This class should be used as input to validate_deep_hash when
 # managing 'ldap' or 'limits' ACLs
 #
 # The SIMP kibana and elasticsearch modules have working examples of
 # how to use this effectively.
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp_apache::validate {
   $method_acl = {
