@@ -29,27 +29,27 @@ describe 'simp_apache::ssl' do
           it { is_expected.to_not create_pki__copy('/etc/httpd/conf') }
         end
 
-        context 'pki = true' do
-          let(:params){{ :pki => true }}
+        context 'pki = simp' do
+          let(:params){{ :pki => 'simp' }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp_apache') }
           it { is_expected.to create_class('simp_apache::ssl') }
           it { is_expected.to_not create_iptables__listen__tcp_stateful('allow_https') }
-          it { is_expected.to create_class('pki') }
+          it { is_expected.to contain_class('pki') }
           it { is_expected.to create_pki__copy('/etc/httpd/conf') }
         end
 
-        context 'pki = true and filled app_pki_cert_source' do
+        context 'pki = simp and filled app_pki_external_source' do
           let(:params){{
-            :pki => true, :app_pki_cert_source  => '/tmp/foo'
+            :pki => 'simp', :app_pki_external_source  => '/tmp/foo'
           }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp_apache') }
           it { is_expected.to create_class('simp_apache::ssl') }
           it { is_expected.to_not create_iptables__listen__tcp_stateful('allow_https') }
-          it { is_expected.to create_class('pki') }
+          it { is_expected.to contain_class('pki') }
           it { is_expected.to create_pki__copy('/etc/httpd/conf') }
           it { is_expected.to create_file('/etc/httpd/conf/pki').with({
               'source' => nil
@@ -57,9 +57,9 @@ describe 'simp_apache::ssl' do
           }
         end
 
-        context 'pki = false and filled app_pki_cert_source' do
+        context 'pki = false and filled app_pki_external_source' do
           let(:params){{
-            :app_pki_cert_source  => '/tmp/foo'
+            :app_pki_external_source  => '/tmp/foo'
           }}
 
           it { is_expected.to compile.with_all_deps }

@@ -24,11 +24,14 @@
 # @param firewall
 #   Whether or not to use the SIMP iptables module.
 #
-# @param app_pki_cert_source
+# @param app_pki_external_source
 #   If $pki is :false, this will designate the proper source
 #   for the PKI certs to be used by Apache. If neither variable is
 #   set, you will need to ensure that certificates are properly
 #   uploaded to the system.
+#
+# @param app_pki_dir
+#   The directory of the application certs.
 #
 # @param pki
 #   Whether or not to use to the inbuilt 'pki' module from the SIMP
@@ -38,22 +41,23 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp_apache::ssl (
-  Array[Simplib::Port]           $listen                 = [443],
-  Simplib::Netlist               $trusted_nets           = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] }),
-  Array[String]                  $openssl_cipher_suite   = simplib::lookup('simp_options::openssl::cipher_suite', { 'default_value' => ['DEFAULT', '!MEDIUM'] }),
-  Array[String]                  $ssl_protocols          = ['TLSv1','TLSv1.1','TLSv1.2'],
-  Boolean                        $ssl_honor_cipher_order = true,
-  String                         $sslverifyclient        = 'require',
-  Integer                        $sslverifydepth         = 10,
-  Stdlib::AbsolutePath           $app_pki_ca_dir         = '/etc/httpd/conf/pki/cacerts',
-  Stdlib::AbsolutePath           $app_pki_cert           = "/etc/httpd/conf/pki/public/${facts['fqdn']}.pub",
-  Stdlib::AbsolutePath           $app_pki_key            = "/etc/httpd/conf/pki/private/${facts['fqdn']}.pem",
-  Optional[Stdlib::AbsolutePath] $app_pki_cert_source    = undef,
-  String                         $logformat              = '%t %h %{SSL_CLIENT_S_DN_CN}x %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %s',
-  Boolean                        $enable_default_vhost   = true,
-  Boolean                        $firewall               = simplib::lookup('simp_options::firewall', { 'default_value' => false, }),
-  Boolean                        $haveged                = simplib::lookup('simp_options::haveged', { 'default_value' => false }),
-  Boolean                        $pki                    = simplib::lookup('simp_options::pki', { 'default_value' => false })
+  Array[Simplib::Port]           $listen                  = [443],
+  Simplib::Netlist               $trusted_nets            = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] }),
+  Array[String]                  $openssl_cipher_suite    = simplib::lookup('simp_options::openssl::cipher_suite', { 'default_value' => ['DEFAULT', '!MEDIUM'] }),
+  Array[String]                  $ssl_protocols           = ['TLSv1','TLSv1.1','TLSv1.2'],
+  Boolean                        $ssl_honor_cipher_order  = true,
+  String                         $sslverifyclient         = 'require',
+  Integer                        $sslverifydepth          = 10,
+  Stdlib::Absolutepath           $app_pki_external_source = simplib::lookup('simp_options::pki::source', { 'default_value' => '/etc/simp/pki' }),
+  Stdlib::AbsolutePath           $app_pki_dir             = '/etc/httpd/conf',
+  Stdlib::AbsolutePath           $app_pki_ca_dir          = '/etc/httpd/conf/pki/cacerts',
+  Stdlib::AbsolutePath           $app_pki_cert            = "/etc/httpd/conf/pki/public/${facts['fqdn']}.pub",
+  Stdlib::AbsolutePath           $app_pki_key             = "/etc/httpd/conf/pki/private/${facts['fqdn']}.pem",
+  String                         $logformat               = '%t %h %{SSL_CLIENT_S_DN_CN}x %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %s',
+  Boolean                        $enable_default_vhost    = true,
+  Boolean                        $firewall                = simplib::lookup('simp_options::firewall', { 'default_value' => false, }),
+  Boolean                        $haveged                 = simplib::lookup('simp_options::haveged', { 'default_value' => false }),
+  Variant[Boolean,Enum['simp']]  $pki                     = simplib::lookup('simp_options::pki', { 'default_value' => false })
 ) {
 
   include '::simp_apache'
@@ -79,20 +83,20 @@ class simp_apache::ssl (
   }
 
   if $pki {
-    include '::pki'
-
-    ::pki::copy { '/etc/httpd/conf':
+    ::pki::copy { $app_pki_dir:
+      source => $app_pki_external_source,
       group  => pick($::simp_apache::conf::group,'apache'),
-      notify => Service['httpd']
+      pki    => $pki,
+      notify => Service['httpd'],
     }
   }
-  elsif $app_pki_cert_source {
-    file { '/etc/httpd/conf/pki':
+  else {
+    file { "${app_pki_dir}/pki":
       ensure  => 'directory',
       owner   => pick($::simp_apache::conf::group,'root'),
       group   => pick($::simp_apache::conf::group,'apache'),
       mode    => '0640',
-      source  => $app_pki_cert_source,
+      source  => $app_pki_external_source,
       recurse => true,
       notify  => Service['httpd']
     }
