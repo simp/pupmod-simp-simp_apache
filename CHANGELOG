@@ -1,6 +1,8 @@
 * Fri Dev 30 2016 Nick Miller <nick.miller@onyxpoint.com> - 6.0.0-0
 - Renamed `add_site` to `site`
 - Strongly typed module
+- Updated module assets
+- Wrote a basic class acceptance test
 
 * Wed Dec 07 2016 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.0-0
 - Updated catalysts to take defaults from simp_options

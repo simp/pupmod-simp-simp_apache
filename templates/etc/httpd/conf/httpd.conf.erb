@@ -17,7 +17,7 @@ PidFile run/httpd.pid
 Timeout <%= @httpd_timeout %>
 
 # Default: Off
-KeepAlive <%= @keepalive ? 'yes' : 'no' %>
+KeepAlive <%= @keepalive ? 'On' : 'Off' %>
 
 # Default: 100
 MaxKeepAliveRequests <%= @maxkeepalive %>
@@ -239,10 +239,10 @@ DefaultType <%= @defaulttype %>
 HostnameLookups Off
 
 # Default: on
-EnableMMAP <%= @enablemmap ? 'yes' : 'no' %>
+EnableMMAP <%= @enablemmap ? 'On' : 'Off' %>
 
 # Default: on
-EnableSendfile <%= @enablesendfile ? 'yes' : 'no' %>
+EnableSendfile <%= @enablesendfile ? 'On' : 'Off' %>
 
 ErrorLog syslog:<%= @logfacility %>
 

@@ -24,11 +24,11 @@
 #
 class simp_apache (
   Stdlib::AbsolutePath $data_dir       = '/var/www',
+  Boolean              $ssl            = true,
   String               $rsync_source   = "apache_${::environment}/www",
   Simplib::Host        $rsync_server   = simplib::lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1' }),
   Integer              $rsync_timeout  = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 }),
-  Boolean              $rsync_web_root = true,
-  Boolean              $ssl            = true
+  Boolean              $rsync_web_root = true
 ) {
 
   include '::simp_apache::install'
@@ -43,8 +43,8 @@ class simp_apache (
   Class['::simp_apache::install'] -> Class['::simp_apache::conf']
   Class['::simp_apache::install'] ~> Service['httpd']
 
-  if $::operatingsystem in ['RedHat','CentOS'] {
-    if (versioncmp($::operatingsystemmajrelease,'7') >= 0) {
+  if $facts['os']['name'] in ['RedHat','CentOS'] {
+    if (versioncmp($facts['os']['release']['major'],'7') >= 0) {
       $apache_homedir = '/usr/share/httpd'
     }
     else {
@@ -55,7 +55,7 @@ class simp_apache (
     $apache_homedir = '/var/www'
   }
 
-  $_modules_target = $::hardwaremodel ? {
+  $_modules_target = $facts['hardwaremodel'] ? {
     'x86_64' => '/usr/lib64/httpd/modules',
     default  => '/usr/lib/httpd/modules'
   }
@@ -119,9 +119,9 @@ class simp_apache (
   }
 
   group { 'apache':
-      ensure    => 'present',
-      allowdupe => false,
-      gid       => '48'
+    ensure    => 'present',
+    allowdupe => false,
+    gid       => '48'
   }
 
   if $rsync_web_root {
