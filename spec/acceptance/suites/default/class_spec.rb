@@ -11,10 +11,8 @@ describe 'apache class' do
       }
       let(:host_fqdn) { fact_on(host, 'fqdn') }
       let(:hieradata) {{
-        'simp_apache::rsync_web_root'      => false,
-        'simp_apache::ssl::app_pki_ca_dir' => '/etc/pki/simp-testing/pki/cacerts',
-        'simp_apache::ssl::app_pki_cert'   => "/etc/pki/simp-testing/pki/public/#{host_fqdn}.pub",
-        'simp_apache::ssl::app_pki_key'    => "/etc/pki/simp-testing/pki/private/#{host_fqdn}.pem"
+        'simp_apache::rsync_web_root'               => false,
+        'simp_apache::ssl::app_pki_external_source' => '/etc/pki/simp-testing/pki/',
       }}
 
       it 'should work with no errors' do
