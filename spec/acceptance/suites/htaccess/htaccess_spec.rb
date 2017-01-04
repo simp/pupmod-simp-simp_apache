@@ -36,14 +36,15 @@ EOM
     it 'should work with no errors' do
       apply_manifest_on(host, manifest2, :catch_failures => true)
 
-      expected = <<EOM
-# This file managed by Puppet. Please do not edit by hand!
-user2:{SHA}yLo2mwINaPQsTgevY0gyfH9mxk4=
-user1:{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=
-EOM
       on host, 'cat /root/htaccess.txt', :acceptable_exit_codes => 0 do
-         expect(stdout).to eq(expected)
+        lines = stdout.split("\n")
+        expect(lines.size).to eq(3)
+        expect(lines.first).to eq('# This file managed by Puppet. Please do not edit by hand!')
+        # The order of entries is non-deterministic, so test with regex:
+        expect(stdout).to match(/^user1:{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=$/)
+        expect(stdout).to match(/^user2:{SHA}yLo2mwINaPQsTgevY0gyfH9mxk4=$/)
       end
+
     end
 
     it 'should be idempotent' do

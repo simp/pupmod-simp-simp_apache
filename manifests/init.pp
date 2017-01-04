@@ -1,5 +1,3 @@
-# == Class: simp_apache
-#
 # This class configures an Apache server.  It ensures that the appropriate
 # files are in the appropriate places and can optionally rsync the
 # /var/www/html content.
@@ -7,45 +5,31 @@
 # Ideally, we will move over to the Puppet Labs apache module in the future but
 # it's going to be quite a bit of work to port all of our code.
 #
-# == Parameters
-#
-# NOTE: If a parameter is not listed here then it is part of the
+# @NOTE: If a parameter is not listed here then it is part of the
 # standard Apache configuration set and the stock Apache documentation
 # should be referenced.
 #
-# [*data_dir*]
-#   Type: Absolute Path
-#   Default: versioncmp(simp_version(),'5') ? { '-1' => '/srv/www', default => '/var/www' }
-#
+# @param data_dir
 #   The location where apache web data should be stored. Set to /srv/www for
 #   legacy reasons.
 #
-# [*rsync_web_root*]
-#   Type: Boolean
+# @param rsync_web_root
 #   Whether or not to rsync over the web root.
 #
-# [*ssl*]
-#   Type: on|off
+# @param ssl
 #   Whether or not to enable SSL. You will need to set the Hiera
 #   variables for apache::ssl appropriately for your needs.
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp_apache (
-  $data_dir       = versioncmp(simp_version(),'5') ? { '-1' => '/srv/www', default => '/var/www' },
-  $rsync_source   = "apache_${::environment}/www",
-  $rsync_server   = simplib::lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1', 'value_type' => String}),
-  $rsync_timeout  = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => '2', 'value_type' => Stdlib::Compat::Integer }),
-  $rsync_web_root = true,
-  $ssl            = true
+  Stdlib::AbsolutePath $data_dir       = '/var/www',
+  Boolean              $ssl            = true,
+  String               $rsync_source   = "apache_${::environment}/www",
+  Simplib::Host        $rsync_server   = simplib::lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1' }),
+  Integer              $rsync_timeout  = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 }),
+  Boolean              $rsync_web_root = true
 ) {
-  validate_absolute_path($data_dir)
-  validate_bool($ssl)
-  validate_string($rsync_server)
-  validate_integer($rsync_timeout)
-  validate_bool($rsync_web_root)
 
   include '::simp_apache::install'
   include '::simp_apache::conf'
@@ -59,8 +43,8 @@ class simp_apache (
   Class['::simp_apache::install'] -> Class['::simp_apache::conf']
   Class['::simp_apache::install'] ~> Service['httpd']
 
-  if $::operatingsystem in ['RedHat','CentOS'] {
-    if (versioncmp($::operatingsystemmajrelease,'7') >= 0) {
+  if $facts['os']['name'] in ['RedHat','CentOS'] {
+    if (versioncmp($facts['os']['release']['major'],'7') >= 0) {
       $apache_homedir = '/usr/share/httpd'
     }
     else {
@@ -71,7 +55,7 @@ class simp_apache (
     $apache_homedir = '/var/www'
   }
 
-  $_modules_target = $::hardwaremodel ? {
+  $_modules_target = $facts['hardwaremodel'] ? {
     'x86_64' => '/usr/lib64/httpd/modules',
     default  => '/usr/lib/httpd/modules'
   }
@@ -135,9 +119,9 @@ class simp_apache (
   }
 
   group { 'apache':
-      ensure    => 'present',
-      allowdupe => false,
-      gid       => '48'
+    ensure    => 'present',
+    allowdupe => false,
+    gid       => '48'
   }
 
   if $rsync_web_root {

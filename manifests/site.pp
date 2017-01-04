@@ -1,28 +1,19 @@
-# == Define: apache::add_site
-#
 # This adds a 'site' to your configuration.
 # In reality, it simply pulls a $name'd template from the templates/sites
 # directory under the apache module, or somewhere else if you specify.
 # The name should be 'something'.conf and should be an Apache includable
 # configuration file.
 #
-# _Example_
+# @example
+#  site { 'public': }
 #
-#  add_site { 'public': }
-#
-# == Parameters
-#
-# [*content*]
+# @param content
 #   Set this to something other than 'base' if you with to write in your own
 #   custom content on the fly.
 #
-#
-define simp_apache::add_site (
-  $content = 'base'
+define simp_apache::site (
+  String $content = 'base'
 ) {
-  validate_string( $content )
-
-  include '::simp_apache'
 
   $_content = $content ? {
     'base'  => template("${module_name}/etc/httpd/conf.d/${name}.conf.erb"),

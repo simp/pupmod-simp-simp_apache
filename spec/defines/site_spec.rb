@@ -1,12 +1,16 @@
 require 'spec_helper'
 
-describe 'simp_apache::add_site' do
+describe 'simp_apache::site' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
         let(:facts) do
           facts
         end
+
+         let(:pre_condition) do
+           'include "simp_apache"'
+         end
 
         context 'with default parameters' do
           let(:title) {'test'}

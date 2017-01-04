@@ -13,5 +13,6 @@ HOSTS:
     box :     centos/6
     hypervisor : vagrant
 CONFIG:
-  type: foss
+  type: aio
   vagrant_memsize: 256
+  synced_folder : disabled

@@ -17,7 +17,7 @@ PidFile run/httpd.pid
 Timeout <%= @httpd_timeout %>
 
 # Default: Off
-KeepAlive <%= @keepalive %>
+KeepAlive <%= @keepalive ? 'On' : 'Off' %>
 
 # Default: 100
 MaxKeepAliveRequests <%= @maxkeepalive %>
@@ -27,15 +27,15 @@ KeepAliveTimeout <%= @keepalivetimeout %>
 
 <IfModule prefork.c>
 # Default: 8
-StartServers       <%= @prefork_startservers %>
+StartServers         <%= @prefork_startservers %>
 # Default: 5
-MinSpareServers    <%= @prefork_minspareservers %>
+MinSpareServers      <%= @prefork_minspareservers %>
 # Default: 20
-MaxSpareServers   <%= @prefork_maxspareservers %>
+MaxSpareServers      <%= @prefork_maxspareservers %>
 # Default: 256
-ServerLimit      <%= @prefork_serverlimit %>
+ServerLimit          <%= @prefork_serverlimit %>
 # Default: 256
-MaxClients       <%= @prefork_maxclients %>
+MaxClients           <%= @prefork_maxclients %>
 # Default: 4000
 MaxRequestsPerChild  <%= @prefork_maxrequestsperchild %>
 </IfModule>
@@ -44,20 +44,20 @@ MaxRequestsPerChild  <%= @prefork_maxrequestsperchild %>
 # Default: 2
 StartServers         <%= @worker_startservers %>
 # Default: 150
-MaxClients         <%= @worker_maxclients %>
+MaxClients           <%= @worker_maxclients %>
 # Default: 25
-MinSpareThreads     <%= @worker_minsparethreads %>
+MinSpareThreads      <%= @worker_minsparethreads %>
 # Default: 75
-MaxSpareThreads     <%= @worker_maxsparethreads %>
+MaxSpareThreads      <%= @worker_maxsparethreads %>
 # Default: 25
-ThreadsPerChild     <%= @worker_threadsperchild %>
+ThreadsPerChild      <%= @worker_threadsperchild %>
 # Default: 0
 MaxRequestsPerChild  <%= @worker_maxrequestsperchild %>
 </IfModule>
 
 # Default: 80
-<% Array(@listen).flatten.each do |l| -%>
-Listen <%= scope.function_bracketize([l]) %>
+<% @listen.flatten.each do |l| -%>
+Listen <%= scope.function_bracketize([l.to_s]) %>
 <% end -%>
 
 <% if (['RedHat','CentOS'].include?(@operatingsystem) ) and scope.function_versioncmp([@operatingsystemmajrelease,'7']) < 0 then -%>
@@ -131,7 +131,7 @@ Include conf.modules.d/*.conf
 <% end -%>
 
 Include conf.d/*.conf
-<% if @includes != 'nil' then -%>
+<% if !@includes.nil? -%>
 <%    @includes.each do |i| -%>
 Include <%= i %><%= "\n" %>
 <%    end -%>
@@ -143,7 +143,7 @@ Group <%= @group %>
 # Default: root@localhost
 ServerAdmin <%= @serveradmin %>
 
-<% if @servername != 'nil' then -%>
+<% if !@servername.nil? -%>
 ServerName <%= @servername %>
 UseCanonicalName On
 <% else -%>
@@ -239,10 +239,10 @@ DefaultType <%= @defaulttype %>
 HostnameLookups Off
 
 # Default: on
-EnableMMAP <%= @enablemmap %>
+EnableMMAP <%= @enablemmap ? 'On' : 'Off' %>
 
 # Default: on
-EnableSendfile <%= @enablesendfile %>
+EnableSendfile <%= @enablesendfile ? 'On' : 'Off' %>
 
 ErrorLog syslog:<%= @logfacility %>
 
