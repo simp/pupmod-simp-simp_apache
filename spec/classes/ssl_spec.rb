@@ -14,7 +14,7 @@ describe 'simp_apache::ssl' do
           it { is_expected.to create_class('simp_apache::ssl') }
           it { is_expected.to_not create_iptables__listen__tcp_stateful('allow_https') }
           it { is_expected.to_not create_class('pki') }
-          it { is_expected.to_not create_pki__copy('/etc/httpd/conf') }
+          it { is_expected.to_not create_pki__copy('simp_apache') }
           it { is_expected.to_not contain_class('haveged') }
         end
 
@@ -26,7 +26,7 @@ describe 'simp_apache::ssl' do
           it { is_expected.to create_class('simp_apache::ssl') }
           it { is_expected.to create_iptables__listen__tcp_stateful('allow_https') }
           it { is_expected.to_not create_class('pki') }
-          it { is_expected.to_not create_pki__copy('/etc/httpd/conf') }
+          it { is_expected.to_not create_pki__copy('simp_apache') }
         end
 
         context 'pki = simp' do
@@ -37,42 +37,7 @@ describe 'simp_apache::ssl' do
           it { is_expected.to create_class('simp_apache::ssl') }
           it { is_expected.to_not create_iptables__listen__tcp_stateful('allow_https') }
           it { is_expected.to contain_class('pki') }
-          it { is_expected.to create_pki__copy('/etc/httpd/conf') }
-        end
-
-        context 'pki = simp and filled app_pki_external_source' do
-          let(:params){{
-            :pki => 'simp', :app_pki_external_source  => '/tmp/foo'
-          }}
-
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('simp_apache') }
-          it { is_expected.to create_class('simp_apache::ssl') }
-          it { is_expected.to_not create_iptables__listen__tcp_stateful('allow_https') }
-          it { is_expected.to contain_class('pki') }
-          it { is_expected.to create_pki__copy('/etc/httpd/conf') }
-          it { is_expected.to create_file('/etc/httpd/conf/pki').with({
-              'source' => nil
-            })
-          }
-        end
-
-        context 'pki = false and filled app_pki_external_source' do
-          let(:params){{
-            :app_pki_external_source  => '/tmp/foo'
-          }}
-
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('simp_apache') }
-          it { is_expected.to create_class('simp_apache::ssl') }
-          it { is_expected.to_not create_iptables__listen__tcp_stateful('allow_https') }
-          it { is_expected.to_not create_class('pki') }
-          it { is_expected.to_not create_pki__copy('/etc/httpd/conf') }
-          it {
-            is_expected.to create_file('/etc/httpd/conf/pki').with({
-              'source' => '/tmp/foo'
-            })
-          }
+          it { is_expected.to create_pki__copy('simp_apache') }
         end
 
         context 'with haveged = false' do
