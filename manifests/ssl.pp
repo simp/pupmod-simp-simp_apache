@@ -24,19 +24,38 @@
 # @param firewall
 #   Whether or not to use the SIMP iptables module.
 #
+# @param pki
+#   * If 'simp', include SIMP's pki module and use pki::copy to manage
+#     application certs in /etc/pki/simp_apps/simp_apache/pki
+#   * If true, do *not* include SIMP's pki module, but still use pki::copy
+#     to manage certs in /etc/pki/simp_apps/simp_apache/pki
+#   * If false, do not include SIMP's pki module and do not use pki::copy
+#     to manage certs.  You will need to appropriately assign a subset of:
+#     * app_pki_dir
+#     * app_pki_key
+#     * app_pki_cert
+#     * app_pki_ca
+#     * app_pki_ca_dir
+#
 # @param app_pki_external_source
-#   If $pki is :false, this will designate the proper source
-#   for the PKI certs to be used by Apache. If neither variable is
-#   set, you will need to ensure that certificates are properly
-#   uploaded to the system.
+#   * If pki = 'simp' or true, this is the directory from which certs will be
+#     copied, via pki::copy.  Defaults to /etc/pki/simp.
+#
+#   * If pki = false, this variable has no effect.
 #
 # @param app_pki_dir
-#   The directory of the application certs.
+#   This variable controls the basepath of $app_pki_key, $app_pki_cert,
+#   $app_pki_ca, $app_pki_ca_dir, and $app_pki_crl.
+#   It defaults to /etc/pki/simp_apps/simp_apache/pki.
 #
-# @param pki
-#   Whether or not to use to the inbuilt 'pki' module from the SIMP
-#   build. This would tie Apache to the system certificates in
-#   /etc/pki
+# @param app_pki_key
+#   Path and name of the private SSL key file
+#
+# @param app_pki_cert
+#   Path and name of the public SSL certificate
+#
+# @param app_pki_ca_dir
+#   Path to the CA.
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
@@ -48,16 +67,16 @@ class simp_apache::ssl (
   Boolean                        $ssl_honor_cipher_order  = true,
   String                         $sslverifyclient         = 'require',
   Integer                        $sslverifydepth          = 10,
+  Variant[Boolean,Enum['simp']]  $pki                     = simplib::lookup('simp_options::pki', { 'default_value' => false }),
   Stdlib::Absolutepath           $app_pki_external_source = simplib::lookup('simp_options::pki::source', { 'default_value' => '/etc/simp/pki' }),
-  Stdlib::AbsolutePath           $app_pki_dir             = '/etc/httpd/conf',
-  Stdlib::AbsolutePath           $app_pki_ca_dir          = "${app_pki_dir}/pki/cacerts",
-  Stdlib::AbsolutePath           $app_pki_cert            = "${app_pki_dir}/pki/public/${facts['fqdn']}.pub",
-  Stdlib::AbsolutePath           $app_pki_key             = "${app_pki_dir}/pki/private/${facts['fqdn']}.pem",
+  Stdlib::AbsolutePath           $app_pki_dir             = '/etc/pki/simp_apps/simp_apache/pki',
+  Stdlib::AbsolutePath           $app_pki_ca_dir          = "${app_pki_dir}/cacerts",
+  Stdlib::AbsolutePath           $app_pki_cert            = "${app_pki_dir}/public/${facts['fqdn']}.pub",
+  Stdlib::AbsolutePath           $app_pki_key             = "${app_pki_dir}/private/${facts['fqdn']}.pem",
   String                         $logformat               = '%t %h %{SSL_CLIENT_S_DN_CN}x %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %s',
   Boolean                        $enable_default_vhost    = true,
   Boolean                        $firewall                = simplib::lookup('simp_options::firewall', { 'default_value' => false, }),
-  Boolean                        $haveged                 = simplib::lookup('simp_options::haveged', { 'default_value' => false }),
-  Variant[Boolean,Enum['simp']]  $pki                     = simplib::lookup('simp_options::pki', { 'default_value' => false })
+  Boolean                        $haveged                 = simplib::lookup('simp_options::haveged', { 'default_value' => false })
 ) {
 
   include '::simp_apache'
@@ -83,22 +102,11 @@ class simp_apache::ssl (
   }
 
   if $pki {
-    ::pki::copy { $app_pki_dir:
+    ::pki::copy { 'simp_apache':
       source => $app_pki_external_source,
       group  => pick($::simp_apache::conf::group,'apache'),
       pki    => $pki,
       notify => Service['httpd'],
-    }
-  }
-  else {
-    file { "${app_pki_dir}/pki":
-      ensure  => 'directory',
-      owner   => pick($::simp_apache::conf::group,'root'),
-      group   => pick($::simp_apache::conf::group,'apache'),
-      mode    => '0640',
-      source  => $app_pki_external_source,
-      recurse => true,
-      notify  => Service['httpd']
     }
   }
 }

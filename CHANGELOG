@@ -1,3 +1,6 @@
+* Tue Jan 10 2017 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.0-0
+- Updated pki scheme
+
 * Fri Dec 30 2016 Nick Miller <nick.miller@onyxpoint.com> - 6.0.0-0
 - Renamed `add_site` to `site`
 - Strongly typed module
