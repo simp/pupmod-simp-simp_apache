@@ -26,9 +26,9 @@
 #
 # @param pki
 #   * If 'simp', include SIMP's pki module and use pki::copy to manage
-#     application certs in /etc/pki/simp_apps/simp_apache/pki
+#     application certs in /etc/pki/simp_apps/simp_apache/x509
 #   * If true, do *not* include SIMP's pki module, but still use pki::copy
-#     to manage certs in /etc/pki/simp_apps/simp_apache/pki
+#     to manage certs in /etc/pki/simp_apps/simp_apache/x509
 #   * If false, do not include SIMP's pki module and do not use pki::copy
 #     to manage certs.  You will need to appropriately assign a subset of:
 #     * app_pki_dir
@@ -39,7 +39,7 @@
 #
 # @param app_pki_external_source
 #   * If pki = 'simp' or true, this is the directory from which certs will be
-#     copied, via pki::copy.  Defaults to /etc/pki/simp.
+#     copied, via pki::copy.  Defaults to /etc/pki/simp/x509.
 #
 #   * If pki = false, this variable has no effect.
 #
@@ -68,8 +68,8 @@ class simp_apache::ssl (
   String                         $sslverifyclient         = 'require',
   Integer                        $sslverifydepth          = 10,
   Variant[Boolean,Enum['simp']]  $pki                     = simplib::lookup('simp_options::pki', { 'default_value' => false }),
-  Stdlib::Absolutepath           $app_pki_external_source = simplib::lookup('simp_options::pki::source', { 'default_value' => '/etc/pki/simp' }),
-  Stdlib::AbsolutePath           $app_pki_dir             = '/etc/pki/simp_apps/simp_apache/pki',
+  Stdlib::Absolutepath           $app_pki_external_source = simplib::lookup('simp_options::pki::source', { 'default_value' => '/etc/pki/simp/x509' }),
+  Stdlib::AbsolutePath           $app_pki_dir             = '/etc/pki/simp_apps/simp_apache/x509',
   Stdlib::AbsolutePath           $app_pki_ca_dir          = "${app_pki_dir}/cacerts",
   Stdlib::AbsolutePath           $app_pki_cert            = "${app_pki_dir}/public/${facts['fqdn']}.pub",
   Stdlib::AbsolutePath           $app_pki_key             = "${app_pki_dir}/private/${facts['fqdn']}.pem",

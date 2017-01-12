@@ -6,13 +6,12 @@ describe 'apache class' do
   hosts.each do |host|
 
     context 'basic parameters' do
-      let(:manifest) {
-        "class { 'simp_apache': }"
-      }
+      let(:manifest) { "include 'simp_apache'" }
       let(:host_fqdn) { fact_on(host, 'fqdn') }
       let(:hieradata) {{
-        'simp_apache::rsync_web_root'               => false,
-        'simp_apache::ssl::app_pki_external_source' => '/etc/pki/simp-testing/pki/',
+        'simp_apache::rsync_web_root' => false,
+        'simp_options::pki'           => true,
+        'simp_options::pki::source'   => '/etc/pki/simp-testing/pki/'
       }}
 
       it 'should work with no errors' do
@@ -29,6 +28,5 @@ describe 'apache class' do
         expect(result.output).to match(/You don't have permission to access \//)
       end
     end
-
   end
 end
