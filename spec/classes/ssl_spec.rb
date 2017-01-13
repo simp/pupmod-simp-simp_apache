@@ -38,6 +38,7 @@ describe 'simp_apache::ssl' do
           it { is_expected.to_not create_iptables__listen__tcp_stateful('allow_https') }
           it { is_expected.to contain_class('pki') }
           it { is_expected.to create_pki__copy('simp_apache') }
+          it { is_expected.to create_file('/etc/pki/simp_apps/simp_apache/x509') }
         end
 
         context 'with haveged = false' do
