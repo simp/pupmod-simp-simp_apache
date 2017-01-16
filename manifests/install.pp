@@ -6,7 +6,7 @@ class simp_apache::install {
   package { 'httpd': ensure => 'latest' }
 
   if $facts['os']['name'] in ['RedHat','CentOS'] {
-    if (versioncmp($facts['os']['release']['major'],'7') >= 0) {
+    if $facts['os']['release']['major'] == 6 {
       package { 'mod_ldap': ensure => 'latest' }
     }
   }
