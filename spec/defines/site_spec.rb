@@ -8,10 +8,6 @@ describe 'simp_apache::site' do
           facts
         end
 
-         let(:pre_condition) do
-           'include "simp_apache"'
-         end
-
         context 'with default parameters' do
           let(:title) {'test'}
           let(:params) {{ :content => 'test' }}
