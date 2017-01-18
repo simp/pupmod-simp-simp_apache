@@ -14,6 +14,7 @@
 define simp_apache::site (
   String $content = 'base'
 ) {
+  include 'simp_apache'
 
   $_content = $content ? {
     'base'  => template("${module_name}/etc/httpd/conf.d/${name}.conf.erb"),

@@ -1,3 +1,6 @@
+* Tue Jan 17 2017 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.0-0
+- simp_apache::site now includes simp_apache
+
 * Mon Jan 16 2017 Nick Miller <nick.miller@onyxpoint.com> - 6.0.0-0
 - Fixed dependency logic with mod_ldap to not install it on CentOS 7
 
