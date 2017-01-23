@@ -21,17 +21,18 @@ end
 
 describe 'simp_apache' do
   context 'supported operating systems' do
-    on_supported_os.each do |os, os_facts|
+    on_supported_os.each do |os, facts|
       context "on #{os}" do
         let(:facts) do
-          os_facts.merge({:environment => 'production'})
+          facts[:environment] = 'production'
+          facts
         end
 
         context 'with default parameters' do
           it_should_behave_like "a simp_apache class"
           it { is_expected.to create_class('simp_apache::ssl') }
           it { is_expected.to create_rsync('site').with({
-              :source => "apache_#{environment}/www"
+              :source => "apache_#{environment}_#{facts[:os][:name]}/www"
             })
           }
 
