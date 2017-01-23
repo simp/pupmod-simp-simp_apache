@@ -129,9 +129,10 @@ class simp_apache (
 
     # Rsync the /var/www space from the rsync server.
     # Add anything here you want to go to every web server.
+    $_downcase_os_name = downcase($facts['os']['name'])
     rsync { 'site':
-      user     => "apache_rsync_${::environment}",
-      password => passgen("apache_rsync_${::environment}"),
+      user     => "apache_rsync_${::environment}_${_downcase_os_name}",
+      password => passgen("apache_rsync_${::environment}_${_downcase_os_name}"),
       source   => $rsync_source,
       target   => '/var',
       server   => $rsync_server,
