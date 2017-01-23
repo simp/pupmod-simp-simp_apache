@@ -25,7 +25,7 @@
 class simp_apache (
   Stdlib::AbsolutePath $data_dir       = '/var/www',
   Boolean              $ssl            = true,
-  String               $rsync_source   = "apache_${::environment}/www",
+  String               $rsync_source   = "apache_${::environment}_${facts['os']['name']}/www",
   Simplib::Host        $rsync_server   = simplib::lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1' }),
   Integer              $rsync_timeout  = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 }),
   Boolean              $rsync_web_root = true
