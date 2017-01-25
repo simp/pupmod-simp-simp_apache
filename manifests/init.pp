@@ -25,7 +25,7 @@
 class simp_apache (
   Stdlib::AbsolutePath $data_dir       = '/var/www',
   Boolean              $ssl            = true,
-  String               $rsync_source   = "apache_${::environment}/www",
+  String               $rsync_source   = "apache_${::environment}_${facts['os']['name']}/www",
   Simplib::Host        $rsync_server   = simplib::lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1' }),
   Integer              $rsync_timeout  = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 }),
   Boolean              $rsync_web_root = true
@@ -129,9 +129,10 @@ class simp_apache (
 
     # Rsync the /var/www space from the rsync server.
     # Add anything here you want to go to every web server.
+    $_downcase_os_name = downcase($facts['os']['name'])
     rsync { 'site':
-      user     => "apache_rsync_${::environment}",
-      password => passgen("apache_rsync_${::environment}"),
+      user     => "apache_rsync_${::environment}_${_downcase_os_name}",
+      password => passgen("apache_rsync_${::environment}_${_downcase_os_name}"),
       source   => $rsync_source,
       target   => '/var',
       server   => $rsync_server,

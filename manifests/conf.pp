@@ -103,12 +103,12 @@ class simp_apache::conf (
   if $syslog  {
     include '::rsyslog'
     rsyslog::rule::local { 'XX_apache_error':
-      rule            => 'if ($programname == \'httpd\' and $syslogseverity-text == \'err\') then',
+      rule            => '$programname == \'httpd\' and $syslogseverity-text == \'err\'',
       target_log_file => "${syslog_target}/error_log",
       stop_processing => true
     }
     rsyslog::rule::local { 'YY_apache_access':
-      rule            => 'if ($programname == \'httpd\') then',
+      rule            => '$programname == \'httpd\'',
       target_log_file => "${syslog_target}/access_log",
       stop_processing => true
     }
