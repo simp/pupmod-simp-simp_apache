@@ -1,3 +1,11 @@
+* Thu Jun 22 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.1-0
+- Create namespaced, Puppet 4 versions of externally-used Puppet 3
+  functions and mark the Puppet 3 functions as deprecated. They will
+  be removed in a later release.
+  - apache_auth should be replaced with simp_apache::auth
+  - apache_limits should be replaced with simp_apache::limits
+  - munge_httpd_networks should be replaced with simp_apache::munge_httpd_networks
+
 * Mon Jan 23 2017 Nick Miller <nick.miller@onyxpoint.com> - 6.0.0-0
 - Fixed dependency logic with mod_ldap to not install it on CentOS 7
 - Rsyslog calls no longer include implied logic

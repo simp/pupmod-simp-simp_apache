@@ -12,6 +12,8 @@ module Puppet::Parser::Functions
 
     ENDHEREDOC
 
+    function_deprecation([:munge_httpd_networks, 'This method is deprecated, please use simp_apache::munge_httpd_networks'])
+
     Puppet::Parser::Functions.autoloader.load(
       File.expand_path(File.dirname(__FILE__) + '/../../../../../simplib/lib/puppet/parser/nets2cidr.rb')
     )
