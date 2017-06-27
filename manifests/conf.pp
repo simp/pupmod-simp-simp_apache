@@ -68,7 +68,7 @@ class simp_apache::conf (
   include '::simp_apache'
 
   # Make sure the networks are all formatted correctly for Apache.
-  $l_allowroot = munge_httpd_networks($allowroot)
+  $l_allowroot = simp_apache::munge_httpd_networks($allowroot)
 
   file { [
     '/etc/httpd/conf',

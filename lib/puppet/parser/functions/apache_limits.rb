@@ -137,6 +137,8 @@ module Puppet::Parser::Functions
       output.join("\n")
     end
 
+    function_deprecation([:apache_limits, 'This method is deprecated, please use simp_apache::limits'])
+
     unless args.count == 1 and args.first.is_a?(Hash) then
       raise Puppet::ParseError, ("apache_limits(): You must supply exactly one Hash argument.")
     end

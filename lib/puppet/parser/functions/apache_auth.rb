@@ -98,6 +98,8 @@ module Puppet::Parser::Functions
       content << "AuthUserFile #{opts['user_file']}"
     end
 
+    function_deprecation([:apache_auth, 'This method is deprecated, please use simp_apache::auth'])
+
     unless args.length == 1 and args.first.is_a?(Hash) then
       raise Puppet::ParseError, ("apache_auth(): You must supply exactly one Hash argument.")
     end
