@@ -5,6 +5,7 @@
   - apache_auth should be replaced with simp_apache::auth
   - apache_limits should be replaced with simp_apache::limits
   - munge_httpd_networks should be replaced with simp_apache::munge_httpd_networks
+- Update puppet requirement and remove OBE pe requirement in metadata.json
 
 * Mon Jan 23 2017 Nick Miller <nick.miller@onyxpoint.com> - 6.0.0-0
 - Fixed dependency logic with mod_ldap to not install it on CentOS 7
