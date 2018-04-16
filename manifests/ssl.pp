@@ -84,7 +84,7 @@ class simp_apache::ssl (
   if $haveged { include '::haveged' }
 
   file { '/etc/httpd/conf.d/ssl.conf':
-    owner   => pick($::simp_apache::conf::group,'root'),
+    owner   => pick($::simp_apache::conf::user,'root'),
     group   => pick($::simp_apache::conf::group,'apache'),
     mode    => '0640',
     content => template("${module_name}/etc/httpd/conf.d/ssl.conf.erb"),
