@@ -1,5 +1,5 @@
 * Mon Apr 16 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 6.0.2-0
-- set owned to asimp_apache::user instead of simp_apache group on
+- set owned to simp_apache::user instead of simp_apache group on
   configuration files.
 - remove simpcat as dependency
 - cleaned up fixtures file
