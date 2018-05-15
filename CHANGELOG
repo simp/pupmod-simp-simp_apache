@@ -1,4 +1,4 @@
-* Mon Apr 16 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 6.0.2-0
+* Mon Apr 16 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 6.0.2-0
 - set owned to simp_apache::user instead of simp_apache group on
   configuration files.
 - remove simpcat as dependency
