@@ -1,5 +1,6 @@
-* Thu Jun 14 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.0.2
+* Thu Jun 14 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.0.2-0
 - Update systemd fixtures and CI assets
+- Update version range of auditd dependency in metadata.json
 
 * Mon Apr 16 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 6.0.2-0
 - set owned to simp_apache::user instead of simp_apache group on
