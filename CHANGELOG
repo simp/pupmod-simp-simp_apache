@@ -1,3 +1,7 @@
+* Tue Jul 17 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.3-0
+- Support for Puppet5/OEL
+- fixed htaccess tests for Gitlab
+
 * Thu Jun 14 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.0.2-0
 - Update systemd fixtures and CI assets
 - Update version range of auditd dependency in metadata.json

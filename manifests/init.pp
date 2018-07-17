@@ -31,6 +31,8 @@ class simp_apache (
   Boolean              $rsync_web_root = true
 ) {
 
+  simplib::assert_metadata($module_name)
+
   include '::simp_apache::install'
   include '::simp_apache::conf'
 
@@ -43,7 +45,7 @@ class simp_apache (
   Class['::simp_apache::install'] -> Class['::simp_apache::conf']
   Class['::simp_apache::install'] ~> Service['httpd']
 
-  if $facts['os']['name'] in ['RedHat','CentOS'] {
+  if $facts['os']['name'] in ['RedHat','CentOS','OracleLinux'] {
     if (versioncmp($facts['os']['release']['major'],'7') >= 0) {
       $apache_homedir = '/usr/share/httpd'
     }

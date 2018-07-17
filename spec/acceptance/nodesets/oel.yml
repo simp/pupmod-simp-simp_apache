@@ -6,23 +6,23 @@
   end
 -%>
 HOSTS:
-  server7:
+  oel7:
     roles:
       - default
       - server7
-    platform: el-7-x86_64
-    box: centos/7
+    platform:   el-7-x86_64
+    box:        elastic/oel-7-x86_64
     hypervisor: <%= hypervisor %>
     yum_repos:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
         gpgkeys:
           - https://getfedora.org/static/352C64E5.txt
-  server6:
+  oel6:
     roles:
       - server6
-    platform: el-6-x86_64
-    box: centos/6
+    platform:   el-6-x86_64
+    box:        elastic/oel-6-x86_64
     hypervisor: <%= hypervisor %>
     yum_repos:
       epel:

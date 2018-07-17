@@ -1,6 +1,6 @@
 <%
   t_allowroot = nil
-  if @l_allowroot != 'nil' then
+  if @l_allowroot != 'nil'
     t_allowroot = Array(@l_allowroot).map{ |x|
       x = "    Allow from #{x}"
     }.join("\n")
@@ -60,7 +60,7 @@ MaxRequestsPerChild  <%= @worker_maxrequestsperchild %>
 Listen <%= scope.function_bracketize([l.to_s]) %>
 <% end -%>
 
-<% if (['RedHat','CentOS'].include?(@operatingsystem) ) and scope.function_versioncmp([@operatingsystemmajrelease,'7']) < 0 then -%>
+<% if (['RedHat','CentOS','OracleLinux'].include?(@operatingsystem) ) and scope.function_versioncmp([@operatingsystemmajrelease,'7']) < 0 -%>
 LoadModule auth_digest_module modules/mod_auth_digest.so
 LoadModule ldap_module modules/mod_ldap.so
 LoadModule include_module modules/mod_include.so
@@ -90,7 +90,7 @@ LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_ftp_module modules/mod_proxy_ftp.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
 LoadModule proxy_connect_module modules/mod_proxy_connect.so
-<%   if ( ['RedHat','CentOS'].include?(@operatingsystem) ) and scope.function_versioncmp([@operatingsystemmajrelease,'6']) < 0 then -%>
+<%   if ( ['RedHat','CentOS','OracleLinux'].include?(@operatingsystem) ) and scope.function_versioncmp([@operatingsystemmajrelease,'6']) < 0 -%>
 LoadModule cache_module modules/mod_cache.so
 LoadModule file_cache_module modules/mod_file_cache.so
 LoadModule disk_cache_module modules/mod_disk_cache.so
@@ -98,7 +98,7 @@ LoadModule mem_cache_module modules/mod_mem_cache.so
 <%   end -%>
 LoadModule suexec_module modules/mod_suexec.so
 LoadModule cgi_module modules/mod_cgi.so
-<%   if ( ['RedHat','CentOS'].include?(@operatingsystem) ) and scope.function_versioncmp([@operatingsystemmajrelease,'4']) > 0 then -%>
+<%   if ( ['RedHat','CentOS','OracleLinux'].include?(@operatingsystem) ) and scope.function_versioncmp([@operatingsystemmajrelease,'4']) > 0 -%>
 LoadModule auth_basic_module modules/mod_auth_basic.so
 LoadModule authn_file_module modules/mod_authn_file.so
 LoadModule authn_alias_module modules/mod_authn_alias.so
@@ -116,7 +116,7 @@ LoadModule logio_module modules/mod_logio.so
 LoadModule ext_filter_module modules/mod_ext_filter.so
 LoadModule proxy_balancer_module modules/mod_proxy_balancer.so
 LoadModule version_module modules/mod_version.so
-<%   elsif ['RedHat','CentOS'].include?(@operatingsystem) then -%>
+<%   elsif ['RedHat','CentOS','OracleLinux'].include?(@operatingsystem) -%>
 LoadModule access_module modules/mod_access.so
 LoadModule auth_module modules/mod_auth.so
 LoadModule auth_anon_module modules/mod_auth_anon.so
@@ -166,7 +166,7 @@ DocumentRoot "/var/www/html"
 <% scope.function_ipaddresses([]).each do |t_iface| -%>
     Allow from <%= t_iface %>
 <% end -%>
-<% if t_allowroot then -%>
+<% if t_allowroot -%>
 <%= t_allowroot %>
 <% end -%>
 
@@ -248,7 +248,7 @@ ErrorLog syslog:<%= @logfacility %>
 
 LogLevel <%= @httpd_loglevel %>
 
-<% if not @logformat.empty? then -%>
+<% unless @logformat.empty? -%>
 LogFormat "<%= @logformat %>" custom
 
 CustomLog "|/bin/logger -thttpd -plocal6.notice" custom
@@ -266,7 +266,7 @@ Alias /icons/ "/var/www/icons/"
 <% scope.function_ipaddresses([]).each do |t_iface| -%>
     Allow from <%= t_iface %>
 <% end -%>
-<% if t_allowroot then -%>
+<% if t_allowroot -%>
 <%= t_allowroot %>
 <% end -%>
 </Directory>
@@ -279,7 +279,7 @@ Alias /icons/ "/var/www/icons/"
 <% scope.function_ipaddresses([]).each do |t_iface| -%>
     Allow from <%= t_iface %>
 <% end -%>
-<% if t_allowroot then -%>
+<% if t_allowroot -%>
 <%= t_allowroot %>
 <% end -%>
 </Directory>
