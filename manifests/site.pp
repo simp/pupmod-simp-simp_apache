@@ -22,7 +22,7 @@ define simp_apache::site (
   }
 
   file { "/etc/httpd/conf.d/${name}.conf":
-    owner   => pick($::simp_apache::conf::group,'root'),
+    owner   => pick($::simp_apache::conf::user,'root'),
     group   => pick($::simp_apache::conf::group,'apache'),
     mode    => '0640',
     content => $_content,
