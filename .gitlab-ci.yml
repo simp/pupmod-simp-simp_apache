@@ -218,7 +218,7 @@ htaccess:
   script:
     - bundle exec rake beaker:suites[htaccess]
 
-htaccess:
+htaccess-fips:
   stage: acceptance
   tags:
     - beaker
