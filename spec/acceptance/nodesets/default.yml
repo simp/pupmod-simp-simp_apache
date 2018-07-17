@@ -6,23 +6,10 @@
   end
 -%>
 HOSTS:
-  el6:
+  server7:
     roles:
       - default
-      - master
-      - client
-    platform:   el-6-x86_64
-    box:        centos/6
-    hypervisor: vagrant
-    hypervisor: <%= hypervisor %>
-    yum_repos:
-      epel:
-        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
-        gpgkeys:
-          - https://getfedora.org/static/0608B895.txt
-  el7:
-    roles:
-      - client
+      - server7
     platform: el-7-x86_64
     box: centos/7
     hypervisor: <%= hypervisor %>
@@ -31,6 +18,17 @@ HOSTS:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
         gpgkeys:
           - https://getfedora.org/static/352C64E5.txt
+  server6:
+    roles:
+      - server6
+    platform: el-6-x86_64
+    box: centos/6
+    hypervisor: <%= hypervisor %>
+    yum_repos:
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/0608B895.txt
 CONFIG:
   log_level: verbose
   type: aio
