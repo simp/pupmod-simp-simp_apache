@@ -247,7 +247,7 @@ default-puppet5-fips:
   tags:
     - beaker
   <<: *cache_bundler
-  <<: *setup_env_beaker
+  <<: *setup_bundler_env
   variables:
     BEAKER_fips: 'yes'
     PUPPET_VERSION: '~> 5.0'
