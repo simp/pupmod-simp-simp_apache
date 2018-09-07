@@ -1,3 +1,6 @@
+* Fri Sep 07 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.3-0
+- Drop Hiera 4 support
+
 * Wed Sep 05 2018 Nicholas Markowski <nicholas.markowski@onyxpoint.com> - 6.0.3-0
 - Updated $app_pki_external_source to accept any string.  This matches the functionality
   of pki::copy.
