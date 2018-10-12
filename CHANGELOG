@@ -1,11 +1,17 @@
-* Fri Sep 07 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.3-0
+* Fri Oct 12 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.1.0-0
+- Added $package_ensure parameters to simp_apache::install
+  - $httpd_ensure  $mod_ldap_ensure  $mod_ssl_ensure
+  - Changed the package from 'latest' to 'installed'
+  - It will also respect `simp_options::package_ensure`
+
+* Fri Sep 07 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.0-0
 - Drop Hiera 4 support
 
-* Wed Sep 05 2018 Nicholas Markowski <nicholas.markowski@onyxpoint.com> - 6.0.3-0
+* Wed Sep 05 2018 Nicholas Markowski <nicholas.markowski@onyxpoint.com> - 6.1.0-0
 - Updated $app_pki_external_source to accept any string.  This matches the functionality
   of pki::copy.
 
-* Tue Jul 17 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.3-0
+* Tue Jul 17 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.1.0-0
 - Support for Puppet5/OEL
 - fixed htaccess tests for Gitlab
 
