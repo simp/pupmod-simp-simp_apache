@@ -10,8 +10,8 @@ HOSTS:
     roles:
       - default
       - server7
-    platform:   el-7-x86_64
-    box:        elastic/oel-7-x86_64
+    platform: el-7-x86_64
+    box: elastic/oel-7-x86_64
     hypervisor: <%= hypervisor %>
     yum_repos:
       epel:
@@ -21,8 +21,8 @@ HOSTS:
   oel6:
     roles:
       - server6
-    platform:   el-6-x86_64
-    box:        elastic/oel-6-x86_64
+    platform: el-6-x86_64
+    box: elastic/oel-6-x86_64
     hypervisor: <%= hypervisor %>
     yum_repos:
       epel:
@@ -32,6 +32,6 @@ HOSTS:
 CONFIG:
   log_level: verbose
   type: aio
-<% if ENV['BEAKER_PUPPET_ENVIRONMENT'] -%>
-  puppet_environment: <%= ENV['BEAKER_PUPPET_ENVIRONMENT'] %>
+<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
+  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
 <% end -%>

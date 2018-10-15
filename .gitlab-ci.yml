@@ -46,6 +46,13 @@
   script:
     - bundle exec rake spec
 
+# To avoid running a prohibitive number of tests every commit,
+# don't set this env var in your gitlab instance
+.only_with_SIMP_FULL_MATRIX: &only_with_SIMP_FULL_MATRIX
+  only:
+    variables:
+      - $SIMP_FULL_MATRIX
+
 stages:
   - validation
   - unit
@@ -112,7 +119,7 @@ pup5_latest-validation:
     - docker
   image: ruby:2.4
   variables:
-    PUPPET_VERSION: '~> 5.0'
+    PUPPET_VERSION: '~> 5.3'
   <<: *cache_bundler
   <<: *setup_bundler_env
   <<: *validation_checks
@@ -123,7 +130,7 @@ pup5_latest-unit:
     - docker
   image: ruby:2.4
   variables:
-    PUPPET_VERSION: '~> 5.0'
+    PUPPET_VERSION: '~> 5.3'
   <<: *cache_bundler
   <<: *setup_bundler_env
   <<: *spec_tests
@@ -138,8 +145,9 @@ default:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '4.10'
+    PUPPET_VERSION: '~> 4.10.10'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[default]
 
 default-fips:
@@ -149,33 +157,23 @@ default-fips:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '4.10'
+    PUPPET_VERSION: '~> 4.10.10'
     BEAKER_fips: 'yes'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[default]
 
-htaccess:
+default-oel:
   stage: acceptance
   tags:
     - beaker
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '4.10'
+    PUPPET_VERSION: '~> 4.10.10'
   script:
-    - bundle exec rake beaker:suites[htaccess]
-
-htaccess-fips:
-  stage: acceptance
-  tags:
-    - beaker
-  <<: *cache_bundler
-  <<: *setup_bundler_env
-  variables:
-    PUPPET_VERSION: '4.10'
-    BEAKER_fips: 'yes'
-  script:
-    - bundle exec rake beaker:suites[htaccess]
+    - bundle exec rake spec_clean
+    - bundle exec rake beaker:suites[default,oel]
 
 default-puppet5:
   stage: acceptance
@@ -184,9 +182,10 @@ default-puppet5:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '~> 5.0'
+    PUPPET_VERSION: '~> 5.3'
     BEAKER_PUPPET_COLLECTION: 'puppet5'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[default]
 
 default-puppet5-fips:
@@ -195,12 +194,40 @@ default-puppet5-fips:
     - beaker
   <<: *cache_bundler
   <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
-    PUPPET_VERSION: '~> 5.0'
+    PUPPET_VERSION: '~> 5.3'
     BEAKER_PUPPET_COLLECTION: 'puppet5'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[default]
+
+default-puppet5-oel:
+  stage: acceptance
+  tags:
+    - beaker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
+  variables:
+    PUPPET_VERSION: '~> 5.3'
+    BEAKER_PUPPET_COLLECTION: 'puppet5'
+  script:
+    - bundle exec rake spec_clean
+    - bundle exec rake beaker:suites[default,oel]
+
+htaccess:
+  stage: acceptance
+  tags:
+    - beaker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  variables:
+    PUPPET_VERSION: '~> 4.10.10'
+  script:
+    - bundle exec rake spec_clean
+    - bundle exec rake beaker:suites[htaccess]
 
 htaccess-puppet5:
   stage: acceptance
@@ -209,9 +236,10 @@ htaccess-puppet5:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '~> 5.0'
+    PUPPET_VERSION: '~> 5.3'
     BEAKER_PUPPET_COLLECTION: 'puppet5'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[htaccess]
 
 htaccess-puppet5-fips:
@@ -220,24 +248,14 @@ htaccess-puppet5-fips:
     - beaker
   <<: *cache_bundler
   <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
-    PUPPET_VERSION: '~> 5.0'
+    PUPPET_VERSION: '~> 5.3'
     BEAKER_PUPPET_COLLECTION: 'puppet5'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[htaccess]
-
-default-puppet5-oel:
-  stage: acceptance
-  tags:
-    - beaker
-  <<: *cache_bundler
-  <<: *setup_bundler_env
-  variables:
-    PUPPET_VERSION: '~> 5.0'
-    BEAKER_PUPPET_COLLECTION: 'puppet5'
-  script:
-    - bundle exec rake beaker:suites[default,oel]
 
 htaccess-puppet5-oel:
   stage: acceptance
@@ -245,8 +263,10 @@ htaccess-puppet5-oel:
     - beaker
   <<: *cache_bundler
   <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
-    PUPPET_VERSION: '~> 5.0'
+    PUPPET_VERSION: '~> 5.3'
     BEAKER_PUPPET_COLLECTION: 'puppet5'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[htaccess,oel]
