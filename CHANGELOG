@@ -2,7 +2,7 @@
 - Added $package_ensure parameters to simp_apache::install
   - $httpd_ensure  $mod_ldap_ensure  $mod_ssl_ensure
   - Changed the package from 'latest' to 'installed'
-  - It will also respect `simp_options::package_ensure`
+  - Each ensure parameter will also respect `simp_options::package_ensure`
 
 * Fri Sep 07 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.0-0
 - Drop Hiera 4 support
