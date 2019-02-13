@@ -1,6 +1,6 @@
 {
   "name": "simp-simp_apache",
-  "version": "6.1.0",
+  "version": "6.1.1",
   "author": "SIMP Team",
   "summary": "configure SIMP apache & component sites (NOTE: legacy, conflicts with puppetlabs-apache)",
   "license": "Apache-2.0",
@@ -27,7 +27,7 @@
     },
     {
       "name": "simp/simplib",
-      "version_requirement": ">= 3.1.0 < 4.0.0"
+      "version_requirement": ">= 3.7.0 < 4.0.0"
     },
     {
       "name": "simp/pki",

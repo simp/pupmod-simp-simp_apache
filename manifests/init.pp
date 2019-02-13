@@ -134,7 +134,7 @@ class simp_apache (
     $_downcase_os_name = downcase($facts['os']['name'])
     rsync { 'site':
       user     => "apache_rsync_${::environment}_${_downcase_os_name}",
-      password => passgen("apache_rsync_${::environment}_${_downcase_os_name}"),
+      password => simplib::passgen("apache_rsync_${::environment}_${_downcase_os_name}"),
       source   => $rsync_source,
       target   => '/var',
       server   => $rsync_server,

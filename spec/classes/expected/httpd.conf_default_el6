@@ -1,11 +1,3 @@
-<%
-  t_allowroot = nil
-  if @l_allowroot != 'nil'
-    t_allowroot = Array(@l_allowroot).map{ |x|
-      x = "    Allow from #{x}"
-    }.join("\n")
-  end
--%>
 TraceEnable off
 ServerTokens ProductOnly
 
@@ -14,53 +6,50 @@ ServerRoot "/etc/httpd"
 PidFile run/httpd.pid
 
 # Default: 120
-Timeout <%= @httpd_timeout %>
+Timeout 120
 
 # Default: Off
-KeepAlive <%= @keepalive ? 'On' : 'Off' %>
+KeepAlive Off
 
 # Default: 100
-MaxKeepAliveRequests <%= @maxkeepalive %>
+MaxKeepAliveRequests 100
 
 # Default: 15
-KeepAliveTimeout <%= @keepalivetimeout %>
+KeepAliveTimeout 15
 
 <IfModule prefork.c>
 # Default: 8
-StartServers         <%= @prefork_startservers %>
+StartServers         8
 # Default: 5
-MinSpareServers      <%= @prefork_minspareservers %>
+MinSpareServers      5
 # Default: 20
-MaxSpareServers      <%= @prefork_maxspareservers %>
+MaxSpareServers      20
 # Default: 256
-ServerLimit          <%= @prefork_serverlimit %>
+ServerLimit          3000
 # Default: 256
-MaxClients           <%= @prefork_maxclients %>
+MaxClients           3000
 # Default: 4000
-MaxRequestsPerChild  <%= @prefork_maxrequestsperchild %>
+MaxRequestsPerChild  4000
 </IfModule>
 
 <IfModule worker.c>
 # Default: 2
-StartServers         <%= @worker_startservers %>
+StartServers         2
 # Default: 150
-MaxClients           <%= @worker_maxclients %>
+MaxClients           3000
 # Default: 25
-MinSpareThreads      <%= @worker_minsparethreads %>
+MinSpareThreads      25
 # Default: 75
-MaxSpareThreads      <%= @worker_maxsparethreads %>
+MaxSpareThreads      75
 # Default: 25
-ThreadsPerChild      <%= @worker_threadsperchild %>
+ThreadsPerChild      25
 # Default: 0
-MaxRequestsPerChild  <%= @worker_maxrequestsperchild %>
+MaxRequestsPerChild  0
 </IfModule>
 
 # Default: 80
-<% @listen.flatten.each do |l| -%>
-Listen <%= scope.function_bracketize([l.to_s]) %>
-<% end -%>
+Listen 80
 
-<% if (['RedHat','CentOS','OracleLinux'].include?(@operatingsystem) ) and scope.function_versioncmp([@operatingsystemmajrelease,'7']) < 0 -%>
 LoadModule auth_digest_module modules/mod_auth_digest.so
 LoadModule ldap_module modules/mod_ldap.so
 LoadModule include_module modules/mod_include.so
@@ -90,15 +79,8 @@ LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_ftp_module modules/mod_proxy_ftp.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
 LoadModule proxy_connect_module modules/mod_proxy_connect.so
-<%   if ( ['RedHat','CentOS','OracleLinux'].include?(@operatingsystem) ) and scope.function_versioncmp([@operatingsystemmajrelease,'6']) < 0 -%>
-LoadModule cache_module modules/mod_cache.so
-LoadModule file_cache_module modules/mod_file_cache.so
-LoadModule disk_cache_module modules/mod_disk_cache.so
-LoadModule mem_cache_module modules/mod_mem_cache.so
-<%   end -%>
 LoadModule suexec_module modules/mod_suexec.so
 LoadModule cgi_module modules/mod_cgi.so
-<%   if ( ['RedHat','CentOS','OracleLinux'].include?(@operatingsystem) ) and scope.function_versioncmp([@operatingsystemmajrelease,'4']) > 0 -%>
 LoadModule auth_basic_module modules/mod_auth_basic.so
 LoadModule authn_file_module modules/mod_authn_file.so
 LoadModule authn_alias_module modules/mod_authn_alias.so
@@ -116,39 +98,16 @@ LoadModule logio_module modules/mod_logio.so
 LoadModule ext_filter_module modules/mod_ext_filter.so
 LoadModule proxy_balancer_module modules/mod_proxy_balancer.so
 LoadModule version_module modules/mod_version.so
-<%   elsif ['RedHat','CentOS','OracleLinux'].include?(@operatingsystem) -%>
-LoadModule access_module modules/mod_access.so
-LoadModule auth_module modules/mod_auth.so
-LoadModule auth_anon_module modules/mod_auth_anon.so
-LoadModule auth_dbm_module modules/mod_auth_dbm.so
-LoadModule auth_ldap_module modules/mod_auth_ldap.so
-LoadModule cern_meta_module modules/mod_cern_meta.so
-LoadModule asis_module modules/mod_asis.so
-LoadModule imap_module modules/mod_imap.so
-<%   end -%>
-<% else -%>
-Include conf.modules.d/*.conf
-<% end -%>
 
 Include conf.d/*.conf
-<% unless @includes.nil? -%>
-<%    @includes.each do |i| -%>
-Include <%= i %><%= "\n" %>
-<%    end -%>
-<% end -%>
 
-User <%= @user %>
-Group <%= @group %>
+User apache
+Group apache
 
 # Default: root@localhost
-ServerAdmin <%= @serveradmin %>
+ServerAdmin root@localhost
 
-<% unless @servername.nil? -%>
-ServerName <%= @servername %>
-UseCanonicalName On
-<% else -%>
 UseCanonicalName Off
-<% end -%>
 
 DocumentRoot "/var/www/html"
 
@@ -163,12 +122,10 @@ DocumentRoot "/var/www/html"
     AllowOverride None
     Order allow,deny
     Allow from ::1
-<% scope.call_function('simplib::ipaddresses',[]).each do |t_iface| -%>
-    Allow from <%= t_iface %>
-<% end -%>
-<% if t_allowroot -%>
-<%= t_allowroot %>
-<% end -%>
+    Allow from 10.0.2.15
+    Allow from 127.0.0.1
+    Allow from 127.0.0.1
+    Allow from ::1
 
 </Directory>
 
@@ -234,25 +191,23 @@ AccessFileName .htaccess
 
 <IfVersion < 2.4>
 # Default: text/plain
-DefaultType <%= @defaulttype %>
+DefaultType text/plain
 </IfVersion>
 HostnameLookups Off
 
 # Default: on
-EnableMMAP <%= @enablemmap ? 'On' : 'Off' %>
+EnableMMAP On
 
 # Default: on
-EnableSendfile <%= @enablesendfile ? 'On' : 'Off' %>
+EnableSendfile On
 
-ErrorLog syslog:<%= @logfacility %>
+ErrorLog syslog:local6
 
-LogLevel <%= @httpd_loglevel %>
+LogLevel warn
 
-<% unless @logformat.empty? -%>
-LogFormat "<%= @logformat %>" custom
+LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" custom
 
 CustomLog "|/bin/logger -thttpd -plocal6.notice" custom
-<% end -%>
 
 ServerSignature Off
 
@@ -263,12 +218,10 @@ Alias /icons/ "/var/www/icons/"
     AllowOverride None
     Order allow,deny
     Allow from ::1
-<% scope.call_function('simplib::ipaddresses',[]).each do |t_iface| -%>
-    Allow from <%= t_iface %>
-<% end -%>
-<% if t_allowroot -%>
-<%= t_allowroot %>
-<% end -%>
+    Allow from 10.0.2.15
+    Allow from 127.0.0.1
+    Allow from 127.0.0.1
+    Allow from ::1
 </Directory>
 
 <Directory "/var/www/cgi-bin">
@@ -276,12 +229,10 @@ Alias /icons/ "/var/www/icons/"
     Options +ExecCGI -FollowSymLinks
     Order allow,deny
     Allow from ::1
-<% scope.call_function('simplib::ipaddresses',[]).each do |t_iface| -%>
-    Allow from <%= t_iface %>
-<% end -%>
-<% if t_allowroot -%>
-<%= t_allowroot %>
-<% end -%>
+    Allow from 10.0.2.15
+    Allow from 127.0.0.1
+    Allow from 127.0.0.1
+    Allow from ::1
 </Directory>
 
 IndexOptions FancyIndexing VersionSort NameWidth=*
