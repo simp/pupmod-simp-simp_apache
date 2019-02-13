@@ -1,3 +1,11 @@
+* Wed Feb 13 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.1-0
+- Use simplib::passgen() in lieu of passgen(), a deprecated simplib
+  Puppet 3 function.
+- Use simplib::nets2cidr in simp_apache::munge_httpd_networks in
+  in lieu of nets2cidr(), a deprecated simplib Puppet 3 function.
+- Use simplib::ipaddresses in lieu of ipaddresses(), a deprecated
+  simplib Puppet 3 function.
+
 * Fri Oct 12 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.1.0-0
 - Added $package_ensure parameters to simp_apache::install
   - $httpd_ensure  $mod_ldap_ensure  $mod_ssl_ensure

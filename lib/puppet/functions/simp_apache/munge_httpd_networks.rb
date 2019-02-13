@@ -26,7 +26,7 @@ Puppet::Functions.create_function(:'simp_apache::munge_httpd_networks') do
       if x =~ /^0\.0\.0\.0/
         httpd_networks << 'ALL'
       elsif x =~ /\/\d{1,3}\./
-        httpd_networks << call_function('nets2cidr', x)
+        httpd_networks << call_function('simplib::nets2cidr', x)
       else
         httpd_networks << x
       end
