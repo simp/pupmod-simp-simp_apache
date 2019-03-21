@@ -3,7 +3,7 @@
 </IFModule>
 
 <% @listen.each do |l| -%>
-Listen <%= scope.function_bracketize([l.to_s]) %><%= "\n" %>
+Listen <%= l %><%= "\n" %>
 <% end -%>
 
 AddType application/x-x509-ca-cert .crt
@@ -46,7 +46,7 @@ SSLVerifyDepth  <%= @sslverifydepth %>
 <%   if not @logformat.empty? then -%>
 LogFormat "<%= @logformat %>" ssl_custom
 
-CustomLog "|/bin/logger -thttpd -plocal6.notice" ssl_custom
+CustomLog "|/bin/logger -t httpd -p local6.notice" ssl_custom
 <%   end -%>
 </VirtualHost>
 <% end -%>
