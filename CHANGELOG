@@ -1,4 +1,7 @@
 * Thu Mar 21 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 6.1.2-0
+- Updated old puppet 3 scope functions to new API
+
+* Thu Mar 21 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 6.1.2-0
 - Removed old puppet 3 bracketize function
 
 * Wed Feb 13 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.1-0
