@@ -3,7 +3,7 @@
 </IFModule>
 
 <% @listen.each do |l| -%>
-Listen <%= scope.call_function('simp::bracketize', [l.to_s]) %><%= "\n" %>
+Listen <%= l %><%= "\n" %>
 <% end -%>
 
 AddType application/x-x509-ca-cert .crt

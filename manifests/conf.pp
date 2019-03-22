@@ -15,6 +15,9 @@
 # @param listen
 #   An array of ports upon which Apache should listen.
 #
+#   NOTE: If you are using an IPv6 with a port, you need to
+#     bracket the address
+#
 # @param firewall
 #   Whether or not to use the SIMP IPTables module.
 #

@@ -57,7 +57,7 @@ MaxRequestsPerChild  <%= @worker_maxrequestsperchild %>
 
 # Default: 80
 <% @listen.flatten.each do |l| -%>
-Listen <%= scope.call_function('simp::bracketize', [l.to_s]) %>
+Listen <%= l %>
 <% end -%>
 
 <% if (['RedHat','CentOS','OracleLinux'].include?(@operatingsystem) ) and scope.function_versioncmp([@operatingsystemmajrelease,'7']) < 0 -%>

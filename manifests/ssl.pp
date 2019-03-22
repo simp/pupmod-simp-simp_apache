@@ -9,6 +9,9 @@
 # @param listen
 #   An array of ports upon which the stock SSL configuration should
 #   listen.
+#   
+#   NOTE: If you are using an IPv6 with a port, you need to
+#     bracket the address
 #
 # @param trusted_nets
 #   An array of networks that you trust to connect to your server.
