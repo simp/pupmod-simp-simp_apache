@@ -9,6 +9,9 @@
 # @param listen
 #   An array of ports upon which the stock SSL configuration should
 #   listen.
+#   
+#   NOTE: If you are using an IPv6 with a port, you need to
+#     bracket the address
 #
 # @param trusted_nets
 #   An array of networks that you trust to connect to your server.
@@ -60,23 +63,23 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp_apache::ssl (
-  Array[Simplib::Port]          $listen                  = [443],
-  Simplib::Netlist              $trusted_nets            = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] }),
-  Array[String]                 $openssl_cipher_suite    = simplib::lookup('simp_options::openssl::cipher_suite', { 'default_value' => ['DEFAULT', '!MEDIUM'] }),
-  Array[String]                 $ssl_protocols           = ['TLSv1','TLSv1.1','TLSv1.2'],
-  Boolean                       $ssl_honor_cipher_order  = true,
-  String                        $sslverifyclient         = 'require',
-  Integer                       $sslverifydepth          = 10,
-  Variant[Boolean,Enum['simp']] $pki                     = simplib::lookup('simp_options::pki', { 'default_value' => false }),
-  String                        $app_pki_external_source = simplib::lookup('simp_options::pki::source', { 'default_value' => '/etc/pki/simp/x509' }),
-  Stdlib::AbsolutePath          $app_pki_dir             = '/etc/pki/simp_apps/simp_apache/x509',
-  Stdlib::AbsolutePath          $app_pki_ca_dir          = "${app_pki_dir}/cacerts",
-  Stdlib::AbsolutePath          $app_pki_cert            = "${app_pki_dir}/public/${facts['fqdn']}.pub",
-  Stdlib::AbsolutePath          $app_pki_key             = "${app_pki_dir}/private/${facts['fqdn']}.pem",
-  String                        $logformat               = '%t %h %{SSL_CLIENT_S_DN_CN}x %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %s',
-  Boolean                       $enable_default_vhost    = true,
-  Boolean                       $firewall                = simplib::lookup('simp_options::firewall', { 'default_value' => false, }),
-  Boolean                       $haveged                 = simplib::lookup('simp_options::haveged', { 'default_value' => false })
+  Array[Variant[Simplib::Host::Port, Simplib::Port]] $listen                  = [443],
+  Simplib::Netlist                                   $trusted_nets            = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] }),
+  Array[String]                                      $openssl_cipher_suite    = simplib::lookup('simp_options::openssl::cipher_suite', { 'default_value' => ['DEFAULT', '!MEDIUM'] }),
+  Array[String]                                      $ssl_protocols           = ['TLSv1','TLSv1.1','TLSv1.2'],
+  Boolean                                            $ssl_honor_cipher_order  = true,
+  String                                             $sslverifyclient         = 'require',
+  Integer                                            $sslverifydepth          = 10,
+  Variant[Boolean,Enum['simp']]                      $pki                     = simplib::lookup('simp_options::pki', { 'default_value' => false }),
+  String                                             $app_pki_external_source = simplib::lookup('simp_options::pki::source', { 'default_value' => '/etc/pki/simp/x509' }),
+  Stdlib::AbsolutePath                               $app_pki_dir             = '/etc/pki/simp_apps/simp_apache/x509',
+  Stdlib::AbsolutePath                               $app_pki_ca_dir          = "${app_pki_dir}/cacerts",
+  Stdlib::AbsolutePath                               $app_pki_cert            = "${app_pki_dir}/public/${facts['fqdn']}.pub",
+  Stdlib::AbsolutePath                               $app_pki_key             = "${app_pki_dir}/private/${facts['fqdn']}.pem",
+  String                                             $logformat               = '%t %h %{SSL_CLIENT_S_DN_CN}x %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %s',
+  Boolean                                            $enable_default_vhost    = true,
+  Boolean                                            $firewall                = simplib::lookup('simp_options::firewall', { 'default_value' => false, }),
+  Boolean                                            $haveged                 = simplib::lookup('simp_options::haveged', { 'default_value' => false })
 ) {
 
   include '::simp_apache'

@@ -1,3 +1,6 @@
+* Thu Mar 21 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 6.1.2-0
+- Removed unnecessary bracketize function
+
 * Wed Feb 13 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.1-0
 - Use simplib::passgen() in lieu of passgen(), a deprecated simplib
   Puppet 3 function.
