@@ -1,3 +1,7 @@
+* Mon Mar 25 2019 Jim Anderson <thesemicolons@protonmail.com> - 6.1.3-0
+- Added command to force purging of the conf/ and conf.d/ folders in
+  /etc/httpd.
+
 * Thu Mar 21 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 6.1.2-0
 - Removed unnecessary bracketize function
 

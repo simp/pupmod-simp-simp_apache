@@ -82,6 +82,7 @@ class simp_apache::conf (
     mode     => '0640',
     recurse  => true,
     purge    => $purge,
+    force    => $purge,
     checksum => undef
   }
 
