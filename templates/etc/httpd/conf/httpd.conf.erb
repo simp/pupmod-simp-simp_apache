@@ -55,11 +55,6 @@ ThreadsPerChild      <%= @worker_threadsperchild %>
 MaxRequestsPerChild  <%= @worker_maxrequestsperchild %>
 </IfModule>
 
-# Default: 80
-<% @listen.flatten.each do |l| -%>
-Listen <%= l %>
-<% end -%>
-
 <% if (['RedHat','CentOS','OracleLinux'].include?(@operatingsystem) ) and scope.function_versioncmp([@operatingsystemmajrelease,'7']) < 0 -%>
 LoadModule auth_digest_module modules/mod_auth_digest.so
 LoadModule ldap_module modules/mod_ldap.so

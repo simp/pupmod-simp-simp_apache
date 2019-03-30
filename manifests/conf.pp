@@ -12,12 +12,6 @@
 #   The LogLevel variable. Renamed to not conflict with the Puppet
 #   reserved word 'loglevel'.
 #
-# @param listen
-#   An array of ports upon which Apache should listen.
-#
-#   NOTE: If you are using an IPv6 with a port, you need to
-#     bracket the address
-#
 # @param firewall
 #   Whether or not to use the SIMP IPTables module.
 #
@@ -50,7 +44,6 @@ class simp_apache::conf (
   Integer                                            $worker_maxsparethreads      = 75,
   Integer                                            $worker_threadsperchild      = 25,
   Integer                                            $worker_maxrequestsperchild  = 0,
-  Array[Variant[Simplib::Host::Port, Simplib::Port]] $listen                      = [80],
   Optional[Array[String]]                            $includes                    = undef,
   String                                             $serveradmin                 = 'root@localhost',
   Optional[String]                                   $servername                  = undef,
@@ -92,16 +85,6 @@ class simp_apache::conf (
     mode    => '0640',
     content => template("${module_name}/etc/httpd/conf/httpd.conf.erb"),
     notify  => Service['httpd']
-  }
-
-  if $firewall {
-    include '::iptables'
-
-    iptables::listen::tcp_stateful { 'allow_http':
-      order        => 11,
-      trusted_nets => $l_allowroot,
-      dports       => $listen
-    }
   }
 
   if $syslog  {
