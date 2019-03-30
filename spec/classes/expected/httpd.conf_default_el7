@@ -47,9 +47,6 @@ ThreadsPerChild      25
 MaxRequestsPerChild  0
 </IfModule>
 
-# Default: 80
-Listen 80
-
 Include conf.modules.d/*.conf
 
 Include conf.d/*.conf

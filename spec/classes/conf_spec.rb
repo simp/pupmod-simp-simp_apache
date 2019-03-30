@@ -27,14 +27,6 @@ describe 'simp_apache::conf' do
           end
         end
 
-        context 'firewall = true' do
-          let(:params){{ 'firewall' => true }}
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('iptables') }
-          it { is_expected.to create_class('simp_apache::conf') }
-          it { is_expected.to create_iptables__listen__tcp_stateful('allow_http') }
-        end
-
         context 'syslog = true' do
           let(:params){{ 'syslog' => true }}
           it { is_expected.to compile.with_all_deps }
