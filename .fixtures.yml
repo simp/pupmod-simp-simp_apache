@@ -1,9 +1,7 @@
 ---
 fixtures:
   repositories:
-    compliance_markup:
-      repo: "https://github.com/simp/pupmod-simp-compliance_markup"
-      branch: "testing_hotfix_06062019"
+    compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup
     iptables: https://github.com/simp/pupmod-simp-iptables
     pki: https://github.com/simp/pupmod-simp-pki
     rsync: https://github.com/simp/pupmod-simp-rsync
