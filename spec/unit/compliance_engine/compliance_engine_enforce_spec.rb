@@ -20,6 +20,7 @@ describe 'compliance_markup', type: :class do
     # defaults
     expected_classes = [
       'simp_apache',
+      'simp_options'
     ]
 
     allowed_failures = {
