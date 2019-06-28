@@ -155,25 +155,6 @@ checks:
       - RHEL-07-040030
       - SRG-OS-000066-GPOS-00034
       - CCI-000185
-  oval:com.puppet.forge.simp.simp_apache.ssl.firewall:
-    settings:
-      parameter: simp_apache::ssl::firewall
-      value: true
-    type: puppet-class-parameter
-    controls:
-      nist_800_53:rev4: true
-      nist_800_53:rev4:AC-4: true
-      disa_stig: true
-      RHEL-07-040920: true
-      SRG-OS-000480-GPOS-00227: true
-      cci:CCI-000366: true
-    identifiers:
-      nist_800_53:rev4:
-      - AC-4
-      disa_stig:
-      - RHEL-07-040920
-      - SRG-OS-000480-GPOS-00227
-      - CCI-000366
   oval:com.puppet.forge.simp.simp_apache.ssl.logformat:
     settings:
       parameter: simp_apache::ssl::logformat
@@ -198,31 +179,6 @@ checks:
       - SRG-OS-000038-GPOS-00016
       - CCI-000131
       - CCI-000126
-  oval:com.puppet.forge.simp.simp_apache.ssl.pki:
-    settings:
-      parameter: simp_apache::ssl::pki
-      value: simp
-    type: puppet-class-parameter
-    controls:
-      nist_800_53:rev4: true
-      nist_800_53:rev4:SC-i8: true
-      nist_800_53:rev4:SC-8:1: true
-      nist_800_53:rev4:SC-8:2: true
-      nist_800_53:rev4:SC-23: true
-      disa_stig: true
-      RHEL-07-040030: true
-      SRG-OS-000066-GPOS-00034: true
-      cci:CCI-000185: true
-    identifiers:
-      nist_800_53:rev4:
-      - SC-i8
-      - SC-8:1
-      - SC-8:2
-      - SC-23
-      disa_stig:
-      - RHEL-07-040030
-      - SRG-OS-000066-GPOS-00034
-      - CCI-000185
   oval:com.puppet.forge.simp.simp_apache.ssl.ssl_honor_cipher_order:
     settings:
       parameter: simp_apache::ssl::ssl_honor_cipher_order
