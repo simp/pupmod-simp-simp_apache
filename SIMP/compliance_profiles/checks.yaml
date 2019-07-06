@@ -42,8 +42,7 @@ checks:
   oval:com.puppet.forge.simp.simp_apache.conf.logformat:
     settings:
       parameter: simp_apache::conf::logformat
-      value: '%h %l %u %t \"%r\" %>s %b \"%{hiera(''compliance_markup::compliance_map::percent_sign'')}{Referer}i\"
-        \"%{hiera(''compliance_markup::compliance_map::percent_sign'')}{User-Agent}i\"'
+      value: '%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"'
     type: puppet-class-parameter
     controls:
       nist_800_53:rev4: true
@@ -158,10 +157,7 @@ checks:
   oval:com.puppet.forge.simp.simp_apache.ssl.logformat:
     settings:
       parameter: simp_apache::ssl::logformat
-      value: '%t %h %{hiera(''compliance_markup::compliance_map::percent_sign'')}{SSL_CLIENT_S_DN_CN}x
-        %{hiera(''compliance_markup::compliance_map::percent_sign'')}{SSL_PROTOCOL}x
-        %{hiera(''compliance_markup::compliance_map::percent_sign'')}{SSL_CIPHER}x
-        \"%r\" %b %s'
+      value: '%t %h %{SSL_CLIENT_S_DN_CN}x %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %s'
     type: puppet-class-parameter
     controls:
       nist_800_53:rev4: true
