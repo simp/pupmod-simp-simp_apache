@@ -1,11 +1,22 @@
 ---
 fixtures:
   repositories:
+    auditd: https://github.com/simp/pupmod-simp-auditd
+    augeas_core:
+      repo: https://github.com/simp/pupmod-puppetlabs-augeas_core.git
+      puppet_version: ">= 6.0.0"
+    augeasproviders_core: https://github.com/simp/augeasproviders_core
+    augeasproviders_grub: https://github.com/simp/augeasproviders_grub
+    compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup
+    haveged: https://github.com/simp/pupmod-simp-haveged
     iptables: https://github.com/simp/pupmod-simp-iptables
+    logrotate: https://github.com/simp/pupmod-simp-logrotate
     pki: https://github.com/simp/pupmod-simp-pki
     rsync: https://github.com/simp/pupmod-simp-rsync
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
+    selinux_core: https://github.com/puppetlabs/puppetlabs-selinux_core
     simplib: https://github.com/simp/pupmod-simp-simplib
+    simp_options: https://github.com/simp/pupmod-simp-simp_options
     stdlib: https://github.com/simp/puppetlabs-stdlib
     systemd:
       repo: https://github.com/simp/puppet-systemd
