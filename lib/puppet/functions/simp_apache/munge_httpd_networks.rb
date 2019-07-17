@@ -16,10 +16,10 @@ Puppet::Functions.create_function(:'simp_apache::munge_httpd_networks') do
 
   def munge_httpd_networks(networks)
     httpd_networks = []
-    networks.flatten.each do |x|
-      next if x.nil?
+    networks.flatten.each do |net|
+      next if net.nil?
 
-      x.strip!
+      x = net.strip
       next if x.empty?
 
       #TODO what about IPv6 addresses?
