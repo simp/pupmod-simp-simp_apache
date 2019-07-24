@@ -1,8 +1,8 @@
-# This adds a 'site' to your configuration.
-# In reality, it simply pulls a $name'd template from the templates/sites
-# directory under the apache module, or somewhere else if you specify.
-# The name should be 'something'.conf and should be an Apache includable
-# configuration file.
+# @summary This adds a 'site' to your configuration.
+#
+# It simply pulls a $name'd template from the templates/sites directory under
+# the apache module, or somewhere else if you specify.  The name should be
+# 'something'.conf and should be an Apache includable configuration file.
 #
 # @example
 #  site { 'public': }
@@ -26,6 +26,6 @@ define simp_apache::site (
     group   => pick($::simp_apache::conf::group,'apache'),
     mode    => '0640',
     content => $_content,
-    notify  => Service['httpd']
+    notify => Class['simp_apache::service']
   }
 }

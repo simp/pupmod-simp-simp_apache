@@ -1,6 +1,7 @@
-# This class configures an Apache server with SSL support.  It ensures that
-# the appropriate files are in the appropriate places and have the correct
-# permissions.
+# @summary Configures an Apache server with SSL support
+#
+# Ensures that the appropriate files are in the appropriate places and have the
+# correct permissions.
 #
 # @NOTE: Any parameter that comes directly from Apache is not documented
 # here and should be found in the Apache mod_ssl reference
@@ -9,9 +10,9 @@
 # @param listen
 #   An array of ports upon which the stock SSL configuration should
 #   listen.
-#   
-#   NOTE: If you are using an IPv6 with a port, you need to
-#     bracket the address
+#
+#   @NOTE: If you are using an IPv6 with a port, you need to bracket the
+#   address
 #
 # @param trusted_nets
 #   An array of networks that you trust to connect to your server.
@@ -81,21 +82,20 @@ class simp_apache::ssl (
   Boolean                                            $firewall                = simplib::lookup('simp_options::firewall', { 'default_value' => false, }),
   Boolean                                            $haveged                 = simplib::lookup('simp_options::haveged', { 'default_value' => false })
 ) {
+  include 'simp_apache'
 
-  include '::simp_apache'
-
-  if $haveged { include '::haveged' }
+  if $haveged { include 'haveged' }
 
   file { '/etc/httpd/conf.d/ssl.conf':
-    owner   => pick($::simp_apache::conf::user,'root'),
-    group   => pick($::simp_apache::conf::group,'apache'),
+    owner   => pick($simp_apache::conf::user,'root'),
+    group   => pick($simp_apache::conf::group,'apache'),
     mode    => '0640',
     content => template("${module_name}/etc/httpd/conf.d/ssl.conf.erb"),
-    notify  => Service['httpd']
+    notify  => Class['simp_apache::service']
   }
 
   if $firewall {
-    include '::iptables'
+    include 'iptables'
 
     iptables::listen::tcp_stateful { 'allow_https':
       order        => 11,
@@ -105,11 +105,11 @@ class simp_apache::ssl (
   }
 
   if $pki {
-    ::pki::copy { 'simp_apache':
+    pki::copy { 'simp_apache':
       source => $app_pki_external_source,
-      group  => pick($::simp_apache::conf::group,'apache'),
+      group  => pick($simp_apache::conf::group,'apache'),
       pki    => $pki,
-      notify => Service['httpd'],
+      notify => Class['simp_apache::service']
     }
   }
 }

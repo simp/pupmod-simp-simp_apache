@@ -4,11 +4,9 @@
 [![Puppet Forge Downloads](https://img.shields.io/puppetforge/dt/simp/simp_apache.svg)](https://forge.puppetlabs.com/simp/simp_apache)
 [![Build Status](https://travis-ci.org/simp/pupmod-simp-simp_apache.svg)](https://travis-ci.org/simp/pupmod-simp-simp_apache)
 
-## Work in Progress
+## Reference
 
-Please excuse us as we transition this code into the public domain.
-
-Downloads, discussion, and patches are still welcome!
+See the [Reference Documentation](./REFERENCE.md) for full details
 
 ## This is a SIMP module
 

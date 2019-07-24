@@ -1,13 +1,14 @@
-# This class configures an Apache server.  It ensures that the appropriate
-# files are in the appropriate places and can optionally rsync the
-# /var/www/html content.
+# @summary Configures an Apache server
+#
+# Ensures that the appropriate files are in the appropriate places and can
+# optionally rsync the `/var/www/html` content.
 #
 # Ideally, we will move over to the Puppet Labs apache module in the future but
 # it's going to be quite a bit of work to port all of our code.
 #
-# @NOTE: If a parameter is not listed here then it is part of the
-# standard Apache configuration set and the stock Apache documentation
-# should be referenced.
+# @NOTE: If a parameter is not listed here then it is part of the standard
+# Apache configuration set and the stock Apache documentation should be
+# referenced.
 #
 # @param data_dir
 #   The location where apache web data should be stored. Set to /srv/www for
@@ -33,17 +34,19 @@ class simp_apache (
 
   simplib::assert_metadata($module_name)
 
-  include '::simp_apache::install'
-  include '::simp_apache::conf'
+  include 'simp_apache::install'
+  include 'simp_apache::conf'
+  include 'simp_apache::service'
 
   if $ssl {
-    include '::simp_apache::ssl'
-    Class['::simp_apache::install'] -> Class['::simp_apache::ssl']
+    include 'simp_apache::ssl'
+    Class['simp_apache::install'] -> Class['simp_apache::ssl']
   }
 
-  Class['::simp_apache::install'] -> Class['::simp_apache']
-  Class['::simp_apache::install'] -> Class['::simp_apache::conf']
-  Class['::simp_apache::install'] ~> Service['httpd']
+  Class['simp_apache::install'] -> Class['simp_apache']
+  Class['simp_apache::install'] -> Class['simp_apache::conf']
+  Class['simp_apache::install'] ~> Class['simp_apache::service']
+  Class['simp_apache::conf']    ~> Class['simp_apache::service']
 
   if $facts['os']['name'] in ['RedHat','CentOS','OracleLinux'] {
     if (versioncmp($facts['os']['release']['major'],'7') >= 0) {
@@ -74,7 +77,7 @@ class simp_apache (
     group  => 'apache',
     mode   => '0640',
     source => "puppet:///modules/${module_name}/magic",
-    notify => Service['httpd'],
+    notify => Class['simp_apache::service']
   }
 
   file { '/etc/httpd/conf.d/welcome.conf': ensure => 'absent' }
@@ -83,7 +86,7 @@ class simp_apache (
     owner  => 'root',
     group  => 'root',
     mode   => '0644',
-    notify => Service['httpd'],
+    notify => Class['simp_apache::service']
   }
 
   file { '/etc/httpd/logs':
@@ -117,7 +120,7 @@ class simp_apache (
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
-    notify => Service['httpd']
+    notify => Class['simp_apache::service']
   }
 
   group { 'apache':
@@ -127,7 +130,7 @@ class simp_apache (
   }
 
   if $rsync_web_root {
-    include '::rsync'
+    include 'rsync'
 
     # Rsync the /var/www space from the rsync server.
     # Add anything here you want to go to every web server.
@@ -153,18 +156,6 @@ class simp_apache (
       persistent => true,
       value      => 'on'
     }
-  }
-
-  service { 'httpd':
-    ensure     => 'running',
-    enable     => true,
-    hasrestart => false,
-    hasstatus  => true,
-    # The sleep 3 is in place to prevent a race condition from happening and
-    # the reload || restart is in place to try to force a clean restart if a
-    # reload fails to do the job.
-    restart    => '/bin/sleep 3; /sbin/service httpd reload || /sbin/service httpd restart',
-    require    => File['/etc/httpd/conf/httpd.conf']
   }
 
   user { 'apache':
