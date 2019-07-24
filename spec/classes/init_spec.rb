@@ -5,7 +5,7 @@ shared_examples_for "a simp_apache class" do
   it { is_expected.to create_class('simp_apache') }
   it { is_expected.to create_class('simp_apache::install') }
   it { is_expected.to create_class('simp_apache::conf') }
-#  it { is_expected.to contain_file(data_dir) }
+  it { is_expected.to create_class('simp_apache::service') }
   it { is_expected.to contain_file('/etc/httpd/conf/magic') }
   it { is_expected.to contain_file('/etc/httpd/conf.d/welcome.conf').with_ensure('absent') }
   it { is_expected.to contain_file('/etc/mime.types') }
@@ -15,7 +15,6 @@ shared_examples_for "a simp_apache class" do
   it { is_expected.to contain_file('/var/log/httpd').with_ensure('directory') }
   it { is_expected.to contain_file('httpd_modules').with_ensure('directory') }
   it { is_expected.to contain_group('apache').with_ensure('present') }
-  it { is_expected.to contain_service('httpd') }
   it { is_expected.to contain_user('apache') }
 end
 
@@ -53,6 +52,12 @@ describe 'simp_apache' do
           it { is_expected.not_to create_class('simp_apache::ssl') }
           it { is_expected.to create_rsync('site') }
           it { is_expected.to create_selboolean('httpd_can_network_connect') }
+        end
+
+        context 'no_manage_service' do
+          let(:hieradata){'no_manage_service'}
+          it_should_behave_like "a simp_apache class"
+          it { is_expected.to_not contain_service('httpd') }
         end
       end
     end
