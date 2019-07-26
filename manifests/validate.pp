@@ -1,8 +1,5 @@
-# This class should be used as input to validate_deep_hash when
-# managing 'ldap' or 'limits' ACLs
-#
-# The SIMP kibana and elasticsearch modules have working examples of
-# how to use this effectively.
+# @summary Should be used as input to `validate_deep_hash` when managing `ldap`
+# or `limits` ACLs
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #

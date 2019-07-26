@@ -68,7 +68,7 @@ class simp_apache::conf (
   Stdlib::AbsolutePath                               $syslog_target               = '/var/log/httpd',
   Boolean                                            $purge                       = true
 ) {
-  include '::simp_apache'
+  include 'simp_apache'
 
   # Make sure the networks are all formatted correctly for Apache.
   $l_allowroot = simp_apache::munge_httpd_networks($allowroot)
@@ -91,11 +91,11 @@ class simp_apache::conf (
     group   => $group,
     mode    => '0640',
     content => template("${module_name}/etc/httpd/conf/httpd.conf.erb"),
-    notify  => Service['httpd']
+    notify  => Class['simp_apache::service']
   }
 
   if $firewall {
-    include '::iptables'
+    include 'iptables'
 
     iptables::listen::tcp_stateful { 'allow_http':
       order        => 11,

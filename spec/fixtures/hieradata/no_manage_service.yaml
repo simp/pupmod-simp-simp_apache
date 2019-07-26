@@ -1,0 +1,4 @@
+---
+# SIMP infrastructure settings
+simp_options::trusted_nets:   ['192.168.122.0/24']
+simp_apache::service::manage: false

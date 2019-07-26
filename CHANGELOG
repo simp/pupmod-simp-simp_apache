@@ -1,3 +1,8 @@
+* Wed Jul 24 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.2.0-0
+- Split out service management into a `simp_apache::service` class
+- Provide users with a Hiera-driveable option to not manage the service
+- Add REFERENCE.md
+
 * Wed Jul 17 2019 Robert Vincent <pillarsdotnet@gmail.com> - 6.2.0-0
 - Ensure that the simp_apache::munge_httpd_networks does not attempt to modify
   passed parameters.
