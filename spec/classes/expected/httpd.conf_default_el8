@@ -1,0 +1,332 @@
+TraceEnable off
+ServerTokens ProductOnly
+
+ServerRoot "/etc/httpd"
+
+PidFile run/httpd.pid
+
+# Default: 120
+Timeout 120
+
+# Default: Off
+KeepAlive Off
+
+# Default: 100
+MaxKeepAliveRequests 100
+
+# Default: 15
+KeepAliveTimeout 15
+
+<IfModule prefork.c>
+# Default: 8
+StartServers         8
+# Default: 5
+MinSpareServers      5
+# Default: 20
+MaxSpareServers      20
+# Default: 256
+ServerLimit          3000
+# Default: 256
+MaxClients           3000
+# Default: 4000
+MaxRequestsPerChild  4000
+</IfModule>
+
+<IfModule worker.c>
+# Default: 2
+StartServers         2
+# Default: 150
+MaxClients           3000
+# Default: 25
+MinSpareThreads      25
+# Default: 75
+MaxSpareThreads      75
+# Default: 25
+ThreadsPerChild      25
+# Default: 0
+MaxRequestsPerChild  0
+</IfModule>
+
+# Default: 80
+Listen 80
+
+Include conf.modules.d/*.conf
+
+Include conf.d/*.conf
+
+User apache
+Group apache
+
+# Default: root@localhost
+ServerAdmin root@localhost
+
+UseCanonicalName Off
+
+DocumentRoot "/var/www/html"
+
+<Directory />
+    Options +FollowSymLinks
+    AllowOverride None
+</Directory>
+
+<Directory "/var/www/html">
+
+    Options -Indexes +FollowSymLinks
+    AllowOverride None
+    Order allow,deny
+    Allow from ::1
+    Allow from 10.0.2.15
+    Allow from 127.0.0.1
+    Allow from 127.0.0.1
+    Allow from ::1
+
+</Directory>
+
+<IfModule log_config_module>
+    #
+    # The following directives define some format nicknames for use with
+    # a CustomLog directive (see below).
+    #
+    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+    LogFormat "%h %l %u %t \"%r\" %>s %b" common
+
+    <IfModule logio_module>
+      # You need to enable mod_logio.c to use %I and %O
+      LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O" combinedio
+    </IfModule>
+
+    #
+    # The location and format of the access logfile (Common Logfile Format).
+    # If you do not define any access logfiles within a <VirtualHost>
+    # container, they will be logged here.  Contrariwise, if you *do*
+    # define per-<VirtualHost> access logfiles, transactions will be
+    # logged therein and *not* in this file.
+    #
+    #CustomLog "logs/access_log" common
+
+    #
+    # If you prefer a logfile with access, agent, and referer information
+    # (Combined Logfile Format) you can use the following directive.
+    #
+    CustomLog "logs/access_log" combined
+</IfModule>
+
+<IfModule alias_module>
+  ScriptAlias /cgi-bin/ "/var/www/cgi-bin/"
+</IfModule>
+
+<IfModule mod_userdir.c>
+    UserDir disable
+</IfModule>
+
+DirectoryIndex index.html index.html.var
+
+AccessFileName .htaccess
+
+<Files ~ "^\.ht">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<IfModule mime_module>
+  TypesConfig /etc/mime.types
+
+  AddType application/x-compress .Z
+  AddType application/x-gzip .gz .tgz
+
+  AddType text/html .shtml
+  AddOutputFilter INCLUDES .shtml
+</IfModule>
+
+<IfModule mime_magic_module>
+  MIMEMagicFile conf/magic
+</IfModule>
+
+<IfVersion < 2.4>
+# Default: text/plain
+DefaultType text/plain
+</IfVersion>
+HostnameLookups Off
+
+# Default: on
+EnableMMAP On
+
+# Default: on
+EnableSendfile On
+
+ErrorLog syslog:local6
+
+LogLevel warn
+
+LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" custom
+
+CustomLog "|/bin/logger -thttpd -plocal6.notice" custom
+
+ServerSignature Off
+
+Alias /icons/ "/var/www/icons/"
+
+<Directory "/var/www/icons">
+    Options +Indexes +MultiViews
+    AllowOverride None
+    Order allow,deny
+    Allow from ::1
+    Allow from 10.0.2.15
+    Allow from 127.0.0.1
+    Allow from 127.0.0.1
+    Allow from ::1
+</Directory>
+
+<Directory "/var/www/cgi-bin">
+    AllowOverride None
+    Options +ExecCGI -FollowSymLinks
+    Order allow,deny
+    Allow from ::1
+    Allow from 10.0.2.15
+    Allow from 127.0.0.1
+    Allow from 127.0.0.1
+    Allow from ::1
+</Directory>
+
+IndexOptions FancyIndexing VersionSort NameWidth=*
+
+AddIconByEncoding (CMP,/icons/compressed.gif) x-compress x-gzip
+
+AddIconByType (TXT,/icons/text.gif) text/*
+AddIconByType (IMG,/icons/image2.gif) image/*
+AddIconByType (SND,/icons/sound2.gif) audio/*
+AddIconByType (VID,/icons/movie.gif) video/*
+
+AddIcon /icons/binary.gif .bin .exe
+AddIcon /icons/binhex.gif .hqx
+AddIcon /icons/tar.gif .tar
+AddIcon /icons/world2.gif .wrl .wrl.gz .vrml .vrm .iv
+AddIcon /icons/compressed.gif .Z .z .tgz .gz .zip
+AddIcon /icons/a.gif .ps .ai .eps
+AddIcon /icons/layout.gif .html .shtml .htm .pdf
+AddIcon /icons/text.gif .txt
+AddIcon /icons/c.gif .c
+AddIcon /icons/p.gif .pl .py
+AddIcon /icons/f.gif .for
+AddIcon /icons/dvi.gif .dvi
+AddIcon /icons/uuencoded.gif .uu
+AddIcon /icons/script.gif .conf .sh .shar .csh .ksh .tcl
+AddIcon /icons/tex.gif .tex
+AddIcon /icons/bomb.gif core
+
+AddIcon /icons/back.gif ..
+AddIcon /icons/hand.right.gif README
+AddIcon /icons/folder.gif ^^DIRECTORY^^
+AddIcon /icons/blank.gif ^^BLANKICON^^
+
+DefaultIcon /icons/unknown.gif
+
+AddDescription "GZIP compressed document" .gz
+AddDescription "tar archive" .tar
+AddDescription "GZIP compressed tar archive" .tgz
+AddDescription "ZIP file" .zip
+AddDescription "Microsoft Office File" .doc .xls .ppt
+AddDescription "Adobe PDF" .pdf
+
+ReadmeName README.html
+HeaderName HEADER.html
+
+IndexIgnore .??* *~ *# HEADER* README* RCS CVS *,v *,t
+
+AddLanguage ca .ca
+AddLanguage cs .cz .cs
+AddLanguage da .dk
+AddLanguage de .de
+AddLanguage el .el
+AddLanguage en .en
+AddLanguage eo .eo
+AddLanguage es .es
+AddLanguage et .et
+AddLanguage fr .fr
+AddLanguage he .he
+AddLanguage hr .hr
+AddLanguage it .it
+AddLanguage ja .ja
+AddLanguage ko .ko
+AddLanguage ltz .ltz
+AddLanguage nl .nl
+AddLanguage nn .nn
+AddLanguage no .no
+AddLanguage pl .po
+AddLanguage pt .pt
+AddLanguage pt-BR .pt-br
+AddLanguage ru .ru
+AddLanguage sv .sv
+AddLanguage zh-CN .zh-cn
+AddLanguage zh-TW .zh-tw
+
+LanguagePriority en ca cs da de el eo es et fr he hr it ja ko ltz nl nn no pl pt pt-BR ru sv zh-CN zh-TW
+
+ForceLanguagePriority Prefer Fallback
+
+AddDefaultCharset UTF-8
+
+AddCharset ISO-8859-1  .iso8859-1  .latin1
+AddCharset ISO-8859-2  .iso8859-2  .latin2 .cen
+AddCharset ISO-8859-3  .iso8859-3  .latin3
+AddCharset ISO-8859-4  .iso8859-4  .latin4
+AddCharset ISO-8859-5  .iso8859-5  .latin5 .cyr .iso-ru
+AddCharset ISO-8859-6  .iso8859-6  .latin6 .arb
+AddCharset ISO-8859-7  .iso8859-7  .latin7 .grk
+AddCharset ISO-8859-8  .iso8859-8  .latin8 .heb
+AddCharset ISO-8859-9  .iso8859-9  .latin9 .trk
+AddCharset ISO-2022-JP .iso2022-jp .jis
+AddCharset ISO-2022-KR .iso2022-kr .kis
+AddCharset ISO-2022-CN .iso2022-cn .cis
+AddCharset Big5        .Big5       .big5
+AddCharset WINDOWS-1251 .cp-1251   .win-1251
+AddCharset CP866       .cp866
+AddCharset KOI8-r      .koi8-r .koi8-ru
+AddCharset KOI8-ru     .koi8-uk .ua
+AddCharset ISO-10646-UCS-2 .ucs2
+AddCharset ISO-10646-UCS-4 .ucs4
+AddCharset UTF-8       .utf8
+
+AddCharset GB2312      .gb2312 .gb
+AddCharset utf-7       .utf7
+AddCharset utf-8       .utf8
+AddCharset big5        .big5 .b5
+AddCharset EUC-TW      .euc-tw
+AddCharset EUC-JP      .euc-jp
+AddCharset EUC-KR      .euc-kr
+AddCharset shift_jis   .sjis
+
+AddHandler imap-file map
+
+AddHandler type-map var
+
+Alias /error/ "/var/www/error/"
+
+<IfModule mod_negotiation.c>
+<IfModule mod_include.c>
+    <Directory "/var/www/error">
+        AllowOverride None
+        Options +IncludesNoExec
+        AddOutputFilter Includes html
+        AddHandler type-map var
+        Order allow,deny
+        Allow from all
+        LanguagePriority en es de fr
+        ForceLanguagePriority Prefer Fallback
+    </Directory>
+
+</IfModule>
+</IfModule>
+
+BrowserMatch "Mozilla/2" nokeepalive
+BrowserMatch "MSIE 4\.0b2;" nokeepalive downgrade-1.0 force-response-1.0
+BrowserMatch "RealPlayer 4\.0" force-response-1.0
+BrowserMatch "Java/1\.0" force-response-1.0
+BrowserMatch "JDK/1\.0" force-response-1.0
+
+BrowserMatch "Microsoft Data Access Internet Publishing Provider" redirect-carefully
+BrowserMatch "^WebDrive" redirect-carefully
+BrowserMatch "^WebDAVFS/1.[0123]" redirect-carefully
+BrowserMatch "^gnome-vfs/1.0" redirect-carefully
+BrowserMatch "^XML Spy" redirect-carefully
+BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
