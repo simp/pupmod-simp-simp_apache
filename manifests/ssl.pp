@@ -61,6 +61,22 @@
 # @param app_pki_ca_dir
 #   Path to the CA.
 #
+# @param haveged
+#   Wether or not to include  havegedd
+# 
+# @see https://httpd.apache.org/docs/current/mod/mod_ssl.html#sslverifyclient
+# @param openssl_cipher_suite
+#   The Cipher Suite the client is permitted to negotiate in the SSL handshake phase. 
+# @param ssl_protocols
+#   This directive can be used to control which versions of the SSL/TLS
+#   protocol will be accepted in new connections
+# @param ssl_honor_cipher_order
+#   Option to prefer the server's cipher preference order
+# @param sslverifyclient
+#   This directive sets the Certificate verification level for the Client Authentication
+# @param sslverifydepth
+#   This directive sets how deeply mod_ssl should verify before deciding that
+#   the clients don't have a valid certificate
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp_apache::ssl (

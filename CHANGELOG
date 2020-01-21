@@ -1,7 +1,9 @@
-* Thu Jan 16 2020 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 6.3.0-0
+* Thu Jan 16 2020 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 7.0.0-0
 - Update puppet module to support EL8
-- Update tests
-- Update spec_helper to set digest algorthm that allows tests to run on FIPS.
+- Remove deprecated puppet 3 functions
+   - apache_auth   replaced by simp_apache::auth
+   - apache_limits replaced by simp_apache::limits
+   - munge_httpd_networks   replaced by simp_apache::munge_httpd_networks
 
 * Wed Jul 24 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.2.0-0
 - Split out service management into a `simp_apache::service` class

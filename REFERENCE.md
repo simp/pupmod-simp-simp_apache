@@ -6,7 +6,7 @@
 **Classes**
 
 * [`simp_apache`](#simp_apache): Configures an Apache server
-* [`simp_apache::conf`](#simp_apacheconf): This class sets up apache.conf.  @NOTE: If a parameter is not listed here then it is part of the standard Apache configuration set and the st
+* [`simp_apache::conf`](#simp_apacheconf): This class sets up apache.conf.
 * [`simp_apache::install`](#simp_apacheinstall): Apache package management
 * [`simp_apache::service`](#simp_apacheservice): Control the Apache service
 * [`simp_apache::ssl`](#simp_apachessl): Configures an Apache server with SSL support
@@ -22,9 +22,6 @@
 
 **Functions**
 
-* [`apache_auth`](#apache_auth): This takes a hash of arguments related to apache auth settings and returns a reasonably formatted set of options.  Currently, only htaccess a
-* [`apache_limits`](#apache_limits): This takes a hash of arguments related to apache 'Limits' settings and returns a reasonably formatted set of options.  Currently, host, user,
-* [`munge_httpd_networks`](#munge_httpd_networks): Provides a method by which an array of networks can be properly formatted for an Apache Allow/Deny segment.  This handles the case of 0.0.0.0
 * [`simp_apache::auth`](#simp_apacheauth): Takes a hash of arguments related to Apache 'Auth' settings and returns a reasonably formatted set of options.  Currently, only htaccess and 
 * [`simp_apache::limits`](#simp_apachelimits): Takes a hash of arguments related to Apache 'Limits' settings and returns a reasonably formatted set of options.  Currently, host, user ('val
 * [`simp_apache::munge_httpd_networks`](#simp_apachemunge_httpd_networks): Provides a method by which an array of networks can be properly formatted for an Apache Allow/Deny segment.  This handles the case of 0.0.0.0
@@ -42,10 +39,6 @@ optionally rsync the `/var/www/html` content.
 
 Ideally, we will move over to the Puppet Labs apache module in the future but
 it's going to be quite a bit of work to port all of our code.
-
-@NOTE: If a parameter is not listed here then it is part of the standard
-Apache configuration set and the stock Apache documentation should be
-referenced.
 
 #### Parameters
 
@@ -81,7 +74,7 @@ Default value: `true`
 
 Data type: `String`
 
-
+The  source  on the rsync server
 
 Default value: "apache_${::environment}_${facts['os']['name']}/www"
 
@@ -89,7 +82,7 @@ Default value: "apache_${::environment}_${facts['os']['name']}/www"
 
 Data type: `Simplib::Host`
 
-
+The name/address of the rsync server
 
 Default value: simplib::lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1' })
 
@@ -97,7 +90,7 @@ Default value: simplib::lookup('simp_options::rsync::server',  { 'default_value'
 
 Data type: `Integer`
 
-
+the rsync connection timeout
 
 Default value: simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 })
 
@@ -105,9 +98,10 @@ Default value: simplib::lookup('simp_options::rsync::timeout', { 'default_value'
 
 This class sets up apache.conf.
 
-@NOTE: If a parameter is not listed here then it is part of the
-standard Apache configuration set and the stock Apache documentation
-should be referenced.
+* **See also**
+The
+following parameters are referenced in the stock apache
+documentation
 
 #### Parameters
 
@@ -496,6 +490,9 @@ correct permissions.
 here and should be found in the Apache mod_ssl reference
 documentation.
 
+* **See also**
+https://httpd.apache.org/docs/current/mod/mod_ssl.html#sslverifyclient
+
 #### Parameters
 
 The following parameters are available in the `simp_apache::ssl` class.
@@ -609,11 +606,19 @@ Path to the CA.
 
 Default value: "${app_pki_dir}/cacerts"
 
+##### `haveged`
+
+Data type: `Boolean`
+
+Wether or not to include  havegedd
+
+Default value: simplib::lookup('simp_options::haveged', { 'default_value' => false })
+
 ##### `openssl_cipher_suite`
 
 Data type: `Array[String]`
 
-
+The Cipher Suite the client is permitted to negotiate in the SSL handshake phase.
 
 Default value: simplib::lookup('simp_options::openssl::cipher_suite', { 'default_value' => ['DEFAULT', '!MEDIUM'] })
 
@@ -621,7 +626,8 @@ Default value: simplib::lookup('simp_options::openssl::cipher_suite', { 'default
 
 Data type: `Array[String]`
 
-
+This directive can be used to control which versions of the SSL/TLS
+protocol will be accepted in new connections
 
 Default value: ['TLSv1','TLSv1.1','TLSv1.2']
 
@@ -629,7 +635,7 @@ Default value: ['TLSv1','TLSv1.1','TLSv1.2']
 
 Data type: `Boolean`
 
-
+Option to prefer the server's cipher preference order
 
 Default value: `true`
 
@@ -637,7 +643,7 @@ Default value: `true`
 
 Data type: `String`
 
-
+This directive sets the Certificate verification level for the Client Authentication
 
 Default value: 'require'
 
@@ -645,17 +651,10 @@ Default value: 'require'
 
 Data type: `Integer`
 
-
+This directive sets how deeply mod_ssl should verify before deciding that
+the clients don't have a valid certificate
 
 Default value: 10
-
-##### `haveged`
-
-Data type: `Boolean`
-
-
-
-Default value: simplib::lookup('simp_options::haveged', { 'default_value' => false })
 
 ### simp_apache::validate
 
@@ -732,276 +731,6 @@ split in the future but, for now, you cannot use usernames that
 contain a colon ':'.
 
 ## Functions
-
-### apache_auth
-
-Type: Ruby 3.x API
-
-This takes a hash of arguments related to apache auth settings and returns
-a reasonably formatted set of options.
-
-Currently, only htaccess and LDAP support are implemented.
-
-Example:
-
-apache_auth({
-  # Htaccess support
-  'file' => {
-    'enable'    => 'true',
-    'user_file' => '/etc/httpd/conf.d/test/.htdigest'
-  }
-  'ldap'    => {
-    # The LDAP server URI in Apache form.
-    'url'         => ['ldap://server1','ldap://server2'],
-    # Must be one of 'NONE', 'SSL', 'TLS', or 'STARTTLS'
-    'security'    => 'STARTTLS',
-    'binddn'      => 'cn=happy,ou=People,dc=your,dc=domain',
-    'bindpw'      => 'birthday',
-    'search'      => 'ou=People,dc=your,dc=domain',
-    # Whether or not your LDAP groups are POSIX groups.
-    'posix_group' => 'true'
-   }
- }
-)
-
-Output:
-  AuthName "Please Authenticate"
-  AuthType Basic
-  AuthBasicProvider ldap file
-  AuthLDAPUrl "server1 server2/ou=People,dc=your,dc=domain" STARTTLS
-  AuthLDAPBindDN "cn=happy,ou=People,dc=your,dc=domain',
-  AuthLDAPBindPassword 'birthday'
-  AuthLDAPGroupAttributeIsDN off
-  AuthLDAPGroupAttribute memberUid
-  AuthUserFile /etc/httpd/conf.d/elasticsearch/.htdigest
-
-#### `apache_auth()`
-
-This takes a hash of arguments related to apache auth settings and returns
-a reasonably formatted set of options.
-
-Currently, only htaccess and LDAP support are implemented.
-
-Example:
-
-apache_auth({
-  # Htaccess support
-  'file' => {
-    'enable'    => 'true',
-    'user_file' => '/etc/httpd/conf.d/test/.htdigest'
-  }
-  'ldap'    => {
-    # The LDAP server URI in Apache form.
-    'url'         => ['ldap://server1','ldap://server2'],
-    # Must be one of 'NONE', 'SSL', 'TLS', or 'STARTTLS'
-    'security'    => 'STARTTLS',
-    'binddn'      => 'cn=happy,ou=People,dc=your,dc=domain',
-    'bindpw'      => 'birthday',
-    'search'      => 'ou=People,dc=your,dc=domain',
-    # Whether or not your LDAP groups are POSIX groups.
-    'posix_group' => 'true'
-   }
- }
-)
-
-Output:
-  AuthName "Please Authenticate"
-  AuthType Basic
-  AuthBasicProvider ldap file
-  AuthLDAPUrl "server1 server2/ou=People,dc=your,dc=domain" STARTTLS
-  AuthLDAPBindDN "cn=happy,ou=People,dc=your,dc=domain',
-  AuthLDAPBindPassword 'birthday'
-  AuthLDAPGroupAttributeIsDN off
-  AuthLDAPGroupAttribute memberUid
-  AuthUserFile /etc/httpd/conf.d/elasticsearch/.htdigest
-
-Returns: `Any`
-
-### apache_limits
-
-Type: Ruby 3.x API
-
-This takes a hash of arguments related to apache 'Limits' settings and
-returns a reasonably formatted set of options.
-
-Currently, host, user, ldap_user, and ldap_group limits are supported.
-
-Groups of LDAP user primary groups are not supported since you would need
-to know the GID.
-
-Example:
-
-apache_limits(
-  {
-    # Set the defaults
-    # If this is omitted, it just defaults to 'GET'.
-    'defaults' => [ 'GET', 'POST', 'PUT' ],
-    # Allow the hosts/subnets below to GET, POST, and PUT to ES.
-    'hosts'  => {
-      '1.2.3.4'     => 'defaults',
-      '3.4.5.6'     => 'defaults',
-      '10.1.2.0/24' => 'defaults'
-    },
-    # You can make a special user 'valid-user' that will translate to
-    # allowing all valid users.
-    'users'  => {
-      # Allow user bob GET, POST, and PUT to ES.
-      'bob'     => 'defaults',
-      # Allow user alice GET, POST, PUT, and DELETE to ES.
-      'alice'   => ['GET','POST','PUT','DELETE']
-    },
-    'ldap_groups' => {
-       # Let the nice users read from ES.
-       "cn=nice_users,ou=Group,${::basedn}" => 'defaults'
-     }
-  }
-)
-
-Output:
-  <Limit GET>
-    Order allow,deny
-    Allow from 1.2.3.4
-    Allow from 3.4.5.6
-    Allow from 10.1.2.0/24
-    Require user bob
-    Require user alice
-    Require group cn=nice_users,ou=Group,dc=your,dc=domain
-    Satisfy any
-  </Limit>
-
-  <Limit POST>
-    Order allow,deny
-    Allow from 1.2.3.4
-    Allow from 3.4.5.6
-    Allow from 10.1.2.0/24
-    Require user bob
-    Require user alice
-    Require group cn=nice_users,ou=Group,dc=your,dc=domain
-    Satisfy any
-  </Limit>
-
-  <Limit PUT>
-    Order allow,deny
-    Allow from 1.2.3.4
-    Allow from 3.4.5.6
-    Allow from 10.1.2.0/24
-    Require user bob
-    Require user alice
-    Require group cn=nice_users,ou=Group,dc=your,dc=domain
-    Satisfy any
-  </Limit>
-
-  <Limit DELETE>
-    Order allow,deny
-    Require user alice
-    Satisfy any
-  </Limit>
-
-#### `apache_limits()`
-
-This takes a hash of arguments related to apache 'Limits' settings and
-returns a reasonably formatted set of options.
-
-Currently, host, user, ldap_user, and ldap_group limits are supported.
-
-Groups of LDAP user primary groups are not supported since you would need
-to know the GID.
-
-Example:
-
-apache_limits(
-  {
-    # Set the defaults
-    # If this is omitted, it just defaults to 'GET'.
-    'defaults' => [ 'GET', 'POST', 'PUT' ],
-    # Allow the hosts/subnets below to GET, POST, and PUT to ES.
-    'hosts'  => {
-      '1.2.3.4'     => 'defaults',
-      '3.4.5.6'     => 'defaults',
-      '10.1.2.0/24' => 'defaults'
-    },
-    # You can make a special user 'valid-user' that will translate to
-    # allowing all valid users.
-    'users'  => {
-      # Allow user bob GET, POST, and PUT to ES.
-      'bob'     => 'defaults',
-      # Allow user alice GET, POST, PUT, and DELETE to ES.
-      'alice'   => ['GET','POST','PUT','DELETE']
-    },
-    'ldap_groups' => {
-       # Let the nice users read from ES.
-       "cn=nice_users,ou=Group,${::basedn}" => 'defaults'
-     }
-  }
-)
-
-Output:
-  <Limit GET>
-    Order allow,deny
-    Allow from 1.2.3.4
-    Allow from 3.4.5.6
-    Allow from 10.1.2.0/24
-    Require user bob
-    Require user alice
-    Require group cn=nice_users,ou=Group,dc=your,dc=domain
-    Satisfy any
-  </Limit>
-
-  <Limit POST>
-    Order allow,deny
-    Allow from 1.2.3.4
-    Allow from 3.4.5.6
-    Allow from 10.1.2.0/24
-    Require user bob
-    Require user alice
-    Require group cn=nice_users,ou=Group,dc=your,dc=domain
-    Satisfy any
-  </Limit>
-
-  <Limit PUT>
-    Order allow,deny
-    Allow from 1.2.3.4
-    Allow from 3.4.5.6
-    Allow from 10.1.2.0/24
-    Require user bob
-    Require user alice
-    Require group cn=nice_users,ou=Group,dc=your,dc=domain
-    Satisfy any
-  </Limit>
-
-  <Limit DELETE>
-    Order allow,deny
-    Require user alice
-    Satisfy any
-  </Limit>
-
-Returns: `Any`
-
-### munge_httpd_networks
-
-Type: Ruby 3.x API
-
-Provides a method by which an array of networks can be properly formatted
-for an Apache Allow/Deny segment.
-
-This handles the case of 0.0.0.0/0, which Apache doesn't care for and
-this function will convert to 'ALL'.
-
-The case where a DDQ address is passed is also handled since Apache
-doesn't care for these at all.
-
-#### `munge_httpd_networks()`
-
-Provides a method by which an array of networks can be properly formatted
-for an Apache Allow/Deny segment.
-
-This handles the case of 0.0.0.0/0, which Apache doesn't care for and
-this function will convert to 'ALL'.
-
-The case where a DDQ address is passed is also handled since Apache
-doesn't care for these at all.
-
-Returns: `Any`
 
 ### simp_apache::auth
 
