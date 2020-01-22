@@ -22,11 +22,10 @@
 #   disable logging.
 #
 # @param enable_default_vhost
-#   Whether or not to activate the default VirtualHost on the $listen
-#   port.
+#   Whether to activate the default VirtualHost on the $listen port.
 #
 # @param firewall
-#   Whether or not to use the SIMP iptables module.
+#   Whether to use the SIMP iptables module.
 #
 # @param pki
 #   * If 'simp', include SIMP's pki module and use pki::copy to manage
@@ -62,22 +61,30 @@
 #   Path to the CA.
 #
 # @param haveged
-#   Wether or not to include  havegedd
-# 
+#   Whether to use the SIMP haveged module to assist with entropy generation.
+#
 # @see https://httpd.apache.org/docs/current/mod/mod_ssl.html#sslverifyclient
+#
 # @param openssl_cipher_suite
-#   The Cipher Suite the client is permitted to negotiate in the SSL handshake phase. 
+#   The Cipher Suite the client is permitted to negotiate in the SSL handshake
+#   phase.
+#
 # @param ssl_protocols
 #   This directive can be used to control which versions of the SSL/TLS
-#   protocol will be accepted in new connections
+#   protocol will be accepted in new connections.
+#
 # @param ssl_honor_cipher_order
-#   Option to prefer the server's cipher preference order
+#   Option to prefer the server's cipher preference order.
+#
 # @param sslverifyclient
-#   This directive sets the Certificate verification level for the Client Authentication
+#   This directive sets the Certificate verification level for the Client
+#   Authentication.
+#
 # @param sslverifydepth
 #   This directive sets how deeply mod_ssl should verify before deciding that
-#   the clients don't have a valid certificate
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+#   the clients don't have a valid certificate.
+#
+# @author https://github.com/simp/pupmod-simp-simp_apache/graphs/contributors
 #
 class simp_apache::ssl (
   Array[Variant[Simplib::Host::Port, Simplib::Port]] $listen                  = [443],

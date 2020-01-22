@@ -17,16 +17,16 @@
 #   Whether or not to enable SSL. You will need to set the Hiera
 #   variables for apache::ssl appropriately for your needs.
 #
-# @param  rsync_source
-#  The  source  on the rsync server
+# @param rsync_source
+#  The source on the rsync server.
 #
-# @param  rsync_server
-#  The name/address of the rsync server
+# @param rsync_server
+#  The name/address of the rsync server.
 #
-# @param  rsync_timeout
-#  the rsync connection timeout
+# @param rsync_timeout
+#  The rsync connection timeout.
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-simp_apache/graphs/contributors
 #
 class simp_apache (
   Stdlib::AbsolutePath $data_dir       = '/var/www',

@@ -74,7 +74,7 @@ Default value: `true`
 
 Data type: `String`
 
-The  source  on the rsync server
+The source on the rsync server.
 
 Default value: "apache_${::environment}_${facts['os']['name']}/www"
 
@@ -82,7 +82,7 @@ Default value: "apache_${::environment}_${facts['os']['name']}/www"
 
 Data type: `Simplib::Host`
 
-The name/address of the rsync server
+The name/address of the rsync server.
 
 Default value: simplib::lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1' })
 
@@ -90,7 +90,7 @@ Default value: simplib::lookup('simp_options::rsync::server',  { 'default_value'
 
 Data type: `Integer`
 
-the rsync connection timeout
+The rsync connection timeout.
 
 Default value: simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 })
 
@@ -530,8 +530,7 @@ Default value: '%t %h %{SSL_CLIENT_S_DN_CN}x %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%
 
 Data type: `Boolean`
 
-Whether or not to activate the default VirtualHost on the $listen
-port.
+Whether to activate the default VirtualHost on the $listen port.
 
 Default value: `true`
 
@@ -539,7 +538,7 @@ Default value: `true`
 
 Data type: `Boolean`
 
-Whether or not to use the SIMP iptables module.
+Whether to use the SIMP iptables module.
 
 Default value: simplib::lookup('simp_options::firewall', { 'default_value' => false, })
 
@@ -610,7 +609,7 @@ Default value: "${app_pki_dir}/cacerts"
 
 Data type: `Boolean`
 
-Wether or not to include  havegedd
+Whether to use the SIMP haveged module to assist with entropy generation.
 
 Default value: simplib::lookup('simp_options::haveged', { 'default_value' => false })
 
@@ -618,7 +617,8 @@ Default value: simplib::lookup('simp_options::haveged', { 'default_value' => fal
 
 Data type: `Array[String]`
 
-The Cipher Suite the client is permitted to negotiate in the SSL handshake phase.
+The Cipher Suite the client is permitted to negotiate in the SSL handshake
+phase.
 
 Default value: simplib::lookup('simp_options::openssl::cipher_suite', { 'default_value' => ['DEFAULT', '!MEDIUM'] })
 
@@ -627,7 +627,7 @@ Default value: simplib::lookup('simp_options::openssl::cipher_suite', { 'default
 Data type: `Array[String]`
 
 This directive can be used to control which versions of the SSL/TLS
-protocol will be accepted in new connections
+protocol will be accepted in new connections.
 
 Default value: ['TLSv1','TLSv1.1','TLSv1.2']
 
@@ -635,7 +635,7 @@ Default value: ['TLSv1','TLSv1.1','TLSv1.2']
 
 Data type: `Boolean`
 
-Option to prefer the server's cipher preference order
+Option to prefer the server's cipher preference order.
 
 Default value: `true`
 
@@ -643,7 +643,8 @@ Default value: `true`
 
 Data type: `String`
 
-This directive sets the Certificate verification level for the Client Authentication
+This directive sets the Certificate verification level for the Client
+Authentication.
 
 Default value: 'require'
 
@@ -652,7 +653,7 @@ Default value: 'require'
 Data type: `Integer`
 
 This directive sets how deeply mod_ssl should verify before deciding that
-the clients don't have a valid certificate
+the clients don't have a valid certificate.
 
 Default value: 10
 

@@ -56,9 +56,8 @@
 # @param group
 # @param logformat
 # @param logfacility
-# 
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-simp_apache/graphs/contributors
 #
 class simp_apache::conf (
   Integer                                            $httpd_timeout               = 120,
