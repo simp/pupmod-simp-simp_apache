@@ -1,9 +1,5 @@
 # This class sets up apache.conf.
 #
-# @NOTE: If a parameter is not listed here then it is part of the
-# standard Apache configuration set and the stock Apache documentation
-# should be referenced.
-#
 # @param httpd_timeout
 #   The Timeout variable. Renamed to not conflict with the Puppet
 #   reserved word 'timeout'.
@@ -31,7 +27,37 @@
 # @param purge
 #   Whether or not to purge the configuration directories.
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @see The following parameters are referenced in the stock apache
+#   documentation
+#
+# @param keepalive
+# @param maxkeepalive
+# @param keepalivetimeout
+# @param prefork_startservers
+# @param prefork_minspareservers
+# @param prefork_maxspareservers
+# @param prefork_serverlimit
+# @param prefork_maxclients
+# @param prefork_maxrequestsperchild
+# @param worker_startservers
+# @param worker_maxclients
+# @param worker_minsparethreads
+# @param worker_maxsparethreads
+# @param worker_threadsperchild
+# @param worker_maxrequestsperchild
+# @param includes
+# @param serveradmin
+# @param servername
+# @param allowroot
+# @param defaulttype
+# @param enablemmap
+# @param enablesendfile
+# @param user
+# @param group
+# @param logformat
+# @param logfacility
+#
+# @author https://github.com/simp/pupmod-simp-simp_apache/graphs/contributors
 #
 class simp_apache::conf (
   Integer                                            $httpd_timeout               = 120,

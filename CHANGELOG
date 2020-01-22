@@ -1,3 +1,11 @@
+* Thu Jan 16 2020 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 7.0.0-0
+- Update Puppet module to support EL8
+- Remove deprecated Puppet 3 API functions:
+  - apache_auth: replaced by simp_apache::auth
+  - apache_limits: replaced by simp_apache::limits
+  - munge_httpd_networks: replaced by simp_apache::munge_httpd_networks
+- Update the upper bound of simp-simplib to < 5.0.0
+
 * Wed Jul 24 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.2.0-0
 - Split out service management into a `simp_apache::service` class
 - Provide users with a Hiera-driveable option to not manage the service

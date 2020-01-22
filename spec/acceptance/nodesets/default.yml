@@ -6,9 +6,16 @@
   end
 -%>
 HOSTS:
-  server7:
+  server8:
     roles:
       - default
+      - server8
+    platform: el-8-x86_64
+    box: centos/8
+    hypervisor: <%= hypervisor %>
+
+  server7:
+    roles:
       - server7
     platform: el-7-x86_64
     box: centos/7

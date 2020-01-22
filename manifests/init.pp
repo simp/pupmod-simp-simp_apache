@@ -6,10 +6,6 @@
 # Ideally, we will move over to the Puppet Labs apache module in the future but
 # it's going to be quite a bit of work to port all of our code.
 #
-# @NOTE: If a parameter is not listed here then it is part of the standard
-# Apache configuration set and the stock Apache documentation should be
-# referenced.
-#
 # @param data_dir
 #   The location where apache web data should be stored. Set to /srv/www for
 #   legacy reasons.
@@ -21,7 +17,16 @@
 #   Whether or not to enable SSL. You will need to set the Hiera
 #   variables for apache::ssl appropriately for your needs.
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @param rsync_source
+#  The source on the rsync server.
+#
+# @param rsync_server
+#  The name/address of the rsync server.
+#
+# @param rsync_timeout
+#  The rsync connection timeout.
+#
+# @author https://github.com/simp/pupmod-simp-simp_apache/graphs/contributors
 #
 class simp_apache (
   Stdlib::AbsolutePath $data_dir       = '/var/www',
