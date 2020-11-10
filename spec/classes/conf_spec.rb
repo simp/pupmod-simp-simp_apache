@@ -8,7 +8,17 @@ describe 'simp_apache::conf' do
           os_facts
         end
 
-        let(:expected_dir) { File.join(File.dirname(__FILE__), 'expected') }
+        let(:pre_condition) do
+          <<~SIMPLIB_IPADDRESSES
+            function simplib::ipaddresses {
+              ['10.0.2.15','127.0.0.1']
+            }
+          SIMPLIB_IPADDRESSES
+        end
+
+        let(:expected_dir) do
+          File.join(File.dirname(__FILE__), 'expected')
+        end
 
         context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }

@@ -90,7 +90,7 @@ class simp_apache::ssl (
   Array[Variant[Simplib::Host::Port, Simplib::Port]] $listen                  = [443],
   Simplib::Netlist                                   $trusted_nets            = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] }),
   Array[String]                                      $openssl_cipher_suite    = simplib::lookup('simp_options::openssl::cipher_suite', { 'default_value' => ['DEFAULT', '!MEDIUM'] }),
-  Array[String]                                      $ssl_protocols           = ['TLSv1','TLSv1.1','TLSv1.2'],
+  Array[String]                                      $ssl_protocols           = ['TLSv1.2'],
   Boolean                                            $ssl_honor_cipher_order  = true,
   String                                             $sslverifyclient         = 'require',
   Integer                                            $sslverifydepth          = 10,

@@ -21,14 +21,14 @@ describe 'simp_apache::munge_httpd_networks' do
     # FIXME simplib net2cidr needs to be fixed
     pending 'fails when transformation of an invalid IPv4 network is requested'  do
       input = ['1.2.3.4/34', '1.2.3..']
-      is_expected.to run.with_params(input).and_raise_error(/is not a valid IP address/)
+      is_expected.to run.with_params(input).and_raise_error(/is not a valid/)
     end
 
     it 'fails when transformation of an invalid IPv4 network is requested'  do
       input = ['1.2.3.4/255.']
-      is_expected.to run.with_params(input).and_raise_error(/is not a valid IP address/)
+      is_expected.to run.with_params(input).and_raise_error(/is not a valid/)
     end
 
-    pending 'fails when transformation of an invalid IPV6 network is requested' 
+    pending 'fails when transformation of an invalid IPV6 network is requested'
   end
 end
