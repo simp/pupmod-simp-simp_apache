@@ -8,6 +8,12 @@ describe 'simp_apache::conf' do
           os_facts
         end
 
+        before(:each) do
+          Puppet::Parser::Functions.newfunction(:'simplib::ipaddresses', :type => :rvalue) { |args|
+            ['10.0.2.15']
+          }
+        end
+
         let(:expected_dir) { File.join(File.dirname(__FILE__), 'expected') }
 
         context 'with default parameters' do
