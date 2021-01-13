@@ -1,3 +1,6 @@
+* Wed Jan 13 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 7.0.2
+- Removed EL6 from supported OSe
+
 * Thu Nov 05 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 7.0.1-0
 - Default to only TLS1.2
 

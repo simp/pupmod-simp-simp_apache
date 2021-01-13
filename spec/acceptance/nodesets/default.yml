@@ -9,6 +9,8 @@ HOSTS:
   server8:
     roles:
       - default
+      # roles migrated from now-removed el6 node(s):
+      - server6
       - server8
     platform: el-8-x86_64
     box: centos/8
@@ -19,13 +21,6 @@ HOSTS:
       - server7
     platform: el-7-x86_64
     box: centos/7
-    hypervisor: <%= hypervisor %>
-
-  server6:
-    roles:
-      - server6
-    platform: el-6-x86_64
-    box: centos/6
     hypervisor: <%= hypervisor %>
 
 CONFIG:

@@ -20,14 +20,6 @@ class simp_apache::install (
     ensure => $httpd_ensure
   }
 
-  if $facts['os']['name'] in ['RedHat','CentOS','OracleLinux'] {
-    if $facts['os']['release']['major'] == 6 {
-      package { 'mod_ldap':
-        ensure => $mod_ldap_ensure
-      }
-    }
-  }
-
   if $simp_apache::ssl {
     package { 'mod_ssl':
       ensure => $mod_ssl_ensure

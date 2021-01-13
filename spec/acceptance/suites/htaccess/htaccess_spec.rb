@@ -2,7 +2,8 @@ require 'spec_helper_acceptance'
 
 test_name "htaccess type/provider"
 
-['6', '7'].each do |os_major_version|
+# TODO: Should these tests include 8?
+['7'].each do |os_major_version|
   describe "htaccess type/provider for CentOS #{os_major_version}" do
     let(:host) {only_host_with_role( hosts, "server#{os_major_version}" ) }
 
