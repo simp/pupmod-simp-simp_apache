@@ -9,8 +9,6 @@ HOSTS:
   oel8:
     roles:
       - default
-      # roles migrated from now-removed el6 node(s):
-      - server6
       - server8
     platform: el-8-x86_64
     box: generic/oracle8
