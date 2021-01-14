@@ -356,6 +356,7 @@ pup5.pe:
 pup5.pe-fips:
   <<: *pup_5_pe
   <<: *acceptance_base
+  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
   script:
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,default]'
 
@@ -417,7 +418,6 @@ pup6.x-htaccess:
 pup6.x-htaccess-fips:
   <<: *pup_6_x
   <<: *acceptance_base
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
   script:
     - 'bundle exec rake spec_clean'
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[htaccess,default]'

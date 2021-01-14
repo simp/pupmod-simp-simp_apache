@@ -53,17 +53,7 @@ class simp_apache (
   Class['simp_apache::install'] ~> Class['simp_apache::service']
   Class['simp_apache::conf']    ~> Class['simp_apache::service']
 
-  if $facts['os']['name'] in ['RedHat','CentOS','OracleLinux'] {
-    if (versioncmp($facts['os']['release']['major'],'7') >= 0) {
-      $apache_homedir = '/usr/share/httpd'
-    }
-    else {
-      $apache_homedir = '/var/www'
-    }
-  }
-  else {
-    $apache_homedir = '/var/www'
-  }
+  $apache_homedir = '/usr/share/httpd'
 
   $_modules_target = $facts['hardwaremodel'] ? {
     'x86_64' => '/usr/lib64/httpd/modules',
