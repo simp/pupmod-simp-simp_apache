@@ -25,7 +25,7 @@ describe 'apache class' do
 
       it 'should respond to http' do
         result = on(host,'curl localhost')
-        expect(result.output).to match(/You don't have permission to access \//)
+        expect(result.output).to match(/You don't have permission to access /)
       end
     end
   end
