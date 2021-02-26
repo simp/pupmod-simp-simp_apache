@@ -25,8 +25,7 @@
 #   A specific command to use to restart the daemon
 #
 #   * Ignored if `$hasrestart` is set to `true`
-#   * The `sleep 3` is in place to prevent a race condition from happening and
-#     the `reload || restart` is in place to try to force a clean restart if a
+#   * The `reload || restart` is in place to try to force a clean restart if a
 #     reload fails to do the job.
 #
 class simp_apache::service (
@@ -36,7 +35,7 @@ class simp_apache::service (
   Boolean   $enable       = true,
   Boolean   $hasstatus    = true,
   Boolean   $hasrestart   = false,
-  String[1] $restart      = '/bin/sleep 3; /sbin/service httpd reload || /sbin/service httpd restart'
+  String[1] $restart      = '/usr/bin/systemctl reload httpd.service || /usr/bin/systemctl restart httpd.service'
 ) {
   if $manage {
     if $hasrestart {
