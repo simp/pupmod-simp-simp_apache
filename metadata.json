@@ -1,6 +1,6 @@
 {
   "name": "simp-simp_apache",
-  "version": "7.0.2",
+  "version": "7.1.0",
   "author": "SIMP Team",
   "summary": "configure SIMP apache & component sites (NOTE: legacy, conflicts with puppetlabs-apache)",
   "license": "Apache-2.0",
@@ -47,7 +47,7 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.13.1 < 7.0.0"
+      "version_requirement": ">= 6.18.0 < 8.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -76,7 +76,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.0.0 < 7.0.0"
+      "version_requirement": ">= 6.22.1 < 8.0.0"
     }
   ]
 }
