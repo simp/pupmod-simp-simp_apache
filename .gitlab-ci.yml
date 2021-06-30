@@ -405,3 +405,17 @@ pup6.pe-oel-htaccess:
   script:
     - 'bundle exec rake spec_clean'
     - 'bundle exec rake beaker:suites[htaccess,oel]'
+
+pup7.x:
+  <<: *pup_7_x
+  <<: *acceptance_base
+  script:
+    - 'bundle exec rake beaker:suites[default,default]'
+
+
+pup7.x-htaccess:
+  <<: *pup_7_x
+  <<: *acceptance_base
+  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_2
+  script:
+    - 'bundle exec rake beaker:suites[htaccess,default]'
