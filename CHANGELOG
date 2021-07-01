@@ -1,3 +1,10 @@
+* Tue Jul 06 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 7.1.0
+  - Fixed
+    - Ensure that all file resources that manage more than permissions have an
+      'ensure' attribute - See PUP-7599
+  - Changed
+    - Moved the 'magic' file into an EPP template to work better with Bolt
+
 * Wed Jun 16 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 7.1.0
 - Removed support for Puppet 5
 - Ensured support for Puppet 7 in requirements and stdlib
