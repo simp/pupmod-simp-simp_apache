@@ -55,69 +55,6 @@ class simp_apache (
 
   $apache_homedir = '/usr/share/httpd'
 
-  $_modules_target = $facts['hardwaremodel'] ? {
-    'x86_64' => '/usr/lib64/httpd/modules',
-    default  => '/usr/lib/httpd/modules'
-  }
-
-  file { $data_dir:
-    ensure => 'directory',
-    owner  => 'root',
-    group  => 'apache',
-    mode   => '0640'
-  }
-
-  file { '/etc/httpd/conf/magic':
-    owner  => 'root',
-    group  => 'apache',
-    mode   => '0640',
-    source => "puppet:///modules/${module_name}/magic",
-    notify => Class['simp_apache::service']
-  }
-
-  file { '/etc/httpd/conf.d/welcome.conf': ensure => 'absent' }
-
-  file { '/etc/mime.types':
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
-    notify => Class['simp_apache::service']
-  }
-
-  file { '/etc/httpd/logs':
-    ensure => 'symlink',
-    target => '/var/log/httpd',
-    force  => true
-  }
-
-  file { '/etc/httpd/modules':
-    ensure => 'symlink',
-    target =>  $_modules_target,
-    force  => true
-  }
-
-  file { '/etc/httpd/run':
-    ensure => 'symlink',
-    target => '/var/run/httpd',
-    force  => true,
-  }
-
-  file { '/var/log/httpd':
-    ensure => 'directory',
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0700'
-  }
-
-  file { 'httpd_modules':
-    ensure => 'directory',
-    path   => $_modules_target,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
-    notify => Class['simp_apache::service']
-  }
-
   group { 'apache':
     ensure    => 'present',
     allowdupe => false,

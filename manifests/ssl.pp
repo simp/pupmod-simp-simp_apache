@@ -110,6 +110,7 @@ class simp_apache::ssl (
   if $haveged { include 'haveged' }
 
   file { '/etc/httpd/conf.d/ssl.conf':
+    ensure  => 'file',
     owner   => pick($simp_apache::conf::user,'root'),
     group   => pick($simp_apache::conf::group,'apache'),
     mode    => '0640',

@@ -103,6 +103,7 @@ class simp_apache::conf (
     '/etc/httpd/conf',
     '/etc/httpd/conf.d'
   ]:
+    ensure   => 'directory',
     owner    => 'root',
     group    => $group,
     mode     => '0640',
@@ -113,11 +114,73 @@ class simp_apache::conf (
   }
 
   file { '/etc/httpd/conf/httpd.conf':
+    ensure  => 'file',
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template("${module_name}/etc/httpd/conf/httpd.conf.erb"),
-    notify  => Class['simp_apache::service']
+    content => template("${module_name}/etc/httpd/conf/httpd.conf.erb")
+  }
+
+  $_modules_target = $facts['hardwaremodel'] ? {
+    'x86_64' => '/usr/lib64/httpd/modules',
+    default  => '/usr/lib/httpd/modules'
+  }
+
+  file { $simp_apache::data_dir:
+    ensure => 'directory',
+    owner  => 'root',
+    group  => 'apache',
+    mode   => '0640'
+  }
+
+  file { '/etc/httpd/conf/magic':
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'apache',
+    mode    => '0640',
+    replace => false,
+    content => epp("${module_name}/etc/httpd/conf/magic.epp")
+  }
+
+  file { '/etc/httpd/conf.d/welcome.conf': ensure => 'absent' }
+
+  file { '/etc/mime.types':
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644'
+  }
+
+  file { '/etc/httpd/logs':
+    ensure => 'symlink',
+    target => '/var/log/httpd',
+    force  => true
+  }
+
+  file { '/etc/httpd/modules':
+    ensure => 'symlink',
+    target =>  $_modules_target,
+    force  => true
+  }
+
+  file { '/etc/httpd/run':
+    ensure => 'symlink',
+    target => '/var/run/httpd',
+    force  => true
+  }
+
+  file { '/var/log/httpd':
+    ensure => 'directory',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0700'
+  }
+
+  file { 'httpd_modules':
+    ensure => 'directory',
+    path   => $_modules_target,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755'
   }
 
   if $firewall {
