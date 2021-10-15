@@ -16,6 +16,11 @@ describe 'simp_apache::ssl' do
           it { is_expected.to_not create_class('pki') }
           it { is_expected.to_not create_pki__copy('simp_apache') }
           it { is_expected.to_not contain_class('haveged') }
+          if facts[:os][:release][:major] <= '7'
+            it { is_expected.to contain_file('/etc/httpd/conf.d/ssl.conf').with_content(/SSLVerifyClient require/)}
+          else
+            it { is_expected.to contain_file('/etc/httpd/conf.d/ssl.conf').with_content(/SSLVerifyClient optional/)}
+          end
         end
 
         context 'firewall = true' do

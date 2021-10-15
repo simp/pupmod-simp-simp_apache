@@ -33,7 +33,7 @@
 
 ## Classes
 
-### `simp_apache`
+### <a name="simp_apache"></a>`simp_apache`
 
 Ensures that the appropriate files are in the appropriate places and can
 optionally rsync the `/var/www/html` content.
@@ -43,9 +43,16 @@ it's going to be quite a bit of work to port all of our code.
 
 #### Parameters
 
-The following parameters are available in the `simp_apache` class.
+The following parameters are available in the `simp_apache` class:
 
-##### `data_dir`
+* [`data_dir`](#data_dir)
+* [`rsync_web_root`](#rsync_web_root)
+* [`ssl`](#ssl)
+* [`rsync_source`](#rsync_source)
+* [`rsync_server`](#rsync_server)
+* [`rsync_timeout`](#rsync_timeout)
+
+##### <a name="data_dir"></a>`data_dir`
 
 Data type: `Stdlib::AbsolutePath`
 
@@ -54,7 +61,7 @@ legacy reasons.
 
 Default value: `'/var/www'`
 
-##### `rsync_web_root`
+##### <a name="rsync_web_root"></a>`rsync_web_root`
 
 Data type: `Boolean`
 
@@ -62,7 +69,7 @@ Whether or not to rsync over the web root.
 
 Default value: ``true``
 
-##### `ssl`
+##### <a name="ssl"></a>`ssl`
 
 Data type: `Boolean`
 
@@ -71,7 +78,7 @@ variables for apache::ssl appropriately for your needs.
 
 Default value: ``true``
 
-##### `rsync_source`
+##### <a name="rsync_source"></a>`rsync_source`
 
 Data type: `String`
 
@@ -79,7 +86,7 @@ The source on the rsync server.
 
 Default value: `"apache_${::environment}_${facts['os']['name']}/www"`
 
-##### `rsync_server`
+##### <a name="rsync_server"></a>`rsync_server`
 
 Data type: `Simplib::Host`
 
@@ -87,7 +94,7 @@ The name/address of the rsync server.
 
 Default value: `simplib::lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1' })`
 
-##### `rsync_timeout`
+##### <a name="rsync_timeout"></a>`rsync_timeout`
 
 Data type: `Integer`
 
@@ -95,7 +102,7 @@ The rsync connection timeout.
 
 Default value: `simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 })`
 
-### `simp_apache::conf`
+### <a name="simp_apacheconf"></a>`simp_apache::conf`
 
 This class sets up apache.conf.
 
@@ -106,9 +113,43 @@ documentation
 
 #### Parameters
 
-The following parameters are available in the `simp_apache::conf` class.
+The following parameters are available in the `simp_apache::conf` class:
 
-##### `httpd_timeout`
+* [`httpd_timeout`](#httpd_timeout)
+* [`httpd_loglevel`](#httpd_loglevel)
+* [`listen`](#listen)
+* [`firewall`](#firewall)
+* [`syslog`](#syslog)
+* [`syslog_target`](#syslog_target)
+* [`purge`](#purge)
+* [`keepalive`](#keepalive)
+* [`maxkeepalive`](#maxkeepalive)
+* [`keepalivetimeout`](#keepalivetimeout)
+* [`prefork_startservers`](#prefork_startservers)
+* [`prefork_minspareservers`](#prefork_minspareservers)
+* [`prefork_maxspareservers`](#prefork_maxspareservers)
+* [`prefork_serverlimit`](#prefork_serverlimit)
+* [`prefork_maxclients`](#prefork_maxclients)
+* [`prefork_maxrequestsperchild`](#prefork_maxrequestsperchild)
+* [`worker_startservers`](#worker_startservers)
+* [`worker_maxclients`](#worker_maxclients)
+* [`worker_minsparethreads`](#worker_minsparethreads)
+* [`worker_maxsparethreads`](#worker_maxsparethreads)
+* [`worker_threadsperchild`](#worker_threadsperchild)
+* [`worker_maxrequestsperchild`](#worker_maxrequestsperchild)
+* [`includes`](#includes)
+* [`serveradmin`](#serveradmin)
+* [`servername`](#servername)
+* [`allowroot`](#allowroot)
+* [`defaulttype`](#defaulttype)
+* [`enablemmap`](#enablemmap)
+* [`enablesendfile`](#enablesendfile)
+* [`user`](#user)
+* [`group`](#group)
+* [`logformat`](#logformat)
+* [`logfacility`](#logfacility)
+
+##### <a name="httpd_timeout"></a>`httpd_timeout`
 
 Data type: `Integer`
 
@@ -117,7 +158,7 @@ reserved word 'timeout'.
 
 Default value: `120`
 
-##### `httpd_loglevel`
+##### <a name="httpd_loglevel"></a>`httpd_loglevel`
 
 Data type: `Simp_apache::LogSeverity`
 
@@ -126,7 +167,7 @@ reserved word 'loglevel'.
 
 Default value: `'warn'`
 
-##### `listen`
+##### <a name="listen"></a>`listen`
 
 Data type: `Array[Variant[Simplib::Host::Port, Simplib::Port]]`
 
@@ -137,7 +178,7 @@ NOTE: If you are using an IPv6 with a port, you need to
 
 Default value: `[80]`
 
-##### `firewall`
+##### <a name="firewall"></a>`firewall`
 
 Data type: `Boolean`
 
@@ -145,7 +186,7 @@ Whether or not to use the SIMP IPTables module.
 
 Default value: `simplib::lookup('simp_options::firewall', { 'default_value' => false })`
 
-##### `syslog`
+##### <a name="syslog"></a>`syslog`
 
 Data type: `Boolean`
 
@@ -153,7 +194,7 @@ Whether or not to use the SIMP Rsyslog module.
 
 Default value: `simplib::lookup('simp_options::syslog', { 'default_value' => false })`
 
-##### `syslog_target`
+##### <a name="syslog_target"></a>`syslog_target`
 
 Data type: `Stdlib::AbsolutePath`
 
@@ -162,7 +203,7 @@ location.
 
 Default value: `'/var/log/httpd'`
 
-##### `purge`
+##### <a name="purge"></a>`purge`
 
 Data type: `Boolean`
 
@@ -170,7 +211,7 @@ Whether or not to purge the configuration directories.
 
 Default value: ``true``
 
-##### `keepalive`
+##### <a name="keepalive"></a>`keepalive`
 
 Data type: `Boolean`
 
@@ -178,7 +219,7 @@ Data type: `Boolean`
 
 Default value: ``false``
 
-##### `maxkeepalive`
+##### <a name="maxkeepalive"></a>`maxkeepalive`
 
 Data type: `Integer`
 
@@ -186,7 +227,7 @@ Data type: `Integer`
 
 Default value: `100`
 
-##### `keepalivetimeout`
+##### <a name="keepalivetimeout"></a>`keepalivetimeout`
 
 Data type: `Integer`
 
@@ -194,7 +235,7 @@ Data type: `Integer`
 
 Default value: `15`
 
-##### `prefork_startservers`
+##### <a name="prefork_startservers"></a>`prefork_startservers`
 
 Data type: `Integer`
 
@@ -202,7 +243,7 @@ Data type: `Integer`
 
 Default value: `8`
 
-##### `prefork_minspareservers`
+##### <a name="prefork_minspareservers"></a>`prefork_minspareservers`
 
 Data type: `Integer`
 
@@ -210,7 +251,7 @@ Data type: `Integer`
 
 Default value: `5`
 
-##### `prefork_maxspareservers`
+##### <a name="prefork_maxspareservers"></a>`prefork_maxspareservers`
 
 Data type: `Integer`
 
@@ -218,7 +259,7 @@ Data type: `Integer`
 
 Default value: `20`
 
-##### `prefork_serverlimit`
+##### <a name="prefork_serverlimit"></a>`prefork_serverlimit`
 
 Data type: `Integer`
 
@@ -226,7 +267,7 @@ Data type: `Integer`
 
 Default value: `3000`
 
-##### `prefork_maxclients`
+##### <a name="prefork_maxclients"></a>`prefork_maxclients`
 
 Data type: `Integer`
 
@@ -234,7 +275,7 @@ Data type: `Integer`
 
 Default value: `3000`
 
-##### `prefork_maxrequestsperchild`
+##### <a name="prefork_maxrequestsperchild"></a>`prefork_maxrequestsperchild`
 
 Data type: `Integer`
 
@@ -242,7 +283,7 @@ Data type: `Integer`
 
 Default value: `4000`
 
-##### `worker_startservers`
+##### <a name="worker_startservers"></a>`worker_startservers`
 
 Data type: `Integer`
 
@@ -250,7 +291,7 @@ Data type: `Integer`
 
 Default value: `2`
 
-##### `worker_maxclients`
+##### <a name="worker_maxclients"></a>`worker_maxclients`
 
 Data type: `Integer`
 
@@ -258,7 +299,7 @@ Data type: `Integer`
 
 Default value: `3000`
 
-##### `worker_minsparethreads`
+##### <a name="worker_minsparethreads"></a>`worker_minsparethreads`
 
 Data type: `Integer`
 
@@ -266,7 +307,7 @@ Data type: `Integer`
 
 Default value: `25`
 
-##### `worker_maxsparethreads`
+##### <a name="worker_maxsparethreads"></a>`worker_maxsparethreads`
 
 Data type: `Integer`
 
@@ -274,7 +315,7 @@ Data type: `Integer`
 
 Default value: `75`
 
-##### `worker_threadsperchild`
+##### <a name="worker_threadsperchild"></a>`worker_threadsperchild`
 
 Data type: `Integer`
 
@@ -282,7 +323,7 @@ Data type: `Integer`
 
 Default value: `25`
 
-##### `worker_maxrequestsperchild`
+##### <a name="worker_maxrequestsperchild"></a>`worker_maxrequestsperchild`
 
 Data type: `Integer`
 
@@ -290,7 +331,7 @@ Data type: `Integer`
 
 Default value: `0`
 
-##### `includes`
+##### <a name="includes"></a>`includes`
 
 Data type: `Optional[Array[String]]`
 
@@ -298,7 +339,7 @@ Data type: `Optional[Array[String]]`
 
 Default value: ``undef``
 
-##### `serveradmin`
+##### <a name="serveradmin"></a>`serveradmin`
 
 Data type: `String`
 
@@ -306,7 +347,7 @@ Data type: `String`
 
 Default value: `'root@localhost'`
 
-##### `servername`
+##### <a name="servername"></a>`servername`
 
 Data type: `Optional[String]`
 
@@ -314,7 +355,7 @@ Data type: `Optional[String]`
 
 Default value: ``undef``
 
-##### `allowroot`
+##### <a name="allowroot"></a>`allowroot`
 
 Data type: `Simplib::Netlist`
 
@@ -322,7 +363,7 @@ Data type: `Simplib::Netlist`
 
 Default value: `['127.0.0.1','::1']`
 
-##### `defaulttype`
+##### <a name="defaulttype"></a>`defaulttype`
 
 Data type: `String`
 
@@ -330,7 +371,7 @@ Data type: `String`
 
 Default value: `'text/plain'`
 
-##### `enablemmap`
+##### <a name="enablemmap"></a>`enablemmap`
 
 Data type: `Boolean`
 
@@ -338,7 +379,7 @@ Data type: `Boolean`
 
 Default value: ``true``
 
-##### `enablesendfile`
+##### <a name="enablesendfile"></a>`enablesendfile`
 
 Data type: `Boolean`
 
@@ -346,7 +387,7 @@ Data type: `Boolean`
 
 Default value: ``true``
 
-##### `user`
+##### <a name="user"></a>`user`
 
 Data type: `String`
 
@@ -354,7 +395,7 @@ Data type: `String`
 
 Default value: `'apache'`
 
-##### `group`
+##### <a name="group"></a>`group`
 
 Data type: `String`
 
@@ -362,7 +403,7 @@ Data type: `String`
 
 Default value: `'apache'`
 
-##### `logformat`
+##### <a name="logformat"></a>`logformat`
 
 Data type: `String`
 
@@ -370,7 +411,7 @@ Data type: `String`
 
 Default value: `'%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"'`
 
-##### `logfacility`
+##### <a name="logfacility"></a>`logfacility`
 
 Data type: `Simplib::Syslog::LowerFacility`
 
@@ -378,15 +419,19 @@ Data type: `Simplib::Syslog::LowerFacility`
 
 Default value: `'local6'`
 
-### `simp_apache::install`
+### <a name="simp_apacheinstall"></a>`simp_apache::install`
 
 Apache package management
 
 #### Parameters
 
-The following parameters are available in the `simp_apache::install` class.
+The following parameters are available in the `simp_apache::install` class:
 
-##### `httpd_ensure`
+* [`httpd_ensure`](#httpd_ensure)
+* [`mod_ldap_ensure`](#mod_ldap_ensure)
+* [`mod_ssl_ensure`](#mod_ssl_ensure)
+
+##### <a name="httpd_ensure"></a>`httpd_ensure`
 
 Data type: `String`
 
@@ -394,7 +439,7 @@ The ensure status the httpd package
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-##### `mod_ldap_ensure`
+##### <a name="mod_ldap_ensure"></a>`mod_ldap_ensure`
 
 Data type: `String`
 
@@ -402,7 +447,7 @@ The ensure status the mod_ldap package
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-##### `mod_ssl_ensure`
+##### <a name="mod_ssl_ensure"></a>`mod_ssl_ensure`
 
 Data type: `String`
 
@@ -410,15 +455,23 @@ The ensure status the mod_ssl package
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-### `simp_apache::service`
+### <a name="simp_apacheservice"></a>`simp_apache::service`
 
 Control the Apache service
 
 #### Parameters
 
-The following parameters are available in the `simp_apache::service` class.
+The following parameters are available in the `simp_apache::service` class:
 
-##### `manage`
+* [`manage`](#manage)
+* [`service_name`](#service_name)
+* [`ensure`](#ensure)
+* [`enable`](#enable)
+* [`hasstatus`](#hasstatus)
+* [`hasrestart`](#hasrestart)
+* [`restart`](#restart)
+
+##### <a name="manage"></a>`manage`
 
 Data type: `Boolean`
 
@@ -429,7 +482,7 @@ If set to `false`, you may need to add the service name to
 
 Default value: ``true``
 
-##### `service_name`
+##### <a name="service_name"></a>`service_name`
 
 Data type: `String[1]`
 
@@ -437,7 +490,7 @@ The name of the service to manage
 
 Default value: `'httpd'`
 
-##### `ensure`
+##### <a name="ensure"></a>`ensure`
 
 Data type: `String[1]`
 
@@ -445,7 +498,7 @@ The state that the service should be in
 
 Default value: `'running'`
 
-##### `enable`
+##### <a name="enable"></a>`enable`
 
 Data type: `Boolean`
 
@@ -453,7 +506,7 @@ Whether or not to enable the daemon
 
 Default value: ``true``
 
-##### `hasstatus`
+##### <a name="hasstatus"></a>`hasstatus`
 
 Data type: `Boolean`
 
@@ -461,7 +514,7 @@ Whether or not the service has a 'status' command
 
 Default value: ``true``
 
-##### `hasrestart`
+##### <a name="hasrestart"></a>`hasrestart`
 
 Data type: `Boolean`
 
@@ -469,20 +522,19 @@ If set to `true` then the contents of `$restart` will be ignored
 
 Default value: ``false``
 
-##### `restart`
+##### <a name="restart"></a>`restart`
 
 Data type: `String[1]`
 
 A specific command to use to restart the daemon
 
 * Ignored if `$hasrestart` is set to `true`
-* The `sleep 3` is in place to prevent a race condition from happening and
-  the `reload || restart` is in place to try to force a clean restart if a
+* The `reload || restart` is in place to try to force a clean restart if a
   reload fails to do the job.
 
-Default value: `'/bin/sleep 3; /sbin/service httpd reload || /sbin/service httpd restart'`
+Default value: `'/usr/bin/systemctl reload httpd.service || /usr/bin/systemctl restart httpd.service'`
 
-### `simp_apache::ssl`
+### <a name="simp_apachessl"></a>`simp_apache::ssl`
 
 Ensures that the appropriate files are in the appropriate places and have the
 correct permissions.
@@ -496,9 +548,27 @@ documentation.
 
 #### Parameters
 
-The following parameters are available in the `simp_apache::ssl` class.
+The following parameters are available in the `simp_apache::ssl` class:
 
-##### `listen`
+* [`listen`](#listen)
+* [`trusted_nets`](#trusted_nets)
+* [`logformat`](#logformat)
+* [`enable_default_vhost`](#enable_default_vhost)
+* [`firewall`](#firewall)
+* [`pki`](#pki)
+* [`app_pki_external_source`](#app_pki_external_source)
+* [`app_pki_dir`](#app_pki_dir)
+* [`app_pki_key`](#app_pki_key)
+* [`app_pki_cert`](#app_pki_cert)
+* [`app_pki_ca_dir`](#app_pki_ca_dir)
+* [`haveged`](#haveged)
+* [`openssl_cipher_suite`](#openssl_cipher_suite)
+* [`ssl_protocols`](#ssl_protocols)
+* [`ssl_honor_cipher_order`](#ssl_honor_cipher_order)
+* [`sslverifyclient`](#sslverifyclient)
+* [`sslverifydepth`](#sslverifydepth)
+
+##### <a name="listen"></a>`listen`
 
 Data type: `Array[Variant[Simplib::Host::Port, Simplib::Port]]`
 
@@ -510,7 +580,7 @@ address
 
 Default value: `[443]`
 
-##### `trusted_nets`
+##### <a name="trusted_nets"></a>`trusted_nets`
 
 Data type: `Simplib::Netlist`
 
@@ -518,7 +588,7 @@ An array of networks that you trust to connect to your server.
 
 Default value: `simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] })`
 
-##### `logformat`
+##### <a name="logformat"></a>`logformat`
 
 Data type: `String`
 
@@ -527,7 +597,7 @@ disable logging.
 
 Default value: `'%t %h %{SSL_CLIENT_S_DN_CN}x %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %s'`
 
-##### `enable_default_vhost`
+##### <a name="enable_default_vhost"></a>`enable_default_vhost`
 
 Data type: `Boolean`
 
@@ -535,7 +605,7 @@ Whether to activate the default VirtualHost on the $listen port.
 
 Default value: ``true``
 
-##### `firewall`
+##### <a name="firewall"></a>`firewall`
 
 Data type: `Boolean`
 
@@ -543,7 +613,7 @@ Whether to use the SIMP iptables module.
 
 Default value: `simplib::lookup('simp_options::firewall', { 'default_value' => false, })`
 
-##### `pki`
+##### <a name="pki"></a>`pki`
 
 Data type: `Variant[Boolean,Enum['simp']]`
 
@@ -561,7 +631,7 @@ Data type: `Variant[Boolean,Enum['simp']]`
 
 Default value: `simplib::lookup('simp_options::pki', { 'default_value' => false })`
 
-##### `app_pki_external_source`
+##### <a name="app_pki_external_source"></a>`app_pki_external_source`
 
 Data type: `String`
 
@@ -572,7 +642,7 @@ Data type: `String`
 
 Default value: `simplib::lookup('simp_options::pki::source', { 'default_value' => '/etc/pki/simp/x509' })`
 
-##### `app_pki_dir`
+##### <a name="app_pki_dir"></a>`app_pki_dir`
 
 Data type: `Stdlib::AbsolutePath`
 
@@ -582,7 +652,7 @@ It defaults to /etc/pki/simp_apps/simp_apache/pki.
 
 Default value: `'/etc/pki/simp_apps/simp_apache/x509'`
 
-##### `app_pki_key`
+##### <a name="app_pki_key"></a>`app_pki_key`
 
 Data type: `Stdlib::AbsolutePath`
 
@@ -590,7 +660,7 @@ Path and name of the private SSL key file
 
 Default value: `"${app_pki_dir}/private/${facts['fqdn']}.pem"`
 
-##### `app_pki_cert`
+##### <a name="app_pki_cert"></a>`app_pki_cert`
 
 Data type: `Stdlib::AbsolutePath`
 
@@ -598,7 +668,7 @@ Path and name of the public SSL certificate
 
 Default value: `"${app_pki_dir}/public/${facts['fqdn']}.pub"`
 
-##### `app_pki_ca_dir`
+##### <a name="app_pki_ca_dir"></a>`app_pki_ca_dir`
 
 Data type: `Stdlib::AbsolutePath`
 
@@ -606,7 +676,7 @@ Path to the CA.
 
 Default value: `"${app_pki_dir}/cacerts"`
 
-##### `haveged`
+##### <a name="haveged"></a>`haveged`
 
 Data type: `Boolean`
 
@@ -614,7 +684,7 @@ Whether to use the SIMP haveged module to assist with entropy generation.
 
 Default value: `simplib::lookup('simp_options::haveged', { 'default_value' => false })`
 
-##### `openssl_cipher_suite`
+##### <a name="openssl_cipher_suite"></a>`openssl_cipher_suite`
 
 Data type: `Array[String]`
 
@@ -623,7 +693,7 @@ phase.
 
 Default value: `simplib::lookup('simp_options::openssl::cipher_suite', { 'default_value' => ['DEFAULT', '!MEDIUM'] })`
 
-##### `ssl_protocols`
+##### <a name="ssl_protocols"></a>`ssl_protocols`
 
 Data type: `Array[String]`
 
@@ -632,7 +702,7 @@ protocol will be accepted in new connections.
 
 Default value: `['TLSv1.2']`
 
-##### `ssl_honor_cipher_order`
+##### <a name="ssl_honor_cipher_order"></a>`ssl_honor_cipher_order`
 
 Data type: `Boolean`
 
@@ -640,16 +710,14 @@ Option to prefer the server's cipher preference order.
 
 Default value: ``true``
 
-##### `sslverifyclient`
+##### <a name="sslverifyclient"></a>`sslverifyclient`
 
 Data type: `String`
 
 This directive sets the Certificate verification level for the Client
 Authentication.
 
-Default value: `'require'`
-
-##### `sslverifydepth`
+##### <a name="sslverifydepth"></a>`sslverifydepth`
 
 Data type: `Integer`
 
@@ -658,13 +726,13 @@ the clients don't have a valid certificate.
 
 Default value: `10`
 
-### `simp_apache::validate`
+### <a name="simp_apachevalidate"></a>`simp_apache::validate`
 
 or `limits` ACLs
 
 ## Defined types
 
-### `simp_apache::site`
+### <a name="simp_apachesite"></a>`simp_apache::site`
 
 It simply pulls a $name'd template from the templates/sites directory under
 the apache module, or somewhere else if you specify.  The name should be
@@ -680,9 +748,11 @@ site { 'public': }
 
 #### Parameters
 
-The following parameters are available in the `simp_apache::site` defined type.
+The following parameters are available in the `simp_apache::site` defined type:
 
-##### `content`
+* [`content`](#content)
+
+##### <a name="content"></a>`content`
 
 Data type: `String`
 
@@ -693,7 +763,7 @@ Default value: `'base'`
 
 ## Resource types
 
-### `htaccess`
+### <a name="htaccess"></a>`htaccess`
 
 Manages the contents of htaccess files using the htpasswd command.
 Right now the $namevar must be a path/user combination as
@@ -724,7 +794,10 @@ Anything not prefixed with {SHA} will be treated as plain text.
 
 The following parameters are available in the `htaccess` type.
 
-##### `name`
+* [`name`](#name)
+* [`provider`](#provider)
+
+##### <a name="name"></a>`name`
 
 namevar
 
@@ -732,14 +805,14 @@ A variable of the format 'path:username'. This will hopefully be
 split in the future but, for now, you cannot use usernames that
 contain a colon ':'.
 
-##### `provider`
+##### <a name="provider"></a>`provider`
 
 The specific backend to use for this `htaccess` resource. You will seldom need to specify this --- Puppet will usually
 discover the appropriate provider for your platform.
 
 ## Functions
 
-### `simp_apache::auth`
+### <a name="simp_apacheauth"></a>`simp_apache::auth`
 
 Type: Ruby 4.x API
 
@@ -842,7 +915,7 @@ methods and relevant parameters as key value pairs. The
 key is the authentication method, while the corresponding
 value is a Hash of relevant parameters.
 
-### `simp_apache::limits`
+### <a name="simp_apachelimits"></a>`simp_apache::limits`
 
 Type: Ruby 4.x API
 
@@ -1030,7 +1103,7 @@ Data type: `Hash`
 
 Hash containing desired Apache limits
 
-### `simp_apache::munge_httpd_networks`
+### <a name="simp_apachemunge_httpd_networks"></a>`simp_apache::munge_httpd_networks`
 
 Type: Ruby 4.x API
 
@@ -1064,9 +1137,13 @@ Array of networks to be converted to Apache format
 
 ## Data types
 
-### `Simp_apache::LogSeverity`
+### <a name="simp_apachelogseverity"></a>`Simp_apache::LogSeverity`
 
 Valid log serveries for Apache
 
-Alias of `Enum['emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 'debug']`
+Alias of
+
+```puppet
+Enum['emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 'debug']
+```
 

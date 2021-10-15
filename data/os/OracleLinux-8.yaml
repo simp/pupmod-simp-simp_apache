@@ -1,0 +1,3 @@
+---
+simp_apache::ssl::sslverifyclient: optional
+

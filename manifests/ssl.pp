@@ -88,11 +88,11 @@
 #
 class simp_apache::ssl (
   Array[Variant[Simplib::Host::Port, Simplib::Port]] $listen                  = [443],
+  String                                             $sslverifyclient,  #data in modules
   Simplib::Netlist                                   $trusted_nets            = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] }),
   Array[String]                                      $openssl_cipher_suite    = simplib::lookup('simp_options::openssl::cipher_suite', { 'default_value' => ['DEFAULT', '!MEDIUM'] }),
   Array[String]                                      $ssl_protocols           = ['TLSv1.2'],
   Boolean                                            $ssl_honor_cipher_order  = true,
-  String                                             $sslverifyclient         = 'require',
   Integer                                            $sslverifydepth          = 10,
   Variant[Boolean,Enum['simp']]                      $pki                     = simplib::lookup('simp_options::pki', { 'default_value' => false }),
   String                                             $app_pki_external_source = simplib::lookup('simp_options::pki::source', { 'default_value' => '/etc/pki/simp/x509' }),

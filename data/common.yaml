@@ -1,0 +1,4 @@
+---
+
+simp_apache::ssl::sslverifyclient: require
+
