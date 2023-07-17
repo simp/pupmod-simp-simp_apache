@@ -22,9 +22,9 @@ describe 'simp_apache' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
+        let(:environment){ 'production' }
         let(:facts) do
-          facts[:environment] = 'production'
-          facts
+          facts.merge({environment: environment})
         end
 
         context 'with default parameters' do
