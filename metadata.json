@@ -1,6 +1,6 @@
 {
   "name": "simp-simp_apache",
-  "version": "7.1.0",
+  "version": "7.2.0",
   "author": "SIMP Team",
   "summary": "configure SIMP apache & component sites (NOTE: legacy, conflicts with puppetlabs-apache)",
   "license": "Apache-2.0",
@@ -47,7 +47,7 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 6.6.0 < 8.0.0"
+      "version_requirement": ">= 8.0.0 < 9.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -69,6 +69,12 @@
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
         "8"
       ]
     }

@@ -121,7 +121,7 @@ class simp_apache::conf (
     content => template("${module_name}/etc/httpd/conf/httpd.conf.erb")
   }
 
-  $_modules_target = $facts['hardwaremodel'] ? {
+  $_modules_target = $facts['os']['hardware'] ? {
     'x86_64' => '/usr/lib64/httpd/modules',
     default  => '/usr/lib/httpd/modules'
   }
@@ -145,9 +145,9 @@ class simp_apache::conf (
   file { '/etc/httpd/conf.d/welcome.conf': ensure => 'absent' }
 
   file { '/etc/mime.types':
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644'
+    owner => 'root',
+    group => 'root',
+    mode  => '0644'
   }
 
   file { '/etc/httpd/logs':

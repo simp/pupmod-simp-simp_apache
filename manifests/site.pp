@@ -26,6 +26,6 @@ define simp_apache::site (
     group   => pick($::simp_apache::conf::group,'apache'),
     mode    => '0640',
     content => $_content,
-    notify => Class['simp_apache::service']
+    notify  => Class['simp_apache::service']
   }
 }

@@ -31,7 +31,7 @@
 class simp_apache (
   Stdlib::AbsolutePath $data_dir       = '/var/www',
   Boolean              $ssl            = true,
-  String               $rsync_source   = "apache_${::environment}_${facts['os']['name']}/www",
+  String               $rsync_source   = "apache_${facts['environment']}_${facts['os']['name']}/www",
   Simplib::Host        $rsync_server   = simplib::lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1' }),
   Integer              $rsync_timeout  = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 }),
   Boolean              $rsync_web_root = true
@@ -68,8 +68,8 @@ class simp_apache (
     # Add anything here you want to go to every web server.
     $_downcase_os_name = downcase($facts['os']['name'])
     rsync { 'site':
-      user     => "apache_rsync_${::environment}_${_downcase_os_name}",
-      password => simplib::passgen("apache_rsync_${::environment}_${_downcase_os_name}"),
+      user     => "apache_rsync_${facts['environment']}_${_downcase_os_name}",
+      password => simplib::passgen("apache_rsync_${facts['environment']}_${_downcase_os_name}"),
       source   => $rsync_source,
       target   => '/var',
       server   => $rsync_server,
@@ -78,7 +78,7 @@ class simp_apache (
     }
   }
 
-  if $::selinux_current_mode and $::selinux_current_mode != 'disabled' {
+  if $facts['os']['selinux']['current_mode'] and $facts['os']['selinux']['current_mode'] != 'disabled' {
     selboolean { [
       'httpd_verify_dns',
       'allow_ypbind',
