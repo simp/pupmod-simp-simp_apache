@@ -4,7 +4,7 @@ require 'tempfile'
 provider_class = Puppet::Type.type(:htaccess).provider(:htaccess)
 describe provider_class do
   before :each do
-    FileUtils.stubs(:chown).returns(true) # can't chown root:root
+    allow(FileUtils).to receive(:chown).and_return(true) # can't chown root:root
     tmp = Tempfile.new('htaccess_tmp')
     @htaccess_file = tmp.path
     tmp.close!
