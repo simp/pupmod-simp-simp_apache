@@ -1,33 +1,39 @@
 require 'spec_helper'
 
 describe 'simp_apache::auth' do
-  let(:file_auth_hash) {{
-    'file' => {
-      'enable'    => 'true',
-      'user_file' => '/etc/httpd/conf.d/test/.htdigest'
+  let(:file_auth_hash) do
+    {
+      'file' => {
+        'enable'    => 'true',
+        'user_file' => '/etc/httpd/conf.d/test/.htdigest'
+      }
     }
-  }}
-   
-  let(:full_ldap_auth_hash) {{
-    'ldap'    => {
-      'enable'      => 'true',
-      'url'         => ['ldap://server1','ldap://server2'],
-      'security'    => 'NONE',
-      'binddn'      => 'cn=happy,ou=People,dc=your,dc=domain',
-      'bindpw'      => 'birthday',
-      'search'      => 'ou=People,dc=your,dc=domain',
-      'posix_group' => 'true'
-    }
-  }}
+  end
 
-  let(:minimal_ldap_auth_hash) {{
-    'ldap'    => {
-      'enable'      => 'true',
-      'url'         => ['ldap://server1','ldap://server2'],
-      'search'      => 'ou=People,dc=your,dc=domain',
-      'posix_group' => 'false'
+  let(:full_ldap_auth_hash) do
+    {
+      'ldap' => {
+        'enable'      => 'true',
+        'url'         => ['ldap://server1', 'ldap://server2'],
+        'security'    => 'NONE',
+        'binddn'      => 'cn=happy,ou=People,dc=your,dc=domain',
+        'bindpw'      => 'birthday',
+        'search'      => 'ou=People,dc=your,dc=domain',
+        'posix_group' => 'true'
+      }
     }
-  }}
+  end
+
+  let(:minimal_ldap_auth_hash) do
+    {
+      'ldap' => {
+        'enable'      => 'true',
+        'url'         => ['ldap://server1', 'ldap://server2'],
+        'search'      => 'ou=People,dc=your,dc=domain',
+        'posix_group' => 'false'
+      }
+    }
+  end
 
   context 'with valid input' do
     it 'generates apache settings for enabled file auth method' do
@@ -135,40 +141,39 @@ EOM
   end
 
   context 'with invalid input' do
-    it 'fails when unsupported auth method is requested'  do
-      input = {'dbm'=> {'enable' => true, 'user_file' => '/some/file'}}
-      is_expected.to run.with_params(input).and_raise_error(/'dbm' not yet supported/)
+    it 'fails when unsupported auth method is requested' do
+      input = { 'dbm' => { 'enable' => true, 'user_file' => '/some/file' } }
+      is_expected.to run.with_params(input).and_raise_error(%r{'dbm' not yet supported})
     end
 
     it 'fails when url option for ldap auth method is not present' do
       input = minimal_ldap_auth_hash.dup
       input['ldap'].delete('url')
-      is_expected.to run.with_params(input).and_raise_error(/missing option\(s\) 'url'/)
+      is_expected.to run.with_params(input).and_raise_error(%r{missing option\(s\) 'url'})
     end
 
     it 'fails when search option for ldap auth method is not present' do
       input = minimal_ldap_auth_hash.dup
       input['ldap'].delete('search')
-      is_expected.to run.with_params(input).and_raise_error(/missing option\(s\) 'search'/)
+      is_expected.to run.with_params(input).and_raise_error(%r{missing option\(s\) 'search'})
     end
 
     it 'fails when posix_group option for ldap auth method is not present' do
       input = minimal_ldap_auth_hash.dup
       input['ldap'].delete('posix_group')
-      is_expected.to run.with_params(input).and_raise_error(/missing option\(s\) 'posix_group'/)
+      is_expected.to run.with_params(input).and_raise_error(%r{missing option\(s\) 'posix_group'})
     end
 
     it 'fails when security method for ldap auth method is invalid' do
       input = full_ldap_auth_hash.dup
       input['ldap']['security'] = 'OOPS'
-      is_expected.to run.with_params(input).and_raise_error(/Error, 'security'.* Got: 'OOPS'/)
+      is_expected.to run.with_params(input).and_raise_error(%r{Error, 'security'.* Got: 'OOPS'})
     end
 
     it 'fails when not all required options for file auth method are present' do
       input = file_auth_hash.dup
       input['file'].delete('user_file')
-      is_expected.to run.with_params(input).and_raise_error(/missing option\(s\) 'user_file'/)
+      is_expected.to run.with_params(input).and_raise_error(%r{missing option\(s\) 'user_file'})
     end
   end
 end
-
