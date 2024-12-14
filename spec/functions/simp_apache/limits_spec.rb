@@ -1,23 +1,25 @@
 require 'spec_helper'
 
 describe 'simp_apache::limits' do
-  let(:limits_hash) {{
-    'defaults' => [ 'GET', 'POST', 'PUT' ],
-    'hosts'  => {
-      '1.2.3.4'     => 'defaults',
-      '3.4.5.6'     => ['GET', 'POST'],
-      '10.1.2.0/24' => 'defaults'
-    },
-    'users'  => {
-      'bob'        => 'defaults',
-      'alice'      => ['GET','POST','PUT','DELETE']
-    },
-    'ldap_groups' => {
-      'cn=basic_users,ou=Group,dc=your,dc=domain' => 'defaults',
-      'cn=admin_users,ou=Group,dc=your,dc=domain' => ['GET','POST','PUT','DELETE']
+  let(:limits_hash) do
+    {
+      'defaults' => [ 'GET', 'POST', 'PUT' ],
+   'hosts' => {
+     '1.2.3.4'     => 'defaults',
+     '3.4.5.6'     => ['GET', 'POST'],
+     '10.1.2.0/24' => 'defaults'
+   },
+   'users' => {
+     'bob'        => 'defaults',
+     'alice'      => ['GET', 'POST', 'PUT', 'DELETE']
+   },
+   'ldap_groups' => {
+     'cn=basic_users,ou=Group,dc=your,dc=domain' => 'defaults',
+     'cn=admin_users,ou=Group,dc=your,dc=domain' => ['GET', 'POST', 'PUT', 'DELETE']
+   }
     }
-  }}
-   
+  end
+
   context 'with valid input' do
     it 'generates apache limits using defaults' do
       expected_output = <<EOM
@@ -116,7 +118,7 @@ EOM
     end
 
     it 'generates apache wildcard user limits' do
-      valid_user_limits_hash = {'users' => {'valid-user' => 'GET' } }
+      valid_user_limits_hash = { 'users' => { 'valid-user' => 'GET' } }
       expected_output = <<EOM
 <Limit GET>
   Order allow,deny
@@ -134,9 +136,9 @@ EOM
   end
 
   context 'with invalid input' do
-    it 'fails when unsupported limit is requested'  do
-      input = {'oops'=> {'user1' => 'defautls'}}
-      is_expected.to run.with_params(input).and_raise_error(/'oops' not yet supported/)
+    it 'fails when unsupported limit is requested' do
+      input = { 'oops' => { 'user1' => 'defautls' } }
+      is_expected.to run.with_params(input).and_raise_error(%r{'oops' not yet supported})
     end
   end
 end
