@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-shared_examples_for "a simp_apache class" do
+shared_examples_for 'a simp_apache class' do
   it { is_expected.to compile.with_all_deps }
   it { is_expected.to create_class('simp_apache') }
   it { is_expected.to create_class('simp_apache::install') }
@@ -22,42 +22,46 @@ describe 'simp_apache' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
-        let(:environment){ 'production' }
+        let(:environment) { 'production' }
         let(:facts) do
-          facts.merge({environment: environment})
+          facts.merge({ environment: environment })
         end
 
         context 'with default parameters' do
-          it_should_behave_like "a simp_apache class"
+          it_behaves_like 'a simp_apache class'
           it { is_expected.to create_class('simp_apache::ssl') }
-          it { is_expected.to create_rsync('site').with({
-              :source => "apache_#{environment}_#{facts[:os][:name]}/www"
-            })
+          it {
+            is_expected.to create_rsync('site').with({
+                                                       source: "apache_#{environment}_#{facts[:os][:name]}/www"
+                                                     })
           }
 
           it { is_expected.to create_selboolean('httpd_can_network_connect') }
         end
 
         context 'no_rsync_web_root' do
-          let(:params){{ :rsync_web_root => false }}
-          it_should_behave_like "a simp_apache class"
+          let(:params) { { rsync_web_root: false } }
+
+          it_behaves_like 'a simp_apache class'
           it { is_expected.to create_class('simp_apache::ssl') }
           it { is_expected.not_to create_rsync('site') }
           it { is_expected.to create_selboolean('httpd_can_network_connect') }
         end
 
         context 'no_ssl' do
-          let(:params){{ :ssl => false }}
-          it_should_behave_like "a simp_apache class"
+          let(:params) { { ssl: false } }
+
+          it_behaves_like 'a simp_apache class'
           it { is_expected.not_to create_class('simp_apache::ssl') }
           it { is_expected.to create_rsync('site') }
           it { is_expected.to create_selboolean('httpd_can_network_connect') }
         end
 
         context 'no_manage_service' do
-          let(:hieradata){'no_manage_service'}
-          it_should_behave_like "a simp_apache class"
-          it { is_expected.to_not contain_service('httpd') }
+          let(:hieradata) { 'no_manage_service' }
+
+          it_behaves_like 'a simp_apache class'
+          it { is_expected.not_to contain_service('httpd') }
         end
       end
     end
