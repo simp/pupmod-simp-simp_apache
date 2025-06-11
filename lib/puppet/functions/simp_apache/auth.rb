@@ -52,7 +52,7 @@ Puppet::Functions.create_function(:'simp_apache::auth') do
     enabled_methods = []
     method_content = []
 
-    auth_hash.keys.each do |auth_method|
+    auth_hash.each_key do |auth_method|
       next unless true?(auth_hash[auth_method]['enable'])
 
       begin
@@ -82,8 +82,7 @@ Puppet::Functions.create_function(:'simp_apache::auth') do
   def check_required_opts(required_opts, opts)
     opt_test = required_opts - opts
     return if opt_test.empty?
-      raise("simp_apache::auth(): Error, missing option(s) '#{opt_test.join(', ')}'")
-    
+    raise("simp_apache::auth(): Error, missing option(s) '#{opt_test.join(', ')}'")
   end
 
   def auth_ldap(opts, content)
@@ -116,13 +115,12 @@ Puppet::Functions.create_function(:'simp_apache::auth') do
     content << "AuthLDAPUrl #{ldapuri}"
     if opts['binddn']
       content << "AuthLDAPBindDN \"#{opts['binddn']}\""
-      content << "AuthLDAPBindPassword '#{opts['bindpw'].gsub(''', "\\\\'")}'" if opts['bindpw']
+      content << "AuthLDAPBindPassword '#{opts['bindpw'].gsub('\'', "\\\\'")}'" if opts['bindpw']
     end
 
     return unless true?(opts['posix_group'])
-      content << 'AuthLDAPGroupAttributeIsDN off'
-      content << 'AuthLDAPGroupAttribute memberUid'
-    
+    content << 'AuthLDAPGroupAttributeIsDN off'
+    content << 'AuthLDAPGroupAttribute memberUid'
   end
 
   def auth_file(opts, content)
