@@ -17,8 +17,9 @@ describe 'simp_apache::munge_httpd_networks' do
   end
 
   context 'with invalid input' do
-    # FIXME: simplib net2cidr needs to be fixed
-    pending 'fails when transformation of an invalid IPv4 network is requested' do
+    # rubocop:disable RSpec/RepeatedDescription
+    it 'fails when transformation of an invalid IPv4 network is requested' do
+      pending('FIXME: simplib net2cidr needs to be fixed')
       input = ['1.2.3.4/34', '1.2.3..']
       is_expected.to run.with_params(input).and_raise_error(%r{is not a valid})
     end
@@ -29,5 +30,6 @@ describe 'simp_apache::munge_httpd_networks' do
     end
 
     pending 'fails when transformation of an invalid IPV6 network is requested'
+    # rubocop:enable RSpec/RepeatedDescription
   end
 end

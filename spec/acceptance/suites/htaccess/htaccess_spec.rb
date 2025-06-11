@@ -4,6 +4,7 @@ test_name 'htaccess type/provider'
 
 hosts.each do |host|
   describe "htaccess type/provider for #{host}" do
+    # rubocop:disable RSpec/IndexedLet
     let(:manifest1) do
       <<~EOM
         htaccess { 'user1': name => '/root/htaccess.txt:user1', password=>"user1's password" }
@@ -27,6 +28,7 @@ hosts.each do |host|
         htaccess { 'user3': name => '/root/htaccess.txt:user3', password=>"user3's password" }
       EOM
     end
+    # rubocop:enable RSpec/IndexedLet
 
     it 'requires file resource' do
       apply_manifest_on(host, manifest1, expect_failures: true) do
