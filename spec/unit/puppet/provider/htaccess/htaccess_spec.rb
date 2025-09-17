@@ -33,10 +33,10 @@ describe provider_class do
 
     it 'creates htaccess file with banner and one user entry' do
       provider.create
-      expected = <<EOM
-# This file managed by Puppet. Please do not edit by hand!
-user1:{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=
-EOM
+      expected = <<~EOM
+        # This file managed by Puppet. Please do not edit by hand!
+        user1:{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=
+      EOM
       expect(IO.read(@htaccess_file)).to eq(expected)
       expect(provider.exists?).to eq(true)
       expect(provider.passwd_retrieve).to eq('{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=')
@@ -55,11 +55,11 @@ EOM
       end
 
       provider.create
-      expected = <<EOM
-# This file managed by Puppet. Please do not edit by hand!
-anotheruser:{SHA}deadbeefdeadbeefdeadbeefdead
-user1:{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=
-EOM
+      expected = <<~EOM
+        # This file managed by Puppet. Please do not edit by hand!
+        anotheruser:{SHA}deadbeefdeadbeefdeadbeefdead
+        user1:{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=
+      EOM
       expect(IO.read(@htaccess_file)).to eq(expected)
       expect(provider.exists?).to eq(true)
       expect(provider.passwd_retrieve).to eq('{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=')
@@ -77,11 +77,11 @@ EOM
       end
 
       provider.create
-      expected = <<EOM
-# This file managed by Puppet. Please do not edit by hand!
-anotheruser:{SHA}deadbeefdeadbeefdeadbeefdead
-user1:{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=
-EOM
+      expected = <<~EOM
+        # This file managed by Puppet. Please do not edit by hand!
+        anotheruser:{SHA}deadbeefdeadbeefdeadbeefdead
+        user1:{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=
+      EOM
       expect(IO.read(@htaccess_file)).to eq(expected)
       expect(provider.exists?).to eq(true)
       expect(provider.passwd_retrieve).to eq('{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=')
@@ -101,10 +101,10 @@ EOM
 
     it 'adds user entry using pre-hashed password to htaccess file' do
       provider.create
-      expected = <<EOM
-# This file managed by Puppet. Please do not edit by hand!
-user1:{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=
-EOM
+      expected = <<~EOM
+        # This file managed by Puppet. Please do not edit by hand!
+        user1:{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=
+      EOM
       expect(IO.read(@htaccess_file)).to eq(expected)
       expect(provider.exists?).to eq(true)
       expect(provider.passwd_retrieve).to eq('{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=')
@@ -122,10 +122,10 @@ EOM
       end
 
       provider.passwd_sync
-      expected = <<EOM
-# This file managed by Puppet. Please do not edit by hand!
-user1:{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=
-EOM
+      expected = <<~EOM
+        # This file managed by Puppet. Please do not edit by hand!
+        user1:{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=
+      EOM
       expect(IO.read(@htaccess_file)).to eq(expected)
       expect(provider.exists?).to eq(true)
       expect(provider.passwd_retrieve).to eq('{SHA}CLub7iwpjkqz0enKLoRcbiDtUCo=')
@@ -145,11 +145,11 @@ EOM
       end
 
       provider.destroy
-      expected = <<EOM
-# This file managed by Puppet. Please do not edit by hand!
-user0:{SHA}deadbeefdeadbeefdeadbeefdead
-user2:{SHA}deadbeefdeadbeefdeadbeefdead
-EOM
+      expected = <<~EOM
+        # This file managed by Puppet. Please do not edit by hand!
+        user0:{SHA}deadbeefdeadbeefdeadbeefdead
+        user2:{SHA}deadbeefdeadbeefdeadbeefdead
+      EOM
       expect(IO.read(@htaccess_file)).to eq(expected)
       expect(provider.exists?).to eq(false)
       expect(provider.passwd_retrieve).to be_nil
