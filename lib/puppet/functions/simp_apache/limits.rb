@@ -1,7 +1,7 @@
 # Takes a hash of arguments related to Apache 'Limits' settings and
 # returns a reasonably formatted set of options.
 #
-# Currently, host, user ('valid-user' only), ldap-user, and 
+# Currently, host, user ('valid-user' only), ldap-user, and
 # ldap-group limits are supported.  The hash keys for these are
 # host limit: 'hosts'
 # user limit: 'users'; only applies for 'valid-user', all others assumed
@@ -13,7 +13,6 @@
 # to know the GID.
 #
 Puppet::Functions.create_function(:'simp_apache::limits') do
-
   # @param limits_hash Hash containing desired Apache limits
   # @return [String] Formatted Apache limits settings
   #
@@ -94,18 +93,16 @@ Puppet::Functions.create_function(:'simp_apache::limits') do
 
     limit_collection = {}
 
-   limits.keys.sort.each do |key|
-     begin
-        send("limit_#{key}",limits[key],limit_collection,limit_defaults)
-     rescue NoMethodError => e
-       fail("simp_apache::limits(): Error, '#{key}' not yet supported")
-     end
+    limits.keys.sort.each do |key|
+      send("limit_#{key}", limits[key], limit_collection, limit_defaults)
+    rescue NoMethodError
+      raise("simp_apache::limits(): Error, '#{key}' not yet supported")
     end
 
-    return collect_output(limit_collection)
+    collect_output(limit_collection)
   end
 
-  def limit_hosts(opts,collection,limit_defaults)
+  def limit_hosts(opts, collection, limit_defaults)
     opts.keys.sort.each do |k|
       v = (opts[k] == 'defaults') ? limit_defaults : Array(opts[k])
       v.each do |oper|
@@ -116,28 +113,28 @@ Puppet::Functions.create_function(:'simp_apache::limits') do
     end
   end
 
-  #FIXME:  This is super confusing:
+  # FIXME:  This is super confusing:
   # 1) The 'users' key is used for LDAP users and a special
   #    wild card.  In contrast, the 'ldap_groups' key is
   #    used for LDAP groups.
   # 2) There is no real support for non-LDAP users.
-  def limit_users(opts,collection,limit_defaults)
+  def limit_users(opts, collection, limit_defaults)
     opts.keys.sort.each do |k|
       v = (opts[k] == 'defaults') ? limit_defaults : Array(opts[k])
 
       v.each do |oper|
         collection[oper] ||= []
 
-        if k == 'valid-user'
-          collection[oper] << 'Require valid-user'
-        else
-          collection[oper] << "Require ldap-user #{k}"
-        end
+        collection[oper] << if k == 'valid-user'
+                              'Require valid-user'
+                            else
+                              "Require ldap-user #{k}"
+                            end
       end
     end
   end
 
-  def limit_ldap_groups(opts,collection,limit_defaults)
+  def limit_ldap_groups(opts, collection, limit_defaults)
     opts.keys.sort.each do |k|
       v = (opts[k] == 'defaults') ? limit_defaults : Array(opts[k])
 
