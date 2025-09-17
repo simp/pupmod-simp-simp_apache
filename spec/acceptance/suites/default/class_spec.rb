@@ -11,7 +11,7 @@ describe 'apache class' do
         {
           'simp_apache::rsync_web_root' => false,
        'simp_options::pki'           => true,
-       'simp_options::pki::source'   => '/etc/pki/simp-testing/pki/'
+       'simp_options::pki::source'   => '/etc/pki/simp-testing/pki/',
         }
       end
 

@@ -5,8 +5,8 @@ describe 'simp_apache::auth' do
     {
       'file' => {
         'enable'    => 'true',
-        'user_file' => '/etc/httpd/conf.d/test/.htdigest'
-      }
+        'user_file' => '/etc/httpd/conf.d/test/.htdigest',
+      },
     }
   end
 
@@ -19,8 +19,8 @@ describe 'simp_apache::auth' do
         'binddn'      => 'cn=happy,ou=People,dc=your,dc=domain',
         'bindpw'      => 'birthday',
         'search'      => 'ou=People,dc=your,dc=domain',
-        'posix_group' => 'true'
-      }
+        'posix_group' => 'true',
+      },
     }
   end
 
@@ -30,105 +30,105 @@ describe 'simp_apache::auth' do
         'enable'      => 'true',
         'url'         => ['ldap://server1', 'ldap://server2'],
         'search'      => 'ou=People,dc=your,dc=domain',
-        'posix_group' => 'false'
-      }
+        'posix_group' => 'false',
+      },
     }
   end
 
   context 'with valid input' do
     it 'generates apache settings for enabled file auth method' do
-      expected_output = <<EOM
-AuthName "Please Authenticate"
-AuthType Basic
-AuthBasicProvider file
-AuthUserFile /etc/httpd/conf.d/test/.htdigest
-EOM
+      expected_output = <<~EOM
+        AuthName "Please Authenticate"
+        AuthType Basic
+        AuthBasicProvider file
+        AuthUserFile /etc/httpd/conf.d/test/.htdigest
+      EOM
       is_expected.to run.with_params(file_auth_hash).and_return(expected_output.strip)
     end
 
     it 'generates apache settings for enabled ldap auth method with NONE security' do
-      expected_output = <<EOM
-AuthName "Please Authenticate"
-AuthType Basic
-AuthBasicProvider ldap
-AuthLDAPUrl "ldap://server1 server2/ou=People,dc=your,dc=domain" NONE
-AuthLDAPBindDN "cn=happy,ou=People,dc=your,dc=domain"
-AuthLDAPBindPassword 'birthday'
-AuthLDAPGroupAttributeIsDN off
-AuthLDAPGroupAttribute memberUid
-EOM
+      expected_output = <<~EOM
+        AuthName "Please Authenticate"
+        AuthType Basic
+        AuthBasicProvider ldap
+        AuthLDAPUrl "ldap://server1 server2/ou=People,dc=your,dc=domain" NONE
+        AuthLDAPBindDN "cn=happy,ou=People,dc=your,dc=domain"
+        AuthLDAPBindPassword 'birthday'
+        AuthLDAPGroupAttributeIsDN off
+        AuthLDAPGroupAttribute memberUid
+      EOM
       is_expected.to run.with_params(full_ldap_auth_hash).and_return(expected_output.strip)
     end
 
     it 'generates apache settings for enabled ldap auth method with SSL security' do
       input = full_ldap_auth_hash.dup
       input['ldap']['security'] = 'SSL'
-      expected_output = <<EOM
-AuthName "Please Authenticate"
-AuthType Basic
-AuthBasicProvider ldap
-AuthLDAPUrl "ldap://server1 server2/ou=People,dc=your,dc=domain" SSL
-AuthLDAPBindDN "cn=happy,ou=People,dc=your,dc=domain"
-AuthLDAPBindPassword 'birthday'
-AuthLDAPGroupAttributeIsDN off
-AuthLDAPGroupAttribute memberUid
-EOM
+      expected_output = <<~EOM
+        AuthName "Please Authenticate"
+        AuthType Basic
+        AuthBasicProvider ldap
+        AuthLDAPUrl "ldap://server1 server2/ou=People,dc=your,dc=domain" SSL
+        AuthLDAPBindDN "cn=happy,ou=People,dc=your,dc=domain"
+        AuthLDAPBindPassword 'birthday'
+        AuthLDAPGroupAttributeIsDN off
+        AuthLDAPGroupAttribute memberUid
+      EOM
       is_expected.to run.with_params(input).and_return(expected_output.strip)
     end
 
     it 'generates apache settings for enabled ldap auth method with TLS security' do
       input = full_ldap_auth_hash.dup
       input['ldap']['security'] = 'TLS'
-      expected_output = <<EOM
-AuthName "Please Authenticate"
-AuthType Basic
-AuthBasicProvider ldap
-AuthLDAPUrl "ldap://server1 server2/ou=People,dc=your,dc=domain" TLS
-AuthLDAPBindDN "cn=happy,ou=People,dc=your,dc=domain"
-AuthLDAPBindPassword 'birthday'
-AuthLDAPGroupAttributeIsDN off
-AuthLDAPGroupAttribute memberUid
-EOM
+      expected_output = <<~EOM
+        AuthName "Please Authenticate"
+        AuthType Basic
+        AuthBasicProvider ldap
+        AuthLDAPUrl "ldap://server1 server2/ou=People,dc=your,dc=domain" TLS
+        AuthLDAPBindDN "cn=happy,ou=People,dc=your,dc=domain"
+        AuthLDAPBindPassword 'birthday'
+        AuthLDAPGroupAttributeIsDN off
+        AuthLDAPGroupAttribute memberUid
+      EOM
       is_expected.to run.with_params(input).and_return(expected_output.strip)
     end
 
     it 'generates apache settings for enabled ldap auth method with STARTTLS security' do
       input = full_ldap_auth_hash.dup
       input['ldap']['security'] = 'STARTTLS'
-      expected_output = <<EOM
-AuthName "Please Authenticate"
-AuthType Basic
-AuthBasicProvider ldap
-AuthLDAPUrl "ldap://server1 server2/ou=People,dc=your,dc=domain" STARTTLS
-AuthLDAPBindDN "cn=happy,ou=People,dc=your,dc=domain"
-AuthLDAPBindPassword 'birthday'
-AuthLDAPGroupAttributeIsDN off
-AuthLDAPGroupAttribute memberUid
-EOM
+      expected_output = <<~EOM
+        AuthName "Please Authenticate"
+        AuthType Basic
+        AuthBasicProvider ldap
+        AuthLDAPUrl "ldap://server1 server2/ou=People,dc=your,dc=domain" STARTTLS
+        AuthLDAPBindDN "cn=happy,ou=People,dc=your,dc=domain"
+        AuthLDAPBindPassword 'birthday'
+        AuthLDAPGroupAttributeIsDN off
+        AuthLDAPGroupAttribute memberUid
+      EOM
       is_expected.to run.with_params(input).and_return(expected_output.strip)
     end
 
     it 'generates apache settings for more than 1 enabled auth methods' do
       input = file_auth_hash.dup.merge(minimal_ldap_auth_hash)
-      expected_output = <<EOM
-AuthName "Please Authenticate"
-AuthType Basic
-AuthBasicProvider file ldap
-AuthUserFile /etc/httpd/conf.d/test/.htdigest
-AuthLDAPUrl "ldap://server1 server2/ou=People,dc=your,dc=domain"
-EOM
+      expected_output = <<~EOM
+        AuthName "Please Authenticate"
+        AuthType Basic
+        AuthBasicProvider file ldap
+        AuthUserFile /etc/httpd/conf.d/test/.htdigest
+        AuthLDAPUrl "ldap://server1 server2/ou=People,dc=your,dc=domain"
+      EOM
       is_expected.to run.with_params(input).and_return(expected_output.strip)
     end
 
     it 'only generates apache settings for enabled auth methods' do
       input = file_auth_hash.dup.merge(minimal_ldap_auth_hash)
       input['ldap']['enable'] = false
-      expected_output = <<EOM
-AuthName "Please Authenticate"
-AuthType Basic
-AuthBasicProvider file
-AuthUserFile /etc/httpd/conf.d/test/.htdigest
-EOM
+      expected_output = <<~EOM
+        AuthName "Please Authenticate"
+        AuthType Basic
+        AuthBasicProvider file
+        AuthUserFile /etc/httpd/conf.d/test/.htdigest
+      EOM
       is_expected.to run.with_params(input).and_return(expected_output.strip)
     end
 
