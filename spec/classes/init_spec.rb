@@ -32,7 +32,7 @@ describe 'simp_apache' do
           it { is_expected.to create_class('simp_apache::ssl') }
           it {
             is_expected.to create_rsync('site').with({
-                                                       source: "apache_#{environment}_#{facts[:os][:name]}/www"
+                                                       source: "apache_#{environment}_#{facts[:os][:name]}/www",
                                                      })
           }
 
