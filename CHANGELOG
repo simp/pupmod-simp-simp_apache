@@ -1,3 +1,6 @@
+* Wed Jun 11 2025 Chris Tessmer <chris.tessmer@onyxpoint.com> - 7.6.1
+- Fix rubocop issues
+
 * Fri Dec 13 2024 Steven Pritchard <steve@sicura.us> - 7.6.0
 - Add EL9 support
 

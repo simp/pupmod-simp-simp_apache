@@ -18,9 +18,9 @@ Puppet::Type.newtype(:htaccess) do
     validate do |value|
       target = value.split(':').first
 
-      fail Puppet::Error, "name is missing either the path or the username. Name format must be 'path:username'" if value !~ /.+:.+/
+      raise Puppet::Error, "name is missing either the path or the username. Name format must be 'path:username'" unless %r{.+:.+}.match?(value)
 
-      fail Puppet::Error, "File paths must be fully qualified, not #{target}" if value !~ /^\//
+      raise Puppet::Error, "File paths must be fully qualified, not #{target}" unless %r{^/}.match?(value)
     end
   end
 
@@ -37,14 +37,14 @@ Puppet::Type.newtype(:htaccess) do
     end
 
     def retrieve
-      return provider.passwd_retrieve
+      provider.passwd_retrieve
     end
 
     munge do |value|
-      unless value =~ /^\{SHA\}/
+      unless %r{^\{SHA\}}.match?(value)
         require 'digest/sha1'
         require 'base64'
-        value = "{SHA}"+Base64.encode64(Digest::SHA1.digest(value)).chomp!
+        value = '{SHA}' + Base64.encode64(Digest::SHA1.digest(value)).chomp!
       end
 
       value
@@ -54,7 +54,7 @@ Puppet::Type.newtype(:htaccess) do
   autorequire(:file) do
     torequire = self[:name].split(':').first
 
-    if catalog.resources.find_all { |r| r.is_a?(Puppet::Type.type(:file)) and r[:name] == torequire }.empty? then
+    if catalog.resources.none? { |r| r.is_a?(Puppet::Type.type(:file)) && (r[:name] == torequire) }
       err "You must declare a 'file' object to manage #{torequire}!"
     end
 
@@ -66,9 +66,8 @@ Puppet::Type.newtype(:htaccess) do
 
     required_fields.each do |req|
       unless @parameters.include?(req)
-        fail Puppet::Error, "You must specify #{req}."
+        raise Puppet::Error, "You must specify #{req}."
       end
     end
   end
-
 end

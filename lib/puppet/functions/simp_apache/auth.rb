@@ -3,7 +3,6 @@
 #
 # Currently, only htaccess and LDAP support are implemented.
 Puppet::Functions.create_function(:'simp_apache::auth') do
-
   # @param auth_hash Hash containing desired Apache authentication
   #    methods and relevant parameters as key value pairs. The
   #    key is the authentication method, while the corresponding
@@ -53,14 +52,14 @@ Puppet::Functions.create_function(:'simp_apache::auth') do
     enabled_methods = []
     method_content = []
 
-    auth_hash.keys.each do |auth_method|
+    auth_hash.each_key do |auth_method|
       next unless true?(auth_hash[auth_method]['enable'])
 
       begin
         send("auth_#{auth_method}", auth_hash[auth_method], method_content)
         enabled_methods << auth_method
-      rescue NoMethodError => e
-        fail("simp_apache::auth(): Error, '#{auth_method}' not yet supported")
+      rescue NoMethodError
+        raise("simp_apache::auth(): Error, '#{auth_method}' not yet supported")
       end
     end
 
@@ -68,48 +67,47 @@ Puppet::Functions.create_function(:'simp_apache::auth') do
     # here.
     unless enabled_methods.empty?
       apache_auth_content << 'AuthName "Please Authenticate"'
-      apache_auth_content << "AuthType Basic"
+      apache_auth_content << 'AuthType Basic'
       apache_auth_content << "AuthBasicProvider #{enabled_methods.join(' ')}"
       apache_auth_content += method_content
     end
 
-    return apache_auth_content.join("\n")
+    apache_auth_content.join("\n")
   end
 
   def true?(val)
-    return val.to_s.downcase == 'true'
+    val.to_s.downcase == 'true'
   end
 
-  def check_required_opts(required_opts,opts)
+  def check_required_opts(required_opts, opts)
     opt_test = required_opts - opts
-    unless opt_test.empty?
-      fail("simp_apache::auth(): Error, missing option(s) '#{opt_test.join(', ')}'")
-    end
+    return if opt_test.empty?
+    raise("simp_apache::auth(): Error, missing option(s) '#{opt_test.join(', ')}'")
   end
 
-  def auth_ldap(opts,content)
+  def auth_ldap(opts, content)
     required_opts = [
       'url',
       'search',
-      'posix_group'
+      'posix_group',
     ]
 
     valid_sec_methods = [
       'NONE',
       'SSL',
       'TLS',
-      'STARTTLS'
+      'STARTTLS',
     ]
 
-    check_required_opts(required_opts,opts.keys)
+    check_required_opts(required_opts, opts.keys)
 
-    ldapuri = 'ldap://' + Array(opts['url']).join(' ').gsub(/ldap:\/\//,'')
+    ldapuri = 'ldap://' + Array(opts['url']).join(' ').gsub('ldap://', '')
     ldapuri = ldapuri + '/' + opts['search']
     ldapuri = '"' + ldapuri + '"'
 
     if opts['security']
       unless valid_sec_methods.include?(opts['security'])
-        fail("simp_apache::auth(): Error, 'security' must be one of {#{valid_sec_methods.join(', ')}}. Got: '#{opts['security']}'")
+        raise("simp_apache::auth(): Error, 'security' must be one of {#{valid_sec_methods.join(', ')}}. Got: '#{opts['security']}'")
       end
       ldapuri = "#{ldapuri} #{opts['security']}"
     end
@@ -117,19 +115,18 @@ Puppet::Functions.create_function(:'simp_apache::auth') do
     content << "AuthLDAPUrl #{ldapuri}"
     if opts['binddn']
       content << "AuthLDAPBindDN \"#{opts['binddn']}\""
-      content << "AuthLDAPBindPassword '#{opts['bindpw'].gsub(/'/, "\\\\'")}'" if opts['bindpw']
+      content << "AuthLDAPBindPassword '#{opts['bindpw'].gsub('\'', "\\\\'")}'" if opts['bindpw']
     end
 
-    if true?(opts['posix_group'])
-      content << "AuthLDAPGroupAttributeIsDN off"
-      content << "AuthLDAPGroupAttribute memberUid"
-    end
+    return unless true?(opts['posix_group'])
+    content << 'AuthLDAPGroupAttributeIsDN off'
+    content << 'AuthLDAPGroupAttribute memberUid'
   end
 
-  def auth_file(opts,content)
+  def auth_file(opts, content)
     required_opts = [ 'user_file' ]
 
-    check_required_opts(required_opts,opts.keys)
+    check_required_opts(required_opts, opts.keys)
 
     content << "AuthUserFile #{opts['user_file']}"
   end
