@@ -7,25 +7,25 @@ hosts.each do |host|
     # rubocop:disable RSpec/IndexedLet
     let(:manifest1) do
       <<~EOM
-        htaccess { 'user1': name => '/root/htaccess.txt:user1', password=>"user1's password" }
-        htaccess { 'user2': name => '/root/htaccess.txt:user2', password=>"{SHA}yLo2mwINaPQsTgevY0gyfH9mxk4=" }
+        htaccess { 'user1': name => '/root/htaccess.txt:user1', password => "user1's password" }
+        htaccess { 'user2': name => '/root/htaccess.txt:user2', password => "{SHA}yLo2mwINaPQsTgevY0gyfH9mxk4=" }
       EOM
     end
 
     let(:manifest2) do
       <<~EOM
         file { '/root/htaccess.txt': ensure => present }
-        htaccess { 'user1': name => '/root/htaccess.txt:user1', password=>"user1's password" }
-        htaccess { 'user2': name => '/root/htaccess.txt:user2', password=>"{SHA}yLo2mwINaPQsTgevY0gyfH9mxk4=" }
+        htaccess { 'user1': name => '/root/htaccess.txt:user1', password => "user1's password" }
+        htaccess { 'user2': name => '/root/htaccess.txt:user2', password => "{SHA}yLo2mwINaPQsTgevY0gyfH9mxk4=" }
       EOM
     end
 
     let(:manifest3) do
       <<~EOM
         file { '/root/htaccess.txt': ensure => present }
-        htaccess { 'user1': name => '/root/htaccess.txt:user1', password=>"user1's password", ensure=>absent }
-        htaccess { 'user2': name => '/root/htaccess.txt:user2', password=>"{SHA}yLo2mwINaPQsTgevY0gyfH9mxk4=", ensure=>absent }
-        htaccess { 'user3': name => '/root/htaccess.txt:user3', password=>"user3's password" }
+        htaccess { 'user1': name => '/root/htaccess.txt:user1', password => "user1's password", ensure=>absent }
+        htaccess { 'user2': name => '/root/htaccess.txt:user2', password => "{SHA}yLo2mwINaPQsTgevY0gyfH9mxk4=", ensure=>absent }
+        htaccess { 'user3': name => '/root/htaccess.txt:user3', password => "user3's password" }
       EOM
     end
     # rubocop:enable RSpec/IndexedLet

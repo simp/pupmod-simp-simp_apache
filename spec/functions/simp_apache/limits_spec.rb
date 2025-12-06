@@ -4,19 +4,19 @@ describe 'simp_apache::limits' do
   let(:limits_hash) do
     {
       'defaults' => [ 'GET', 'POST', 'PUT' ],
-   'hosts' => {
-     '1.2.3.4'     => 'defaults',
-     '3.4.5.6'     => ['GET', 'POST'],
-     '10.1.2.0/24' => 'defaults',
-   },
-   'users' => {
-     'bob'        => 'defaults',
-     'alice'      => ['GET', 'POST', 'PUT', 'DELETE'],
-   },
-   'ldap_groups' => {
-     'cn=basic_users,ou=Group,dc=your,dc=domain' => 'defaults',
-     'cn=admin_users,ou=Group,dc=your,dc=domain' => ['GET', 'POST', 'PUT', 'DELETE'],
-   },
+      'hosts' => {
+        '1.2.3.4'     => 'defaults',
+        '3.4.5.6'     => ['GET', 'POST'],
+        '10.1.2.0/24' => 'defaults',
+      },
+      'users' => {
+        'bob'        => 'defaults',
+        'alice'      => ['GET', 'POST', 'PUT', 'DELETE'],
+      },
+      'ldap_groups' => {
+        'cn=basic_users,ou=Group,dc=your,dc=domain' => 'defaults',
+        'cn=admin_users,ou=Group,dc=your,dc=domain' => ['GET', 'POST', 'PUT', 'DELETE'],
+      },
     }
   end
 

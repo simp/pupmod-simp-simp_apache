@@ -80,8 +80,8 @@ Puppet::Type.type(:htaccess).provide :htaccess do
       outfile.close
       FileUtils.cp(tmpname, target)
       FileUtils.rm(tmpname)
-    rescue e
-      raise Puppet::Error, e
+    rescue => e
+      raise Puppet::Error, e.message
     end
   end
 
@@ -112,8 +112,8 @@ Puppet::Type.type(:htaccess).provide :htaccess do
       end
 
       false
-    rescue e
-      raise Puppet::Error, e
+    rescue => e
+      raise Puppet::Error, e.message
     end
   end
 
@@ -132,8 +132,8 @@ Puppet::Type.type(:htaccess).provide :htaccess do
           return l_pass
         end
       end
-    rescue e
-      raise Puppet::Error, e
+    rescue => e
+      raise Puppet::Error, e.message
     end
 
     nil

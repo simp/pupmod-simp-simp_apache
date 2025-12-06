@@ -6,12 +6,12 @@ describe 'apache class' do
   hosts.each do |host|
     context 'basic parameters' do
       let(:manifest) { "include 'simp_apache'" }
-      let(:host_fqdn) { fact_on(host, 'fqdn') }
+      let(:host_fqdn) { fact_on(host, 'networking.fqdn') }
       let(:hieradata) do
         {
           'simp_apache::rsync_web_root' => false,
-       'simp_options::pki'           => true,
-       'simp_options::pki::source'   => '/etc/pki/simp-testing/pki/',
+          'simp_options::pki'           => true,
+          'simp_options::pki::source'   => '/etc/pki/simp-testing/pki/',
         }
       end
 
