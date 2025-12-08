@@ -1,22 +1,22 @@
 Puppet::Type.type(:htaccess).provide :htaccess do
   require 'fileutils'
 
-  desc "Htaccess provider"
+  desc 'Htaccess provider'
 
-  HTACCESS_EDIT_MSG = "# This file managed by Puppet. Please do not edit by hand!"
+  HTACCESS_EDIT_MSG = '# This file managed by Puppet. Please do not edit by hand!'.freeze
 
   def create_target
     target = @resource[:name].split(':').first
-    username = @resource[:name].split(':').last
+    @resource[:name].split(':').last
 
     FileUtils.touch(target)
-    FileUtils.chmod(0640,target)
-    FileUtils.chown('root','root',target)
+    FileUtils.chmod(0o640, target)
+    FileUtils.chown('root', 'root', target)
   end
 
   def target_exist?
     target = @resource[:name].split(':').first
-    username = @resource[:name].split(':').last
+    @resource[:name].split(':').last
 
     File.exist?(target)
   end
@@ -26,25 +26,25 @@ Puppet::Type.type(:htaccess).provide :htaccess do
     username = @resource[:name].split(':').last
 
     begin
-      self.target_exist? or self.create_target
+      target_exist? or create_target
 
       tmpname = "#{File.dirname(target)}/.#{File.basename(target)}.htpasswd.tmp"
-      outfile = File.open(tmpname,'w+')
-      FileUtils.chmod(0600,tmpname)
+      outfile = File.open(tmpname, 'w+')
+      FileUtils.chmod(0o600, tmpname)
 
-      fh = File.open(target,'r')
+      fh = File.open(target, 'r')
 
       # Check for the edit message and add if necessary.
       if fh.eof?
         outfile.puts(HTACCESS_EDIT_MSG)
-      elsif not fh.readline.chomp.eql?(HTACCESS_EDIT_MSG)
+      elsif !fh.readline.chomp.eql?(HTACCESS_EDIT_MSG)
         outfile.puts(HTACCESS_EDIT_MSG)
         fh.rewind
       else
         fh.rewind
       end
 
-      if mod_type.eql?("create")
+      if mod_type.eql?('create')
 
         fh.each do |line|
           line.chomp!
@@ -52,25 +52,25 @@ Puppet::Type.type(:htaccess).provide :htaccess do
         end
         outfile.puts("#{username}:#{@resource[:password]}")
 
-      elsif mod_type.eql?("modify")
+      elsif mod_type.eql?('modify')
 
         fh.rewind
         fh.each do |line|
           line.chomp!
-          (l_uname,l_pass) = line.split(':')
+          (l_uname,) = line.split(':')
 
-          if l_uname.eql?(username) then
+          if l_uname.eql?(username)
             outfile.puts("#{username}:#{@resource[:password]}")
           else
             outfile.puts(line)
           end
         end
 
-      elsif mod_type.eql?("delete")
+      elsif mod_type.eql?('delete')
         fh.rewind
         fh.each do |line|
           line.chomp!
-          if not line.split(':').first.eql?(username) then
+          unless line.split(':').first.eql?(username)
             outfile.puts(line)
           end
         end
@@ -78,25 +78,24 @@ Puppet::Type.type(:htaccess).provide :htaccess do
 
       fh.close
       outfile.close
-      FileUtils.cp(tmpname,target)
+      FileUtils.cp(tmpname, target)
       FileUtils.rm(tmpname)
-    rescue Exception => e
-      fail Puppet::Error, e
+    rescue => e
+      raise Puppet::Error, e.message
     end
-
   end
 
   def create
-    mod_target("create")
+    mod_target('create')
   end
 
   def destroy
-    mod_target("delete")
+    mod_target('delete')
   end
 
   def passwd_sync
-    mod_target("modify")
-    return nil
+    mod_target('modify')
+    nil
   end
 
   def exists?
@@ -104,18 +103,17 @@ Puppet::Type.type(:htaccess).provide :htaccess do
     username = @resource[:name].split(':').last
 
     begin
-      File.open(target,'r').each do |line|
-
+      File.open(target, 'r').each do |line|
         line.chomp!
 
-        if line.split(':').first.eql?(username) then
+        if line.split(':').first.eql?(username)
           return true
         end
       end
 
-      return false
-    rescue Exception => e
-      fail Puppet::Error, e
+      false
+    rescue => e
+      raise Puppet::Error, e.message
     end
   end
 
@@ -124,22 +122,20 @@ Puppet::Type.type(:htaccess).provide :htaccess do
     username = @resource[:name].split(':').last
 
     begin
-      self.target_exist? or return nil
+      target_exist? or return nil
 
-      File.open(target,'r').each do |line|
+      File.open(target, 'r').each do |line|
         line.chomp!
-        (l_uname,l_pass) = line.split(':')
+        (l_uname, l_pass) = line.split(':')
 
-        if l_uname.eql?(username) then
+        if l_uname.eql?(username)
           return l_pass
         end
       end
-
-    rescue Exception => e
-      fail Puppet::Error, e
+    rescue => e
+      raise Puppet::Error, e.message
     end
 
-    return nil
+    nil
   end
-
 end
