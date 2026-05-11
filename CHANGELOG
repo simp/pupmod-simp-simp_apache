@@ -1,3 +1,6 @@
+* Mon May 11 2026 Steven Pritchard <steve@sicura.us> - 8.0.0
+- Remove unmaintained Compliance Engine data
+
 * Wed Jun 11 2025 Chris Tessmer <chris.tessmer@onyxpoint.com> - 7.6.1
 - Fix rubocop issues
 
