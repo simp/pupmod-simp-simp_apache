@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-htaccess_type = Puppet::Type.type(:htaccess)
+describe Puppet::Type.type(:htaccess) do
+  let(:htaccess_type) { described_class }
 
-describe htaccess_type do
   it 'requires <fully-qualified path>:<username> for the name param' do
     expect {
       htaccess_type.new(

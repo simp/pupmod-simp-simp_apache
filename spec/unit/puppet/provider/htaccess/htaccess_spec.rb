@@ -1,8 +1,9 @@
 require 'spec_helper'
 require 'tempfile'
 
-provider_class = Puppet::Type.type(:htaccess).provider(:htaccess)
-describe provider_class do
+describe Puppet::Type.type(:htaccess).provider(:htaccess) do
+  let(:provider_class) { described_class }
+
   let(:htaccess_file) do
     tmp = Tempfile.new('htaccess_tmp')
     htaccess_file = tmp.path

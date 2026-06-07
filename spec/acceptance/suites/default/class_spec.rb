@@ -32,7 +32,7 @@ describe 'apache class' do
 
       it 'responds to http' do
         result = on(host, 'curl localhost')
-        expect(result.output).to match(%r{You don't have permission to access })
+        expect(result.output).to include("You don't have permission to access ")
       end
     end
   end
