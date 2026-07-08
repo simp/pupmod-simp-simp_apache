@@ -924,7 +924,7 @@ Type: Ruby 4.x API
 Takes a hash of arguments related to Apache 'Limits' settings and
 returns a reasonably formatted set of options.
 
-Currently, host, user ('valid-user' only), ldap-user, and 
+Currently, host, user ('valid-user' only), ldap-user, and
 ldap-group limits are supported.  The hash keys for these are
 host limit: 'hosts'
 user limit: 'users'; only applies for 'valid-user', all others assumed
@@ -1013,7 +1013,7 @@ Output:
 Takes a hash of arguments related to Apache 'Limits' settings and
 returns a reasonably formatted set of options.
 
-Currently, host, user ('valid-user' only), ldap-user, and 
+Currently, host, user ('valid-user' only), ldap-user, and
 ldap-group limits are supported.  The hash keys for these are
 host limit: 'hosts'
 user limit: 'users'; only applies for 'valid-user', all others assumed
