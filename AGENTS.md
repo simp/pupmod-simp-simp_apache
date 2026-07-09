@@ -13,7 +13,7 @@ into the surrounding SIMP feature modules (iptables, rsyslog, PKI, haveged).
 
 This is an **older, legacy module**: its own `metadata.json` summary flags it as
 "legacy, conflicts with puppetlabs-apache," and the docstring on
-`manifests/init.pp:6-7` states the long-term intent is to migrate to the
+`manifests/init.pp` states the long-term intent is to migrate to the
 Puppet Labs `apache` module. It carries hand-rolled ERB templates, a custom
 `htaccess` type/provider, and helper functions rather than delegating to a
 maintained upstream Apache module. Treat it as a maintenance target: prefer
@@ -25,11 +25,11 @@ optionally `ssl`), plus a `site` define for dropping in per-site vhost configs.
 
 ### Business logic
 
-- **`simp_apache` (`manifests/init.pp:31`)** — Public entry class; consumers
+- **`simp_apache` (`manifests/init.pp`)** — Public entry class; consumers
   `include 'simp_apache'`. It calls `simplib::assert_metadata($module_name)`
   and then `include`s `simp_apache::install`, `simp_apache::conf`, and
   `simp_apache::service`. When `$ssl` is true (default) it also `include`s
-  `simp_apache::ssl`. Key parameters (`init.pp:31-38`):
+  `simp_apache::ssl`. Key parameters (`init.pp`):
   - `$data_dir` (`Stdlib::AbsolutePath`, default `/var/www`) — where web data
     lives. (The docstring says `/srv/www` "for legacy reasons," but the code
     default is `/var/www`; trust the code.)
@@ -43,91 +43,91 @@ optionally `ssl`), plus a `site` define for dropping in per-site vhost configs.
     root.
 
   Resources and control flow:
-  - **Ordering** (`init.pp:51-54`): `install` runs before `simp_apache`, `conf`,
+  - **Ordering** (`init.pp`): `install` runs before `simp_apache`, `conf`,
     and (when enabled) `ssl`; `install` and `conf` both `notify` `service`.
   - `group { 'apache' }` and `user { 'apache' }` are pinned to **uid/gid 48**
     with `allowdupe => false`, `shell => /sbin/nologin`, home
-    `/usr/share/httpd`, and `membership => minimum` (`init.pp:58-62,93-102`).
-  - **rsync branch** (`init.pp:64-79`): when `$rsync_web_root`, `include 'rsync'`
+    `/usr/share/httpd`, and `membership => minimum` (`init.pp`).
+  - **rsync branch** (`init.pp`): when `$rsync_web_root`, `include 'rsync'`
     and declare `rsync { 'site' }` pulling `$rsync_source` to `/var`, with the
     per-host rsync **password sourced from `simplib::passgen(...)`**
-    (`init.pp:72`) and `delete => false`.
-  - **SELinux branch** (`init.pp:81-91`): only when the SELinux mode fact is set
+    (`init.pp`) and `delete => false`.
+  - **SELinux branch** (`init.pp`): only when the SELinux mode fact is set
     and not `disabled`, sets four `selboolean`s persistently on:
     `httpd_verify_dns`, `allow_ypbind`, `allow_httpd_mod_auth_pam`,
     `httpd_can_network_connect`.
 
-- **`simp_apache::install` (`manifests/install.pp:12`)** — Private class
-  (`assert_private()` at `install.pp:17`). Manages `package { 'httpd' }`, and
+- **`simp_apache::install` (`manifests/install.pp`)** — Private class
+  (`assert_private()` at `install.pp`). Manages `package { 'httpd' }`, and
   `package { 'mod_ssl' }` **only when `$simp_apache::ssl`** is true
-  (`install.pp:23-27`). All three ensure params
+  (`install.pp`). All three ensure params
   (`$httpd_ensure`, `$mod_ldap_ensure`, `$mod_ssl_ensure`) default to
   `simp_options::package_ensure` → `'installed'`.
 
-- **`simp_apache::conf` (`manifests/conf.pp:62`)** — Renders
+- **`simp_apache::conf` (`manifests/conf.pp`)** — Renders
   `/etc/httpd/conf/httpd.conf` from an ERB template
-  (`conf.pp:116-122`), manages the `conf`/`conf.d` directories (with
+  (`conf.pp`), manages the `conf`/`conf.d` directories (with
   `purge => $purge`, default `true` — **this purges unmanaged files**), the
   `magic` file (EPP, `replace => false`), a symlink farm
   (`/etc/httpd/logs`, `/etc/httpd/modules`, `/etc/httpd/run`), and the
   `$data_dir`. The modules symlink target is arch-dependent:
   `/usr/lib64/httpd/modules` on `x86_64`, else `/usr/lib/httpd/modules`
-  (`conf.pp:124-127`). Networks in `$allowroot` are normalized through
-  `simp_apache::munge_httpd_networks()` (`conf.pp:100`). This class carries the
+  (`conf.pp`). Networks in `$allowroot` are normalized through
+  `simp_apache::munge_httpd_networks()` (`conf.pp`). This class carries the
   bulk of the tunables (prefork/worker MPM sizing, keepalive, logging, etc.).
-  - **firewall branch** (`conf.pp:186-194`): when `$firewall`, `include
+  - **firewall branch** (`conf.pp`): when `$firewall`, `include
     'iptables'` and open the `$listen` ports (default `[80]`) via
     `iptables::listen::tcp_stateful` with `trusted_nets => $l_allowroot`.
-  - **syslog branch** (`conf.pp:196-208`): when `$syslog`, `include '::rsyslog'`
+  - **syslog branch** (`conf.pp`): when `$syslog`, `include '::rsyslog'`
     and add two `rsyslog::rule::local` rules routing `httpd` error and access
     logs under `$syslog_target` (default `/var/log/httpd`).
 
-- **`simp_apache::service` (`manifests/service.pp:31`)** — Manages
+- **`simp_apache::service` (`manifests/service.pp`)** — Manages
   `service { 'httpd' }` (`ensure => running`, `enable => true`) only when
   `$manage` (default `true`). If `$hasrestart` is false (the default), a custom
   `$restart` command is used that tries `systemctl reload` then falls back to
-  `restart` (`service.pp:38-53`). When `$manage` is false you may need to add
+  `restart` (`service.pp`). When `$manage` is false you may need to add
   the service to `svckill::ignore` (per the docstring).
 
-- **`simp_apache::ssl` (`manifests/ssl.pp:89`)** — Renders
-  `/etc/httpd/conf.d/ssl.conf` from ERB (`ssl.pp:112-119`), notifying the
-  service. Optionally `include 'haveged'` (`ssl.pp:110`) and `include 'iptables'`
+- **`simp_apache::ssl` (`manifests/ssl.pp`)** — Renders
+  `/etc/httpd/conf.d/ssl.conf` from ERB (`ssl.pp`), notifying the
+  service. Optionally `include 'haveged'` (`ssl.pp`) and `include 'iptables'`
   to open the SSL `$listen` ports (default `[443]`). When `$pki` is truthy,
   `pki::copy { 'simp_apache' }` manages certs under
-  `/etc/pki/simp_apps/simp_apache/x509` (`ssl.pp:99,131-138`). Defaults:
+  `/etc/pki/simp_apps/simp_apache/x509` (`ssl.pp`). Defaults:
   `$ssl_protocols = ['TLSv1.2']`, `$sslverifyclient = 'require'`,
   `$sslverifydepth = 10`, `$ssl_honor_cipher_order = true`.
 
-- **`simp_apache::site` (`manifests/site.pp:14`)** — Define. Drops a
+- **`simp_apache::site` (`manifests/site.pp`)** — Define. Drops a
   `/etc/httpd/conf.d/${name}.conf` file, `notify`ing the service. With the
   default `$content = 'base'` it renders a `templates/sites/${name}.conf.erb`
-  template; otherwise `$content` is written verbatim (`site.pp:19-30`). File
+  template; otherwise `$content` is written verbatim (`site.pp`). File
   owner/group come from `pick($simp_apache::conf::user/group, ...)`.
 
-- **`simp_apache::validate` (`manifests/validate.pp:6`)** — Not a resource
+- **`simp_apache::validate` (`manifests/validate.pp`)** — Not a resource
   class; it just defines `$method_acl`, a nested hash of regex/validation rules
   intended as input to `validate_deep_hash` when managing `ldap`/`limits` ACLs.
 
 ### Gotchas / non-obvious details
 
 - **`simp_apache::conf` purges by default.** `$purge` defaults to `true`
-  (`conf.pp:95`), which sets `purge`/`force` on `/etc/httpd/conf` and
-  `/etc/httpd/conf.d` (`conf.pp:110-113`). Any httpd config file **not** managed
+  (`conf.pp`), which sets `purge`/`force` on `/etc/httpd/conf` and
+  `/etc/httpd/conf.d` (`conf.pp`). Any httpd config file **not** managed
   by this module (or dropped in via `simp_apache::site`) will be removed. This
   is the single most surprising behavior — set `simp_apache::conf::purge: false`
   in Hiera if consumers manage config files out-of-band.
-- **The `apache` user/group are hard-pinned to uid/gid 48** (`init.pp:58-102`)
+- **The `apache` user/group are hard-pinned to uid/gid 48** (`init.pp`)
   with `allowdupe => false` — a collision with an existing uid/gid 48 will fail
   the run.
-- **The rsync password comes from `simplib::passgen`** (`init.pp:72`), so the
+- **The rsync password comes from `simplib::passgen`** (`init.pp`), so the
   rsync branch depends on SIMP's passgen infrastructure being available and
   seeded; the server side must accept that generated credential.
 - **`$ssl` is read across classes.** `install` gates `mod_ssl` on
-  `$simp_apache::ssl` (`install.pp:23`) and `site`/`ssl` read
+  `$simp_apache::ssl` (`install.pp`) and `site`/`ssl` read
   `$simp_apache::conf::user`/`group` via `pick(...)` — the component classes are
   tightly coupled through the top-level class's variables, so they are not
   meant to be `include`d standalone in isolation from `simp_apache`.
-- **SELinux booleans are only touched when SELinux is enabled** (`init.pp:81`);
+- **SELinux booleans are only touched when SELinux is enabled** (`init.pp`);
   on a `disabled`/absent SELinux host they are silently skipped.
 - **`simp/simp_options` is NOT a declared dependency** in `metadata.json`, yet
   every `simplib::lookup('simp_options::*', ...)` call reads that seam
@@ -135,7 +135,7 @@ optionally `ssl`), plus a `site` define for dropping in per-site vhost configs.
   as a `.fixtures.yml` fixture for test compilation.
 - **This module conflicts with `puppetlabs-apache`** (per `metadata.json`
   summary). Do not attempt to co-manage `httpd` with both.
-- **The modules symlink target is arch-gated** (`conf.pp:124-127`); non-`x86_64`
+- **The modules symlink target is arch-gated** (`conf.pp`); non-`x86_64`
   hosts get `/usr/lib/httpd/modules`.
 
 ## The `simp_options` / `simplib::lookup` seam
@@ -146,17 +146,17 @@ lookup-path unit test). All calls route SIMP feature toggles through
 
 | Location | Key | `default_value` |
 |----------|-----|-----------------|
-| `init.pp:35` | `simp_options::rsync::server` | `'127.0.0.1'` |
-| `init.pp:36` | `simp_options::rsync::timeout` | `2` |
-| `install.pp:13-15` | `simp_options::package_ensure` (×3) | `'installed'` |
-| `conf.pp:92` | `simp_options::firewall` | `false` |
-| `conf.pp:93` | `simp_options::syslog` | `false` |
-| `ssl.pp:91` | `simp_options::trusted_nets` | `['127.0.0.1', '::1']` |
-| `ssl.pp:92` | `simp_options::openssl::cipher_suite` | `['DEFAULT', '!MEDIUM']` |
-| `ssl.pp:97` | `simp_options::pki` | `false` |
-| `ssl.pp:98` | `simp_options::pki::source` | `'/etc/pki/simp/x509'` |
-| `ssl.pp:105` | `simp_options::firewall` | `false` |
-| `ssl.pp:106` | `simp_options::haveged` | `false` |
+| `init.pp` | `simp_options::rsync::server` | `'127.0.0.1'` |
+| `init.pp` | `simp_options::rsync::timeout` | `2` |
+| `install.pp` | `simp_options::package_ensure` (×3) | `'installed'` |
+| `conf.pp` | `simp_options::firewall` | `false` |
+| `conf.pp` | `simp_options::syslog` | `false` |
+| `ssl.pp` | `simp_options::trusted_nets` | `['127.0.0.1', '::1']` |
+| `ssl.pp` | `simp_options::openssl::cipher_suite` | `['DEFAULT', '!MEDIUM']` |
+| `ssl.pp` | `simp_options::pki` | `false` |
+| `ssl.pp` | `simp_options::pki::source` | `'/etc/pki/simp/x509'` |
+| `ssl.pp` | `simp_options::firewall` | `false` |
+| `ssl.pp` | `simp_options::haveged` | `false` |
 
 Keep routing SIMP feature toggles through `simplib::lookup('simp_options::*', {
 'default_value' => ... })` with an explicit default rather than assuming
@@ -283,4 +283,4 @@ defaults `puppet_version` to `['>= 7', '< 9']` and installs the `puppet` gem
 - Match the existing 2-space Puppet indentation and aligned-arrow / aligned-`=`
   parameter style used across `manifests/`.
 - This is a legacy module intended to eventually migrate to `puppetlabs-apache`
-  (`init.pp:6-7`) — favor minimal, targeted fixes over large refactors.
+  (`init.pp`) — favor minimal, targeted fixes over large refactors.
