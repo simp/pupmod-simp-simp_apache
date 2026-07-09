@@ -22,8 +22,8 @@ define simp_apache::site (
   }
 
   file { "/etc/httpd/conf.d/${name}.conf":
-    owner   => pick($::simp_apache::conf::user,'root'),
-    group   => pick($::simp_apache::conf::group,'apache'),
+    owner   => pick($simp_apache::conf::user,'root'),
+    group   => pick($simp_apache::conf::group,'apache'),
     mode    => '0640',
     content => $_content,
     notify  => Class['simp_apache::service']
