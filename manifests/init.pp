@@ -32,11 +32,10 @@ class simp_apache (
   Stdlib::AbsolutePath $data_dir       = '/var/www',
   Boolean              $ssl            = true,
   String               $rsync_source   = "apache_${facts['environment']}_${facts['os']['name']}/www",
-  Simplib::Host        $rsync_server   = simplib::lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1' }),
+  Simplib::Host        $rsync_server   = simplib::lookup('simp_options::rsync::server', { 'default_value' => '127.0.0.1' }),
   Integer              $rsync_timeout  = simplib::lookup('simp_options::rsync::timeout', { 'default_value' => 2 }),
   Boolean              $rsync_web_root = true
 ) {
-
   simplib::assert_metadata($module_name)
 
   include 'simp_apache::install'
@@ -80,13 +79,13 @@ class simp_apache (
 
   if $facts['os']['selinux']['current_mode'] and $facts['os']['selinux']['current_mode'] != 'disabled' {
     selboolean { [
-      'httpd_verify_dns',
-      'allow_ypbind',
-      'allow_httpd_mod_auth_pam',
-      'httpd_can_network_connect'
-    ]:
-      persistent => true,
-      value      => 'on'
+        'httpd_verify_dns',
+        'allow_ypbind',
+        'allow_httpd_mod_auth_pam',
+        'httpd_can_network_connect'
+      ]:
+        persistent => true,
+        value      => 'on'
     }
   }
 

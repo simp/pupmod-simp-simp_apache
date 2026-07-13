@@ -100,17 +100,17 @@ class simp_apache::conf (
   $l_allowroot = simp_apache::munge_httpd_networks($allowroot)
 
   file { [
-    '/etc/httpd/conf',
-    '/etc/httpd/conf.d'
-  ]:
-    ensure   => 'directory',
-    owner    => 'root',
-    group    => $group,
-    mode     => '0640',
-    recurse  => true,
-    purge    => $purge,
-    force    => $purge,
-    checksum => undef
+      '/etc/httpd/conf',
+      '/etc/httpd/conf.d'
+    ]:
+      ensure   => 'directory',
+      owner    => 'root',
+      group    => $group,
+      mode     => '0640',
+      recurse  => true,
+      purge    => $purge,
+      force    => $purge,
+      checksum => undef
   }
 
   file { '/etc/httpd/conf/httpd.conf':
@@ -158,7 +158,7 @@ class simp_apache::conf (
 
   file { '/etc/httpd/modules':
     ensure => 'symlink',
-    target =>  $_modules_target,
+    target => $_modules_target,
     force  => true
   }
 
@@ -193,8 +193,8 @@ class simp_apache::conf (
     }
   }
 
-  if $syslog  {
-    include '::rsyslog'
+  if $syslog {
+    include 'rsyslog'
     rsyslog::rule::local { 'XX_apache_error':
       rule            => '$programname == \'httpd\' and $syslogseverity-text == \'err\'',
       target_log_file => "${syslog_target}/error_log",
