@@ -92,7 +92,7 @@ Data type: `Simplib::Host`
 
 The name/address of the rsync server.
 
-Default value: `simplib::lookup('simp_options::rsync::server',  { 'default_value' => '127.0.0.1' })`
+Default value: `simplib::lookup('simp_options::rsync::server', { 'default_value' => '127.0.0.1' })`
 
 ##### <a name="-simp_apache--rsync_timeout"></a>`rsync_timeout`
 
