@@ -23,7 +23,7 @@
 
 ### Functions
 
-* [`simp_apache::auth`](#simp_apache--auth): Takes a hash of arguments related to Apache 'Auth' settings and returns a reasonably formatted set of options.  Currently, only htaccess and 
+* [`simp_apache::auth`](#simp_apache--auth): Takes a hash of arguments related to Apache 'Auth' settings and returns a reasonably formatted set of options.  Currently, only htaccess and
 * [`simp_apache::limits`](#simp_apache--limits): Takes a hash of arguments related to Apache 'Limits' settings and returns a reasonably formatted set of options.  Currently, host, user ('val
 * [`simp_apache::munge_httpd_networks`](#simp_apache--munge_httpd_networks): Provides a method by which an array of networks can be properly formatted for an Apache Allow/Deny segment.  This handles the case of 0.0.0.0
 
@@ -742,7 +742,7 @@ the apache module, or somewhere else if you specify.  The name should be
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 site { 'public': }
@@ -1144,4 +1144,3 @@ Array of networks to be converted to Apache format
 Valid log serveries for Apache
 
 Alias of `Enum['emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 'debug']`
-
