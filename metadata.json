@@ -1,6 +1,6 @@
 {
   "name": "simp-simp_apache",
-  "version": "9.0.2",
+  "version": "9.1.0",
   "author": "SIMP Team",
   "summary": "configure SIMP apache & component sites (NOTE: legacy, conflicts with puppetlabs-apache)",
   "license": "Apache-2.0",
@@ -19,7 +19,7 @@
     },
     {
       "name": "simp/iptables",
-      "version_requirement": ">= 6.5.3 < 9.0.0"
+      "version_requirement": ">= 6.5.3 < 10.0.0"
     },
     {
       "name": "simp/logrotate",
@@ -39,11 +39,11 @@
     },
     {
       "name": "simp/rsyslog",
-      "version_requirement": ">= 7.6.0 < 10.0.0"
+      "version_requirement": ">= 7.6.0 < 11.0.0"
     },
     {
       "name": "simp/auditd",
-      "version_requirement": ">= 8.5.0 < 11.0.0"
+      "version_requirement": ">= 8.5.0 < 12.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
@@ -94,7 +94,7 @@
   "requirements": [
     {
       "name": "openvox",
-      "version_requirement": ">= 8.0.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 10.0.0"
     }
   ]
 }
