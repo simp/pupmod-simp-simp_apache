@@ -1,3 +1,11 @@
+* Mon Nov 09 2026 Hazel Caballero <hazel@sicura.us> - 9.2.0
+- Add `simp_apache::ssl::rngd` to include the `rngd` class for entropy
+  generation
+- Deprecate `simp_apache::ssl::haveged` (and its `simp_options::haveged`
+  default); it will be removed in the next major release
+- `simp/haveged` is now an optional dependency and must be installed
+  separately to use `simp_apache::ssl::haveged`
+
 * Thu Oct 08 2026 Steven Pritchard <steve@sicura.us> - 9.1.0
 - Add support for OpenVox 9
 - Update metadata.json dependency ranges from the Forge

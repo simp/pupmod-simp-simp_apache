@@ -16,6 +16,7 @@ describe 'simp_apache::ssl' do
           it { is_expected.not_to create_class('pki') }
           it { is_expected.not_to create_pki__copy('simp_apache') }
           it { is_expected.not_to contain_class('haveged') }
+          it { is_expected.not_to contain_class('rngd') }
         end
 
         context 'firewall = true' do
@@ -44,6 +45,24 @@ describe 'simp_apache::ssl' do
         context 'with haveged = false' do
           let(:params) { { haveged: false } }
 
+          it { is_expected.not_to contain_class('haveged') }
+        end
+
+        context 'with haveged = true (deprecated)' do
+          let(:params) { { haveged: true } }
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_class('haveged') }
+          it { is_expected.not_to contain_class('rngd') }
+        end
+
+        context 'with rngd = true' do
+          let(:params) { { rngd: true } }
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_class('rngd') }
+          it { is_expected.to contain_package('rng-tools') }
+          it { is_expected.not_to contain_service('rngd') }
           it { is_expected.not_to contain_class('haveged') }
         end
       end
