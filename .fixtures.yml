@@ -10,6 +10,7 @@ fixtures:
     iptables: https://github.com/simp/pupmod-simp-iptables.git
     logrotate: https://github.com/simp/pupmod-simp-logrotate.git
     pki: https://github.com/simp/pupmod-simp-pki.git
+    rngd: https://github.com/simp/pupmod-simp-rngd.git
     rsync: https://github.com/simp/pupmod-simp-rsync.git
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog.git
     selinux_core: https://github.com/puppetlabs/puppetlabs-selinux_core.git

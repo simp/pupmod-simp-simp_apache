@@ -61,7 +61,18 @@
 #   Path to the CA.
 #
 # @param haveged
-#   Whether to use the SIMP haveged module to assist with entropy generation.
+#   Deprecated. Whether to use the SIMP haveged module to assist with entropy
+#   generation.
+#
+#   `simp/haveged` is an optional dependency and must be installed
+#   separately. This parameter will be removed in the next major release;
+#   use `rngd` instead.
+#
+# @param rngd
+#   Whether to include the `rngd` class to assist with entropy generation.
+#
+#   By default `rngd` only installs `rng-tools`; set `rngd::service_ensure`
+#   and `rngd::service_enable` to manage the service.
 #
 # @see https://httpd.apache.org/docs/current/mod/mod_ssl.html#sslverifyclient
 #
@@ -103,11 +114,18 @@ class simp_apache::ssl (
   String                                             $logformat               = '%t %h %{SSL_CLIENT_S_DN_CN}x %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b %s',
   Boolean                                            $enable_default_vhost    = true,
   Boolean                                            $firewall                = simplib::lookup('simp_options::firewall', { 'default_value' => false, }),
-  Boolean                                            $haveged                 = simplib::lookup('simp_options::haveged', { 'default_value' => false })
+  Boolean                                            $haveged                 = simplib::lookup('simp_options::haveged', { 'default_value' => false }),
+  Boolean                                            $rngd                    = false
 ) {
   include 'simp_apache'
 
-  if $haveged { include 'haveged' }
+  if $haveged {
+    deprecation('simp_apache::ssl::haveged', "${module_name}: 'simp_apache::ssl::haveged' (and 'simp_options::haveged') is deprecated and will be removed in the next major release. Use 'simp_apache::ssl::rngd' instead.", false)
+    simplib::assert_optional_dependency($module_name, 'simp/haveged')
+    include 'haveged'
+  }
+
+  if $rngd { include 'rngd' }
 
   file { '/etc/httpd/conf.d/ssl.conf':
     ensure  => 'file',

@@ -562,6 +562,7 @@ The following parameters are available in the `simp_apache::ssl` class:
 * [`app_pki_cert`](#-simp_apache--ssl--app_pki_cert)
 * [`app_pki_ca_dir`](#-simp_apache--ssl--app_pki_ca_dir)
 * [`haveged`](#-simp_apache--ssl--haveged)
+* [`rngd`](#-simp_apache--ssl--rngd)
 * [`openssl_cipher_suite`](#-simp_apache--ssl--openssl_cipher_suite)
 * [`ssl_protocols`](#-simp_apache--ssl--ssl_protocols)
 * [`ssl_honor_cipher_order`](#-simp_apache--ssl--ssl_honor_cipher_order)
@@ -680,9 +681,25 @@ Default value: `"${app_pki_dir}/cacerts"`
 
 Data type: `Boolean`
 
-Whether to use the SIMP haveged module to assist with entropy generation.
+Deprecated. Whether to use the SIMP haveged module to assist with entropy
+generation.
+
+`simp/haveged` is an optional dependency and must be installed
+separately. This parameter will be removed in the next major release;
+use `rngd` instead.
 
 Default value: `simplib::lookup('simp_options::haveged', { 'default_value' => false })`
+
+##### <a name="-simp_apache--ssl--rngd"></a>`rngd`
+
+Data type: `Boolean`
+
+Whether to include the `rngd` class to assist with entropy generation.
+
+By default `rngd` only installs `rng-tools`; set `rngd::service_ensure`
+and `rngd::service_enable` to manage the service.
+
+Default value: `false`
 
 ##### <a name="-simp_apache--ssl--openssl_cipher_suite"></a>`openssl_cipher_suite`
 

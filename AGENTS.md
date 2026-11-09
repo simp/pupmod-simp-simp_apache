@@ -9,7 +9,7 @@ This file provides guidance to AI agents when working with code in this reposito
 `httpd` package(s), lays down `httpd.conf` and the SSL configuration from
 templates, creates the `apache` user/group, manages the SELinux booleans Apache
 needs, optionally rsyncs the web root from a SIMP rsync server, and wires Apache
-into the surrounding SIMP feature modules (iptables, rsyslog, PKI, haveged).
+into the surrounding SIMP feature modules (iptables, rsyslog, PKI, rngd).
 
 This is an **older, legacy module**: its own `metadata.json` summary flags it as
 "legacy, conflicts with puppetlabs-apache," and the docstring on
@@ -91,7 +91,7 @@ optionally `ssl`), plus a `site` define for dropping in per-site vhost configs.
 
 - **`simp_apache::ssl` (`manifests/ssl.pp`)** — Renders
   `/etc/httpd/conf.d/ssl.conf` from ERB (`ssl.pp`), notifying the
-  service. Optionally `include 'haveged'` (`ssl.pp`) and `include 'iptables'`
+  service. Optionally `include 'rngd'` or the deprecated `include 'haveged'` (`ssl.pp`) and `include 'iptables'`
   to open the SSL `$listen` ports (default `[443]`). When `$pki` is truthy,
   `pki::copy { 'simp_apache' }` manages certs under
   `/etc/pki/simp_apps/simp_apache/x509` (`ssl.pp`). Defaults:
@@ -160,22 +160,23 @@ lookup-path unit test). All calls route SIMP feature toggles through
 
 Keep routing SIMP feature toggles through `simplib::lookup('simp_options::*', {
 'default_value' => ... })` with an explicit default rather than assuming
-`simp_options` is included. There are **no** `simplib::assert_optional_dependency`
-calls in this module — every integration (`iptables`, `rsyslog`, `pki`,
-`haveged`, `rsync`) is a hard, declared dependency toggled by a `simp_options`
-flag.
+`simp_options` is included. The only `simplib::assert_optional_dependency` call is for the deprecated
+`haveged` integration (`ssl.pp`). Every other integration (`iptables`,
+`rsyslog`, `pki`, `rngd`, `rsync`) is a hard, declared dependency.
 
 ## Dependencies
 
-Module dependencies (from `metadata.json`) — all hard, no optional dependencies:
+Module dependencies (from `metadata.json`). `simp/haveged` `>= 0.4.5 < 1.0.0`
+is the only optional dependency (`simp.optional_dependencies`), used by the
+deprecated `simp_apache::ssl::haveged`.
 
 - `simp/simplib` `>= 4.9.0 < 5.0.0` (provides `simplib::lookup`,
   `simplib::assert_metadata`, `simplib::passgen`, `simplib::nets2cidr`, and the
   `Simplib::*` data types used throughout)
-- `simp/haveged` `>= 0.4.5 < 1.0.0` (entropy, via the SSL class)
 - `simp/iptables` `>= 6.5.3 < 8.0.0` (firewall rules)
 - `simp/logrotate` `>= 6.5.0 < 7.0.0`
 - `simp/pki` `>= 6.2.0 < 7.0.0` (`pki::copy` for certs)
+- `simp/rngd` `>= 0.2.0 < 1.0.0` (entropy, via the SSL class)
 - `simp/rsync` `>= 6.1.1 < 7.0.0` (web-root sync)
 - `simp/rsyslog` `>= 7.6.0 < 9.0.0` (log routing)
 - `simp/auditd` `>= 8.5.0 < 9.0.0`
@@ -196,7 +197,7 @@ OracleLinux 7/8/9; Rocky 8/9; AlmaLinux 8/9.
 - `manifests/conf.pp` — `simp_apache::conf`: `httpd.conf`, dirs, symlinks,
   firewall/syslog branches; carries most tunables.
 - `manifests/service.pp` — `simp_apache::service`: the `httpd` service.
-- `manifests/ssl.pp` — `simp_apache::ssl`: `ssl.conf`, PKI, haveged, HTTPS
+- `manifests/ssl.pp` — `simp_apache::ssl`: `ssl.conf`, PKI, rngd/haveged, HTTPS
   firewall.
 - `manifests/site.pp` — `simp_apache::site` **define**: per-site vhost configs.
 - `manifests/validate.pp` — `simp_apache::validate`: the `$method_acl`
