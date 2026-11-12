@@ -170,25 +170,23 @@ Module dependencies (from `metadata.json`). `simp/haveged` `>= 0.4.5 < 1.0.0`
 is the only optional dependency (`simp.optional_dependencies`), used by the
 deprecated `simp_apache::ssl::haveged`.
 
-- `simp/simplib` `>= 4.9.0 < 5.0.0` (provides `simplib::lookup`,
+- `simp/simplib` `>= 4.9.0 < 8.0.0` (provides `simplib::lookup`,
   `simplib::assert_metadata`, `simplib::passgen`, `simplib::nets2cidr`, and the
   `Simplib::*` data types used throughout)
-- `simp/iptables` `>= 6.5.3 < 8.0.0` (firewall rules)
-- `simp/logrotate` `>= 6.5.0 < 7.0.0`
-- `simp/pki` `>= 6.2.0 < 7.0.0` (`pki::copy` for certs)
+- `simp/iptables` `>= 6.5.3 < 10.0.0` (firewall rules)
+- `simp/logrotate` `>= 6.5.0 < 8.0.0`
+- `simp/pki` `>= 6.2.0 < 8.0.0` (`pki::copy` for certs)
 - `simp/rngd` `>= 0.2.0 < 1.0.0` (entropy, via the SSL class)
-- `simp/rsync` `>= 6.1.1 < 7.0.0` (web-root sync)
-- `simp/rsyslog` `>= 7.6.0 < 9.0.0` (log routing)
-- `simp/auditd` `>= 8.5.0 < 9.0.0`
-- `puppetlabs/stdlib` `>= 8.0.0 < 10.0.0` (`pick()` and friends)
+- `simp/rsync` `>= 6.1.1 < 9.0.0` (web-root sync)
+- `simp/rsyslog` `>= 7.6.0 < 11.0.0` (log routing)
+- `simp/auditd` `>= 8.5.0 < 12.0.0`
+- `puppetlabs/stdlib` `>= 9.2.0 < 11.0.0` (`pick()` and friends)
 
-Runtime requirement (from `metadata.json` `requirements`): `puppet
->= 7.0.0 < 9.0.0`. (SIMP is migrating Puppet → OpenVox; this module still names
-`puppet` and its `Gemfile` installs only the `puppet` gem. When `metadata.json`
-switches this to `openvox`, update this line to match.)
+Runtime requirement (from `metadata.json` `requirements`): `openvox
+>= 8.0.0 < 10.0.0`.
 
-Supported OS matrix (from `metadata.json`): CentOS 7/8/9; RedHat 7/8/9;
-OracleLinux 7/8/9; Rocky 8/9; AlmaLinux 8/9.
+Supported OS matrix (from `metadata.json`): CentOS 9/10; RedHat 8/9/10;
+OracleLinux 8/9/10; Rocky 8/9/10; AlmaLinux 8/9/10.
 
 ## Repository layout
 
