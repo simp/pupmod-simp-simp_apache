@@ -9,6 +9,7 @@
   Environments on stdlib 9.0.x or 9.1.x must upgrade stdlib; with those
   versions the catalog fails to compile when the deprecated haveged
   parameter is in effect.
+- Allow `simp/rsyslog` 11.x
 
 * Thu Oct 08 2026 Steven Pritchard <steve@sicura.us> - 9.1.0
 - Add support for OpenVox 9

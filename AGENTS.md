@@ -178,7 +178,7 @@ deprecated `simp_apache::ssl::haveged`.
 - `simp/pki` `>= 6.2.0 < 8.0.0` (`pki::copy` for certs)
 - `simp/rngd` `>= 0.2.0 < 1.0.0` (entropy, via the SSL class)
 - `simp/rsync` `>= 6.1.1 < 9.0.0` (web-root sync)
-- `simp/rsyslog` `>= 7.6.0 < 11.0.0` (log routing)
+- `simp/rsyslog` `>= 7.6.0 < 12.0.0` (log routing)
 - `simp/auditd` `>= 8.5.0 < 12.0.0`
 - `puppetlabs/stdlib` `>= 9.2.0 < 11.0.0` (`pick()` and friends)
 
