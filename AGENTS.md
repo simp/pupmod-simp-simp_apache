@@ -166,29 +166,17 @@ Keep routing SIMP feature toggles through `simplib::lookup('simp_options::*', {
 
 ## Dependencies
 
-Module dependencies (from `metadata.json`). `simp/haveged` `>= 0.4.5 < 1.0.0`
-is the only optional dependency (`simp.optional_dependencies`), used by the
-deprecated `simp_apache::ssl::haveged`.
+`metadata.json` is the source of truth for module dependencies, the
+optional dependencies (`simp.optional_dependencies`), the OpenVox
+requirement and the supported OS matrix. Read it directly; don't copy
+version ranges into this file, where they drift.
 
-- `simp/simplib` `>= 4.9.0 < 5.0.0` (provides `simplib::lookup`,
-  `simplib::assert_metadata`, `simplib::passgen`, `simplib::nets2cidr`, and the
-  `Simplib::*` data types used throughout)
-- `simp/iptables` `>= 6.5.3 < 8.0.0` (firewall rules)
-- `simp/logrotate` `>= 6.5.0 < 7.0.0`
-- `simp/pki` `>= 6.2.0 < 7.0.0` (`pki::copy` for certs)
-- `simp/rngd` `>= 0.2.0 < 1.0.0` (entropy, via the SSL class)
-- `simp/rsync` `>= 6.1.1 < 7.0.0` (web-root sync)
-- `simp/rsyslog` `>= 7.6.0 < 9.0.0` (log routing)
-- `simp/auditd` `>= 8.5.0 < 9.0.0`
-- `puppetlabs/stdlib` `>= 8.0.0 < 10.0.0` (`pick()` and friends)
+Not visible there:
 
-Runtime requirement (from `metadata.json` `requirements`): `puppet
->= 7.0.0 < 9.0.0`. (SIMP is migrating Puppet → OpenVox; this module still names
-`puppet` and its `Gemfile` installs only the `puppet` gem. When `metadata.json`
-switches this to `openvox`, update this line to match.)
-
-Supported OS matrix (from `metadata.json`): CentOS 7/8/9; RedHat 7/8/9;
-OracleLinux 7/8/9; Rocky 8/9; AlmaLinux 8/9.
+- Optional dependencies are checked at compile time with
+  `simplib::assert_optional_dependency` before they're used.
+- `.fixtures.yml` adds modules needed only to compile the tests, such as
+  `simp_options`.
 
 ## Repository layout
 
@@ -215,7 +203,7 @@ OracleLinux 7/8/9; Rocky 8/9; AlmaLinux 8/9.
   form, e.g. `0.0.0.0/0` → `ALL`).
 - `templates/etc/httpd/conf/httpd.conf.erb`, `.../conf.d/ssl.conf.erb`,
   `.../conf/magic.epp` — the config templates.
-- `metadata.json` — deps, OS matrix, Puppet requirement.
+- `metadata.json` — deps, OS matrix, OpenVox requirement.
 - `spec/classes/{init,conf,ssl}_spec.rb`, `spec/defines/site_spec.rb` —
   rspec-puppet unit tests; `spec/classes/expected/httpd.conf_default_el{7,8,9}`
   are golden-file comparisons of the rendered `httpd.conf`.
@@ -249,19 +237,15 @@ bundle exec rake lint
 # Ruby lint
 bundle exec rake rubocop
 
-# Regenerate REFERENCE.md from puppet-strings docstrings
-puppet strings generate --format markdown --out REFERENCE.md
+# Regenerate REFERENCE.md from openvox-strings docstrings (never hand-edit it)
+bundle update openvox-strings
+bundle exec rake strings:generate:reference
 
 # Run the default beaker acceptance suite (local only — not run in CI)
 bundle exec rake beaker:suites[default]
 ```
 
-Relevant gem pins (from `Gemfile`): `puppetlabs_spec_helper ~> 8.0.0`,
-`simp-rake-helpers ~> 5.24.0`, `simp-rspec-puppet-facts ~> 4.0.0`,
-`simp-beaker-helpers ~> 2.0.0`. Rubocop is pinned to `~> 1.88.0`. The `Gemfile`
-defaults `puppet_version` to `['>= 7', '< 9']` and installs the `puppet` gem
-(no `openvox` gem). `spec/spec_helper.rb` requires
-`puppetlabs_spec_helper/module_spec_helper`.
+Gem versions come from the `Gemfile`.
 
 ## Conventions
 
