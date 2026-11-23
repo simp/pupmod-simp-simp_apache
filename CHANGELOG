@@ -1,3 +1,6 @@
+* Mon Nov 23 2026 Steven Pritchard <steve@sicura.us> - 9.2.1
+- Allow simp/iptables 10.x
+
 * Mon Nov 09 2026 Hazel Caballero <hazel@sicura.us> - 9.2.0
 - Add `simp_apache::ssl::rngd` to include the `rngd` class for entropy
   generation
